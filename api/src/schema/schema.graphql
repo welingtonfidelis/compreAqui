@@ -1,0 +1,85 @@
+type token {
+    name: String,
+    token: String
+}
+
+type Address {
+    id: Int,
+    cep: String,
+    state: String,
+    city: String,
+    district: String,
+    street: String,
+    complement: String,
+    number: Int
+}
+
+type User {
+    id: Int,
+    name: String,
+    doc: String,
+    email: String,
+    phone1: String,
+    phone2: String,
+    user: String,
+    birth: String,
+    password: String,
+    tokenReset: String,
+    type: String,
+    Address: Address
+}
+
+
+#rota para retornos de informações
+type Query {
+    userIndex: [User]
+    userShow(id: ID!): User
+    sessionSign(user: String!, password: String!): token
+}
+
+# rota para alteração de informações
+type Mutation {
+    userStore(
+        name: String!,
+        doc: String!,
+        email: String!,
+        phone1: String!,
+        phone2: String!,
+        user: String!,
+        birth: String!,
+        password: String!,
+        type: String!,
+        cep: String!,
+        state: String!,
+        city: String!,
+        district: String!,
+        street: String!,
+        complement: String!,
+        number: Int!
+    ): User
+
+    userUpdate(
+        id: ID,
+        name: String!,
+        doc: String!,
+        email: String!,
+        phone1: String!,
+        phone2: String!,
+        user: String!,
+        birth: String!,
+        password: String!,
+        type: String!,
+        AddressId: ID,
+        cep: String!,
+        state: String!,
+        city: String!,
+        district: String!,
+        street: String!,
+        complement: String!,
+        number: Int!
+    ): String
+
+    userDelete(
+        id: ID
+    ): String
+}
