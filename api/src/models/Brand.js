@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     const Brand = sequelize.define('Brand', {
-        UserId: DataTypes.INTEGER,
+        ProviderId: DataTypes.INTEGER,
         description: DataTypes.STRING
     },
         {
@@ -13,7 +13,8 @@ module.exports = (sequelize, DataTypes) => {
         });
     Brand.associate = function (models) {
         Brand.belongsTo(models.User, {
-            foreingKey: 'UserId'
+            foreingKey: 'ProviderId',
+            as: "Provider"
         })
     }
 

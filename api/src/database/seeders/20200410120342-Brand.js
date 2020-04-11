@@ -6,25 +6,25 @@ module.exports = {
       [
         {
           description: 'Marca 1',
-          UserId: 1,
+          ProviderId: 1,
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
           description: 'Marca 2',
-          UserId: 1,
+          ProviderId: 1,
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
           description: 'Marca 3',
-          UserId: 2,
+          ProviderId: 2,
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
           description: 'Marca 4',
-          UserId: 2,
+          ProviderId: 2,
           createdAt: new Date(),
           updatedAt: new Date()
         },

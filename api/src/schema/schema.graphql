@@ -1,6 +1,7 @@
 type token {
     name: String,
-    token: String
+    token: String,
+    typeUser: String
 }
 
 type Address {
@@ -44,25 +45,54 @@ type User {
 
 type Brand {
     id: ID,
-    UserId: Int,
+    ProviderId: ID,
     description: String
 }
 
 type Size {
     id: ID,
-    UserId: Int,
+    ProviderId: ID,
     description: String
 }
 
 type Product {
     id: ID,
-    UserId: ID,
+    ProviderId: ID,
     BrandId: ID,
     SizeId: ID,
     description: String,
     price: Float,
     stock: Int,
-    User: User
+    Provider: User
+}
+
+type Request {
+    id: ID,
+    ClientId: ID,
+    ProviderId: ID,
+    timeWait: Int,
+    value: Float,
+    status: String,
+    delivery: String,
+    cashBack: Float,
+    createdAt: String,
+    Client: User,
+    Provider: User,
+    RequestProducts: [RequestProducts]
+}
+
+input RequestListProduct {
+    id: ID,
+    amount: Int
+}
+
+type RequestProducts {
+    id: ID,
+    RequestId: ID,
+    ProductId: ID,
+    amount: Int,
+    request: Request,
+    Product: Product
 }
 
 #rota para retornos de informações
@@ -83,6 +113,13 @@ type Query {
     ##===========> PRODUTO <============##
     productIndex(ProviderId: ID): [Product]
     productShow(id: ID!): Product
+
+    ##===========> PEDIDO <============##
+    requestIndex: [Request]
+
+    ##===========> PEDIDO/PRODUTO <============##
+    requestShow(id: ID!): Request
+
 }
 
 # rota para alteração de informações
@@ -183,4 +220,18 @@ type Mutation {
     ): String
 
     ##===========> PEDIDO <============##
+    requestStore (
+        ProviderId: ID!,
+        value: Float!,
+        delivery: String!,
+        cashBack: Float!,
+        products: [RequestListProduct!]
+    ): Request
+
+    requestChangeStatus (
+        id: ID!,
+        status: String,
+        timeWait: Int
+    ): String
+
 }

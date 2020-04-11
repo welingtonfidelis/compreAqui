@@ -12,7 +12,10 @@ const autheticate = async (resolve, root, args, context, info) => {
 
     jwt.verify(token, process.env.SECRET, function (err, decoded) {
         if (err) { }
-        else args.UserId = decoded.id
+        else {
+            args.UserId = decoded.id,
+            args.typeUser = decoded.typeUser
+        }
     });
 
     const result = await resolve(root, args, context, info);

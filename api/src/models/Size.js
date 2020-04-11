@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     const Size = sequelize.define('Size', {
-        UserId: DataTypes.INTEGER,
+        ProviderId: DataTypes.INTEGER,
         description: DataTypes.STRING,
     },
         {
@@ -13,7 +13,8 @@ module.exports = (sequelize, DataTypes) => {
         });
     Size.associate = function (models) {
         Size.belongsTo(models.User, {
-            foreingKey: 'UserId',
+            foreingKey: 'ProviderId',
+            as: "Provider"
         })
     }
 

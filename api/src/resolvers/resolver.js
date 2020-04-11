@@ -10,6 +10,8 @@ const { Size } = require('../models');
 const { Product } = require('../models');
 const { Category } = require('../models');
 const { Subcategory } = require('../models');
+const { Request } = require('../models');
+const { RequestProduct } = require('../models');
 
 const saltRounds = 10;
 
@@ -23,6 +25,9 @@ const invalidLogin = () => {
 }
 
 module.exports = {
+
+    // =====================>>  QUERY  <<=====================//
+
     Query: {
         //===========> LOGIN <============//
         sessionSign: async (_, args) => {
@@ -33,20 +38,20 @@ module.exports = {
                     where: {
                         [Op.or]: [{ user }, { email: user }]
                     },
-                    attributes: ['id', 'name', 'password']
+                    attributes: ['id', 'name', 'password', 'type']
                 });
 
                 if (query) {
-                    const { id, name } = query, hash = query.password;
+                    const { id, name, type } = query, hash = query.password;
 
                     const isValid = await bcrypt.compareSync(password, hash);
 
                     if (isValid) {
-                        const token = jwt.sign({ id }, process.env.SECRET, {
+                        const token = jwt.sign({ id, typeUser: type }, process.env.SECRET, {
                             // expiresIn: '12h'
                         })
 
-                        return { name, token };
+                        return { name, token, typeUser: type };
                     }
                 }
 
@@ -85,7 +90,7 @@ module.exports = {
                         {
                             model: Subcategory,
                             attributes: [
-                                "id", "CategoryId" , "name"
+                                "id", "CategoryId", "name"
                             ]
                         }
                     ]
@@ -140,7 +145,7 @@ module.exports = {
             try {
                 query = await Brand.findAll({
                     where: {
-                        UserId: args.UserId
+                        ProviderId: args.UserId
                     },
                     order: [['description', 'ASC']]
                 });
@@ -162,12 +167,12 @@ module.exports = {
             try {
                 query = await Size.findAll({
                     where: {
-                        UserId: args.UserId
+                        ProviderId: args.UserId
                     },
                     order: [['description', 'ASC']]
 
                 });
-                
+
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
                 console.log(err);
@@ -186,20 +191,18 @@ module.exports = {
                 const ProviderId = args.ProviderId ? args.ProviderId : args.UserId;
                 query = await Product.findAll({
                     where: {
-                        UserId: ProviderId
+                        ProviderId
                     },
                     order: [['description', 'ASC']],
                     include: [
                         {
                             model: User,
-                            attributes: [
-                                "name"
-                            ]
+                            as: "Provider"
                         }
                     ]
 
                 });
-                
+
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
                 console.log(err);
@@ -222,22 +225,171 @@ module.exports = {
                     include: [
                         {
                             model: User,
-                            attributes: [
-                                "name"
-                            ]
+                            as: "Provider"
                         }
                     ]
 
                 });
-                
+
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
                 console.log(err);
             }
 
             return query;
-        }
+        },
+
+        //===========> PEDIDO <============//
+        requestIndex: async (_, args) => {
+            const notAuthenticated = isAuthenticated(args);
+            if (notAuthenticated) return notAuthenticated;
+
+            let query = null;
+            try {
+                const { UserId, typeUser } = args;
+
+                if (typeUser === 'user') {
+                    query = await Request.findAll({
+                        where: {
+                            ClientId: UserId
+                        },
+                        order: [['createdAt', 'DESC']],
+                        include: [
+                            {
+                                model: User,
+                                as: "Provider",
+                                include: [
+                                    {
+                                        model: Address
+                                    }
+                                ]
+                            },
+                            {
+                                model: RequestProduct,
+                                include: [
+                                    {
+                                        model: Product
+                                    }
+                                ]
+                            }
+                        ]
+
+                    });
+                }
+                else {
+                    query = await Request.findAll({
+                        where: {
+                            ProviderId: UserId
+                        },
+                        order: [['createdAt', 'DESC']],
+                        include: [
+                            {
+                                model: User,
+                                as: "Client",
+                                include: [
+                                    {
+                                        model: Address
+                                    }
+                                ]
+                            },
+                            {
+                                model: RequestProduct,
+                                include: [
+                                    {
+                                        model: Product
+                                    }
+                                ]
+                            }
+                        ]
+
+                    });
+                }
+
+
+                //console.log("All users:", JSON.stringify(query, null, 2));
+
+            } catch (error) {
+                const err = error.stack || error.errors || error.message || error;
+                console.log(err);
+            }
+
+            return query;
+        },
+        requestShow: async (_, args) => {
+            const notAuthenticated = isAuthenticated(args);
+            if (notAuthenticated) return notAuthenticated;
+
+            let query = null;
+            try {
+                const { UserId, typeUser, id } = args;
+
+                if (typeUser === 'user') {
+                    query = await Request.findOne({
+                        where: {
+                            id
+                        },
+                        order: [['createdAt', 'DESC']],
+                        include: [
+                            {
+                                model: User,
+                                as: "Provider",
+                                include: [
+                                    {
+                                        model: Address
+                                    }
+                                ]
+                            },
+                            {
+                                model: RequestProduct,
+                                include: [
+                                    {
+                                        model: Product
+                                    }
+                                ]
+                            }
+                        ]
+                    });
+                }
+                else {
+                    query = await Request.findOne({
+                        where: {
+                            id
+                        },
+                        order: [['createdAt', 'DESC']],
+                        include: [
+                            {
+                                model: User,
+                                as: "Client",
+                                include: [
+                                    {
+                                        model: Address
+                                    }
+                                ]
+                            },
+                            {
+                                model: RequestProduct,
+                                include: [
+                                    {
+                                        model: Product
+                                    }
+                                ]
+                            }
+                        ]
+                    });
+                }
+
+                //console.log("All users:", JSON.stringify(query, null, 2));
+
+            } catch (error) {
+                const err = error.stack || error.errors || error.message || error;
+                console.log(err);
+            }
+
+            return query;
+        },
     },
+
+    // =====================>>  MUTATIONS  <<=====================//
 
     Mutation: {
         //===========> USUÁRIO <============//
@@ -344,7 +496,7 @@ module.exports = {
                 const { UserId, description } = args;
 
                 query = await Brand.create({
-                    UserId, description
+                    ProviderId: UserId, description
                 });
 
             } catch (error) {
@@ -414,7 +566,7 @@ module.exports = {
                 const { UserId, description } = args;
 
                 query = await Size.create({
-                    UserId, description
+                    ProviderId: UserId, description
                 });
 
             } catch (error) {
@@ -481,11 +633,11 @@ module.exports = {
 
             let query = null;
             try {
-                const { UserId, BrandId, SizeId, description, 
+                const { UserId, BrandId, SizeId, description,
                     price, stock } = args;
 
                 query = await Product.create({
-                    UserId, description, BrandId,
+                    ProviderId: UserId, description, BrandId,
                     SizeId, stock, price
                 });
 
@@ -502,11 +654,11 @@ module.exports = {
 
             let query = null;
             try {
-                const { id, BrandId, SizeId, description, 
+                const { id, BrandId, SizeId, description,
                     price, stock } = args;
-                    
+
                 query = await Product.update({
-                    BrandId, SizeId, description, 
+                    BrandId, SizeId, description,
                     price, stock
                 },
                     {
@@ -518,7 +670,7 @@ module.exports = {
                 );
 
                 query = query[0];
-                
+
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
                 console.log(err);
@@ -547,5 +699,65 @@ module.exports = {
 
             return query;
         },
+
+        //===========> PEDIDO <============//
+        requestStore: async (_, args) => {
+            const notAuthenticated = isAuthenticated(args);
+            if (notAuthenticated) return notAuthenticated;
+
+            let query = null;
+            try {
+                const { UserId, ProviderId, value,
+                    delivery, cashBack, products } = args;
+
+                query = await Request.create({
+                    ClientId: UserId, ProviderId, timeWait: 0,
+                    value, status: 'pending', delivery, cashBack
+                });
+
+                const RequestId = query.dataValues.id;
+                for (const prod of products) {
+                    await RequestProduct.create({
+                        RequestId, ProductId: prod.id, amount: prod.amount
+                    });
+
+                }
+
+            } catch (error) {
+                const err = error.stack || error.errors || error.message || error;
+                console.log(err);
+            }
+
+            return query;
+        },
+        requestChangeStatus: async (_, args) => {
+            const notAuthenticated = isAuthenticated(args);
+            if (notAuthenticated) return notAuthenticated;
+
+            let query = null;
+            try {
+                const { id, status, timeWait } = args;
+
+                query = await Request.update({
+                    status, timeWait
+                },
+                    {
+                        return: true,
+                        where: {
+                            id
+                        }
+                    }
+                );
+
+                query = query[0];
+
+            } catch (error) {
+                const err = error.stack || error.errors || error.message || error;
+                console.log(err);
+            }
+
+            return query;
+        },
+
     }
 };
