@@ -60,6 +60,22 @@ module.exports = {
           onDelete: 'cascade',
         }
       },
+      CategoryId: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'Categories',
+          key: 'id'
+        }
+      },
+      SubcategoryId: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'Subcategories',
+          key: 'id'
+        }
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

@@ -2,22 +2,22 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Sizes', {
+    return queryInterface.createTable('Subcategories', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      UserId: {
+      CategoryId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Users',
+          model: 'Categories',
           key: 'id',
         }
       },
-      description: {
+      name: {
         type: Sequelize.STRING,
         allowNull: false
       },
@@ -37,6 +37,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Sizes');
+    return queryInterface.dropTable('Subcategories');
   }
 };

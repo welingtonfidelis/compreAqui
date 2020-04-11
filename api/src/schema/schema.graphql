@@ -4,7 +4,7 @@ type token {
 }
 
 type Address {
-    id: Int,
+    id: ID,
     cep: String,
     state: String,
     city: String,
@@ -14,8 +14,19 @@ type Address {
     number: Int
 }
 
+type Category {
+    id: ID,
+    name: String
+}
+
+type Subcategory {
+    id: ID,
+    CategoryId: Int,
+    name: String
+}
+
 type User {
-    id: Int,
+    id: ID,
     name: String,
     doc: String,
     email: String,
@@ -26,15 +37,30 @@ type User {
     password: String,
     tokenReset: String,
     type: String,
-    Address: Address
+    Address: Address,
+    Category: Category,
+    Subcategory: Subcategory
 }
 
+type Brand {
+    id: ID,
+    UserId: Int,
+    description: String
+}
+
+type Size {
+    id: ID,
+    UserId: Int,
+    description: String
+}
 
 #rota para retornos de informações
 type Query {
     userIndex: [User]
     userShow(id: ID!): User
     sessionSign(user: String!, password: String!): token
+    brandIndex: [Brand]
+    sizeIndex: [Size]
 }
 
 # rota para alteração de informações
@@ -59,7 +85,7 @@ type Mutation {
     ): User
 
     userUpdate(
-        id: ID,
+        id: ID!,
         name: String!,
         doc: String!,
         email: String!,
@@ -80,6 +106,34 @@ type Mutation {
     ): String
 
     userDelete(
-        id: ID
+        id: ID!
+    ): String
+
+    brandStore(
+        description: String!,
+        UserId: ID!
+    ): Brand
+
+    brandUpdate(
+        id: ID!
+        description: String!
+    ): String
+
+    brandDelete(
+        id: ID!
+    ): String
+
+    sizeStore(
+        description: String!,
+        UserId: ID!
+    ): Size
+
+    sizeUpdate(
+        id: ID!
+        description: String!
+    ): String
+
+    sizeDelete(
+        id: ID!
     ): String
 }

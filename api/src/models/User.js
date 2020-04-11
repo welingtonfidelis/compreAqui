@@ -11,7 +11,8 @@ module.exports = (sequelize, DataTypes) => {
         tokenReset: DataTypes.STRING,
         type: DataTypes.STRING,
         AddressId: DataTypes.INTEGER,
-        deletedAt: DataTypes.DATE
+        CategoryId: DataTypes.INTEGER,
+        SubcategoryId: DataTypes.INTEGER,
     },
         {
             tableName: 'Users',
@@ -25,6 +26,12 @@ module.exports = (sequelize, DataTypes) => {
         User.belongsTo(models.Address, {
             foreingKey: 'AddressId',
             onDelete: 'cascade'
+        }),
+        User.belongsTo(models.Category, {
+            foreingKey: 'CategoryId'
+        }),
+        User.belongsTo(models.Subcategory, {
+            foreingKey: 'SubcategoryId'
         })
     }
 
