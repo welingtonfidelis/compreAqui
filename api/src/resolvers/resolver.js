@@ -11,6 +11,8 @@ const { Product } = require('../models');
 const { Category } = require('../models');
 const { Subcategory } = require('../models');
 
+const saltRounds = 10;
+
 const isAuthenticated = (args) => {
     if (!args.UserId) return new AuthenticationError('Invalid token');
     else return null;
@@ -172,6 +174,68 @@ module.exports = {
             }
 
             return query;
+        },
+
+        //===========> PRODUTO <============//
+        productIndex: async (_, args) => {
+            const notAuthenticated = isAuthenticated(args);
+            if (notAuthenticated) return notAuthenticated;
+
+            let query = null;
+            try {
+                const ProviderId = args.ProviderId ? args.ProviderId : args.UserId;
+                query = await Product.findAll({
+                    where: {
+                        UserId: ProviderId
+                    },
+                    order: [['description', 'ASC']],
+                    include: [
+                        {
+                            model: User,
+                            attributes: [
+                                "name"
+                            ]
+                        }
+                    ]
+
+                });
+                
+            } catch (error) {
+                const err = error.stack || error.errors || error.message || error;
+                console.log(err);
+            }
+
+            return query;
+        },
+
+        productShow: async (_, args) => {
+            const notAuthenticated = isAuthenticated(args);
+            if (notAuthenticated) return notAuthenticated;
+
+            let query = null;
+            try {
+                const { id } = args;
+                query = await Product.findOne({
+                    where: {
+                        id
+                    },
+                    include: [
+                        {
+                            model: User,
+                            attributes: [
+                                "name"
+                            ]
+                        }
+                    ]
+
+                });
+                
+            } catch (error) {
+                const err = error.stack || error.errors || error.message || error;
+                console.log(err);
+            }
+
+            return query;
         }
     },
 
@@ -182,7 +246,7 @@ module.exports = {
 
             try {
                 const {
-                    name, doc, email, phone1, phone2, user, birth, password, type,
+                    name, doc, email, phone1, phone2, user, birth, type,
                     cep, state, city, district, street, complemen, number,
                 } = args;
 
@@ -192,6 +256,7 @@ module.exports = {
                 });
 
                 const AddressId = query.dataValues.id;
+                const password = bcrypt.hashSync(args.password, saltRounds);
 
                 query = await User.create({
                     name, doc, email, phone1, phone2,
@@ -396,6 +461,80 @@ module.exports = {
                 const { id } = args;
 
                 query = await Size.destroy({
+                    where: {
+                        id
+                    }
+                });
+
+            } catch (error) {
+                const err = error.stack || error.errors || error.message || error;
+                console.log(err);
+            }
+
+            return query;
+        },
+
+        //===========> PRODUTO <============//
+        productStore: async (_, args) => {
+            const notAuthenticated = isAuthenticated(args);
+            if (notAuthenticated) return notAuthenticated;
+
+            let query = null;
+            try {
+                const { UserId, BrandId, SizeId, description, 
+                    price, stock } = args;
+
+                query = await Product.create({
+                    UserId, description, BrandId,
+                    SizeId, stock, price
+                });
+
+            } catch (error) {
+                const err = error.stack || error.errors || error.message || error;
+                console.log(err);
+            }
+
+            return query;
+        },
+        productUpdate: async (_, args) => {
+            const notAuthenticated = isAuthenticated(args);
+            if (notAuthenticated) return notAuthenticated;
+
+            let query = null;
+            try {
+                const { id, BrandId, SizeId, description, 
+                    price, stock } = args;
+                    
+                query = await Product.update({
+                    BrandId, SizeId, description, 
+                    price, stock
+                },
+                    {
+                        return: true,
+                        where: {
+                            id
+                        }
+                    }
+                );
+
+                query = query[0];
+                
+            } catch (error) {
+                const err = error.stack || error.errors || error.message || error;
+                console.log(err);
+            }
+
+            return query;
+        },
+        productDelete: async (_, args) => {
+            const notAuthenticated = isAuthenticated(args);
+            if (notAuthenticated) return notAuthenticated;
+
+            let query = null;
+            try {
+                const { id } = args;
+
+                query = await Product.destroy({
                     where: {
                         id
                     }

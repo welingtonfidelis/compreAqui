@@ -54,17 +54,40 @@ type Size {
     description: String
 }
 
+type Product {
+    id: ID,
+    UserId: ID,
+    BrandId: ID,
+    SizeId: ID,
+    description: String,
+    price: Float,
+    stock: Int,
+    User: User
+}
+
 #rota para retornos de informações
 type Query {
+    ##===========> USUÁRIO <============##
     userIndex: [User]
     userShow(id: ID!): User
+
+    ##===========> SESSÃO/LOGIN <============##
     sessionSign(user: String!, password: String!): token
+
+    ##===========> MARCA <============##
     brandIndex: [Brand]
+
+    ##===========> TAMANHO <============##
     sizeIndex: [Size]
+
+    ##===========> PRODUTO <============##
+    productIndex(ProviderId: ID): [Product]
+    productShow(id: ID!): Product
 }
 
 # rota para alteração de informações
 type Mutation {
+    ##===========> USUÁRIO <============##
     userStore(
         name: String!,
         doc: String!,
@@ -109,9 +132,9 @@ type Mutation {
         id: ID!
     ): String
 
+    ##===========> MARCA <============##
     brandStore(
         description: String!,
-        UserId: ID!
     ): Brand
 
     brandUpdate(
@@ -123,9 +146,9 @@ type Mutation {
         id: ID!
     ): String
 
+    ##===========> TAMANHO <============##
     sizeStore(
         description: String!,
-        UserId: ID!
     ): Size
 
     sizeUpdate(
@@ -136,4 +159,28 @@ type Mutation {
     sizeDelete(
         id: ID!
     ): String
+
+    ##===========> PRODUTO <============##
+    productStore(
+        BrandId: ID!,
+        SizeId: ID!,
+        description: String!,
+        price: Float!,
+        stock: Int!,
+    ): Product
+
+    productUpdate(
+        id: ID!,
+        BrandId: ID!,
+        SizeId: ID!,
+        description: String!,
+        price: Float!,
+        stock: Int!,
+    ): String
+
+    productDelete(
+        id: ID!,
+    ): String
+
+    ##===========> PEDIDO <============##
 }
