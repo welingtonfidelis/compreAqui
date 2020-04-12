@@ -188,20 +188,37 @@ module.exports = {
 
             let query = null;
             try {
-                const ProviderId = args.ProviderId ? args.ProviderId : args.UserId;
-                query = await Product.findAll({
-                    where: {
-                        ProviderId
-                    },
-                    order: [['description', 'ASC']],
-                    include: [
-                        {
-                            model: User,
-                            as: "Provider"
-                        }
-                    ]
+                const { typeUser, ProviderId, UserId } = args;
 
-                });
+                if (typeUser === 'user') {
+                    query = await Product.findAll({
+                        where: {
+                            ProviderId,
+                            stock: { [Op.gt]: 0 }
+                        },
+                        order: [['description', 'ASC']],
+                        include: [
+                            {
+                                model: User,
+                                as: "Provider"
+                            }
+                        ]
+                    });
+                }
+                else {
+                    query = await Product.findAll({
+                        where: {
+                            ProviderId: UserId
+                        },
+                        order: [['description', 'ASC']],
+                        include: [
+                            {
+                                model: User,
+                                as: "Provider"
+                            }
+                        ]
+                    });
+                }
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
@@ -737,6 +754,41 @@ module.exports = {
             let query = null;
             try {
                 const { id, status, timeWait } = args;
+
+                if (status === 'approved') {
+                    query = await RequestProduct.findAll({
+                        where: {
+                            RequestId: id
+                        },
+                        attributes: ["id", "ProductId", "amount"],
+                        include: [
+                            {
+                                model: Product,
+                                attributes: ["stock"]
+                            }
+                        ]
+                    });
+                    // console.log(JSON.stringify(query, null, 2));
+
+                    // Atualiza estoque
+                    if (query.length > 0) {
+                        for (const item of query) {
+                            const { amount, id = ProductId } = item;
+                            const stock = item.Product.stock - amount;
+
+                            await Product.update({
+                                stock
+                            },
+                                {
+                                    return: true,
+                                    where: {
+                                        id
+                                    }
+                                }
+                            );                            
+                        }
+                    }
+                }
 
                 query = await Request.update({
                     status, timeWait
