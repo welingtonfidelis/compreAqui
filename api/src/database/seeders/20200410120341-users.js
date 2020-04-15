@@ -45,7 +45,7 @@ module.exports = {
                     user: 'user1',
                     birth: '1990-07-28 00:00:00',
                     password: '$2b$10$Dtan5DFEMqV0FC8n6vXVBedlz6pvDwncYcBPTOxCvX5kSVtkr3eYS',
-                    type: 'user',
+                    type: 'client',
                     AddressId: Math.floor(Math.random() * 5) + 1,
                     createdAt: new Date(),
                     updatedAt: new Date()
@@ -59,7 +59,7 @@ module.exports = {
                     user: 'user2',
                     birth: '1990-07-28 00:00:00',
                     password: '$2b$10$Dtan5DFEMqV0FC8n6vXVBedlz6pvDwncYcBPTOxCvX5kSVtkr3eYS',
-                    type: 'user',
+                    type: 'client',
                     AddressId: Math.floor(Math.random() * 5) + 1,
                     createdAt: new Date(),
                     updatedAt: new Date()

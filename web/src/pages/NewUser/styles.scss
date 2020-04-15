@@ -1,0 +1,77 @@
+.body-new-user {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    flex-direction: column;
+    overflow: auto;
+}
+
+.box-info {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    padding: 0 10px 0 10px;
+}
+
+.box-info form {
+    align-items: center;
+}
+
+.btn-steps {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.card-type-container {
+    border: 1px solid #3f51b5;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.card-type-container .flex-row {
+    justify-content: center;
+}
+.card-type-user {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #bfbfbf;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 10px;
+    width: 110px;
+    height: 110px;
+    transition: background-color 0.2s;
+}
+
+.card-type-user-selected {
+    border: 1.5px solid #3f51b5;
+}
+
+.card-type-user:hover {
+    cursor: pointer;
+    background-color: #dadada;
+}
+
+.card-type-user svg{
+    font-size: 55px !important;
+}
+
+.card-type-user span {
+    font-size: 20px;
+}
+
+.card-type-user .icon-client{
+    color: #3f51b5
+}
+
+.card-type-user .icon-provider{
+    color: #2eb940
+}
+

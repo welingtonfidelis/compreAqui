@@ -29,6 +29,11 @@ module.exports = {
     // =====================>>  QUERY  <<=====================//
 
     Query: {
+        //===========> TESTES <============//
+        test: () => {
+            return "Hello World"
+        },
+        
         //===========> LOGIN <============//
         sessionSign: async (_, args) => {
             try {
@@ -190,7 +195,7 @@ module.exports = {
             try {
                 const { typeUser, ProviderId, UserId } = args;
 
-                if (typeUser === 'user') {
+                if (typeUser === 'client') {
                     query = await Product.findAll({
                         where: {
                             ProviderId,
@@ -340,7 +345,7 @@ module.exports = {
             try {
                 const { UserId, typeUser, id } = args;
 
-                if (typeUser === 'user') {
+                if (typeUser === 'client') {
                     query = await Request.findOne({
                         where: {
                             id

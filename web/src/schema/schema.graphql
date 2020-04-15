@@ -97,9 +97,8 @@ type RequestProducts {
 
 #rota para retornos de informações
 type Query {
-    ##===========> TESTES <============##
     test: String
-
+    
     ##===========> USUÁRIO <============##
     userIndex: [User]
     userShow(id: ID!): User
