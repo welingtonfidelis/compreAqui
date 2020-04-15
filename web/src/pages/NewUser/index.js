@@ -109,7 +109,7 @@ export default function NewUser({ history }) {
 
                                 <Button 
                                     variant="contained" color="primary" 
-                                    disabled={activeStep === steps.length - 1} 
+                                    disabled={activeStep === steps.length - 1 || type === ''} 
                                     onClick={handleNext}
                                 >
                                     {activeStep === steps.length - 1 ? 'Enviar' : 'Próximo'}

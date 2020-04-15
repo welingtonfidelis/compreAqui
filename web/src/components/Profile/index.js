@@ -103,35 +103,110 @@ export default function Profile(props) {
     }
 
     async function handleCheckEmail() {
-        setLoading(true);
+        if (email !== '') {
+            setLoading(true);
+            try {
+                const query = graphql`
+                query ProfileuserShowByEmailQuery($email: String!) {
+                    userShowByEmail(email: $email) {
+                        id
+                    }
+                }`;
 
-        setLoading(false);
+                const variables = { email };
+                const response = await fetchQuery(environment, query, variables);
+                const div = document.getElementById('email');
+                if (response.userShowByEmail) {
+                    div.setCustomValidity("E-mail já em uso.");
+                    div.reportValidity();
+                }
+                else div.setCustomValidity("");
+
+            } catch (error) {
+                console.error(error);
+            }
+
+            setLoading(false);
+        }
     }
 
     async function handleCheckUser() {
-        setLoading(true);
+        if (user !== '') {
+            setLoading(true);
+            try {
+                const query = graphql`
+                query ProfileuserShowByUserQuery($user: String!) {
+                    userShowByUser(user: $user) {
+                        id
+                    }
+                }`;
 
-        setLoading(false);
+                const variables = { user };
+                const response = await fetchQuery(environment, query, variables);
+                const div = document.getElementById('user');
+                if (response.userShowByUser) {
+                    div.setCustomValidity("Usuário já em uso.");
+                    div.reportValidity();
+                }
+                else div.setCustomValidity("");
+
+            } catch (error) {
+                console.error(error);
+            }
+
+            setLoading(false);
+        }
+    }
+
+    async function handleCheckDoc() {
+        if (doc !== '') {
+            setLoading(true);
+            try {
+                const query = graphql`
+                query ProfileuserShowByDocQuery($doc: String!) {
+                    userShowByDoc(doc: $doc) {
+                        id
+                    }
+                }`;
+
+                const variables = { doc };
+                const response = await fetchQuery(environment, query, variables);
+                const div = document.getElementById('doc');
+                if (response.userShowByDoc) {
+                    div.setCustomValidity(`${docFormat.dsc} já em uso.`);
+                    div.reportValidity();
+                }
+                else div.setCustomValidity("");
+
+            } catch (error) {
+                console.error(error);
+            }
+
+            setLoading(false);
+        }
     }
 
     async function handleCheckConfirmPassword() {
-        setLoading(true);
+        const div = document.getElementById('passwordConfirm');
 
-        setLoading(false);
+        if (password !== passwordConfirm) {
+            div.setCustomValidity('As senhas não conferem.');
+        }
+        else div.setCustomValidity("");
     }
 
     async function handleCep() {
         setLoading(true);
         const response = await util.getCep(cep);
 
-        if(response) {
+        if (response) {
             setStreet(response.logradouro);
             setComplement(response.complemento);
             setDistrict(response.bairro);
             setCity(response.localidade);
             setState(response.uf);
         }
-        
+
         setLoading(false);
     }
 
@@ -149,6 +224,7 @@ export default function Profile(props) {
                         id="doc"
                         value={doc}
                         onChange={event => setDoc(event.target.value)}
+                        onBlur={handleCheckDoc}
                         format={docFormat.mask}
                         label="teste"
                         placeholder={docFormat.dsc}
@@ -193,6 +269,7 @@ export default function Profile(props) {
                     variant="outlined"
                     value={email}
                     onChange={event => setEmail(event.target.value)}
+                    onBlur={handleCheckEmail}
                 />
             </div>
 
@@ -230,6 +307,7 @@ export default function Profile(props) {
                     variant="outlined"
                     value={user}
                     onChange={event => setUser(event.target.value)}
+                    onBlur={handleCheckUser}
                 />
             </div>
 
@@ -258,6 +336,7 @@ export default function Profile(props) {
                         variant="outlined"
                         value={passwordConfirm}
                         onChange={event => setPasswordConfirm(event.target.value)}
+                        onBlur={handleCheckConfirmPassword}
                     />
                 </div>
             </div>
@@ -346,9 +425,9 @@ export default function Profile(props) {
             </div>
 
             {
-                showSubmit 
-                ? <Button type="submit" variant="contained" color="primary"> Salvar </Button> 
-                : null
+                showSubmit
+                    ? <Button type="submit" variant="contained" color="primary"> Salvar </Button>
+                    : null
             }
         </form>
     )
