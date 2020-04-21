@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { format } from 'date-fns';
 import { Button, TextField } from '@material-ui/core';
+import { Autocomplete } from '@material-ui/lab';
 import NumberFormat from 'react-number-format';
-import { fetchQuery, commitMutation } from 'react-relay';
+import { fetchQuery } from 'react-relay';
 import environment from '../../services/RelayEnvironment';
 
 import swal from '../../services/SweetAlert';
@@ -32,7 +33,10 @@ export default function Profile(props) {
     const [passwordConfirm, setPasswordConfirm] = useState('');
     const [type, setType] = useState('');
     const [cep, setCep] = useState('');
-    const [state, setState] = useState('');
+    const [state, setState] = useState(null);
+    const [stateList, setStateList] = useState([]);
+    const [category, setCategory] = useState(null);
+    const [categoryList, setCategoryList] = useState([]);
     const [city, setCity] = useState('');
     const [district, setDistrict] = useState('');
     const [street, setStreet] = useState('');
@@ -43,6 +47,7 @@ export default function Profile(props) {
 
     useEffect(() => {
         if (props.type) {
+            getInfo();
             setType(props.type);
             if (props.type !== 'client') {
                 setDocFormat({ dsc: 'CNPJ', mask: '##.###.###/####-##' });
@@ -52,14 +57,44 @@ export default function Profile(props) {
         };
     }, []);
 
+    async function getInfo() {
+        setLoading(true);
+        try {
+            const query = graphql`
+                query ProfilestateIndexAndcategoryIndexQuery {
+                    stateIndex {
+                        stateId: id
+                        description
+                        code
+                    }
+                    categoryIndex {
+                        id
+                        name
+                    }
+                }`;
+
+            const variables = {};
+            const response = await fetchQuery(environment, query, variables);
+
+            if (response.stateIndex) {
+                setStateList(response.stateIndex);
+            }
+            if (response.categoryIndex) {
+                setCategoryList(response.categoryIndex);
+            }
+
+        } catch (error) {
+            console.error(error);
+        }
+        setLoading(false);
+    }
+
     async function handleSubmit(event) {
         event.preventDefault();
         setLoading(true);
 
         try {
             const data = new FormData();
-            data.append('teste', 'testinho');
-            data.append('aviao', 2);
             data.append('name', name);
             data.append('doc', doc);
             data.append('email', email);
@@ -71,12 +106,16 @@ export default function Profile(props) {
             data.append('passwordConfirm', passwordConfirm);
             data.append('type', type);
             data.append('cep', cep);
-            data.append('state', state);
+            data.append('state', state.code);
             data.append('city', city);
             data.append('district', district);
             data.append('street', street);
             data.append('number', number);
             data.append('complement', complement);
+            
+            if (category) {
+                data.append('CategoryId', category.id);
+            }
 
             if (file) {
                 data.append('file', file);
@@ -89,7 +128,9 @@ export default function Profile(props) {
             const { status } = query.data;
             if (status) {
                 swal.swalInform();
+                setLoading(false);
                 history.push('/');
+                return;
             }
             else swal.swalErrorInform();
 
@@ -247,7 +288,7 @@ export default function Profile(props) {
             setComplement(response.complemento);
             setDistrict(response.bairro);
             setCity(response.localidade);
-            setState(response.uf);
+            setState({ name: response.uf, value: response.uf });
         }
 
         setLoading(false);
@@ -260,10 +301,10 @@ export default function Profile(props) {
 
             <div>
                 <label htmlFor="file">
-                    <img 
-                        className="image-profile-large" 
-                        src={file ? URL.createObjectURL(file) : ImageProfile} 
-                        alt="Foto perfil" 
+                    <img
+                        className="image-profile-large"
+                        src={file ? URL.createObjectURL(file) : ImageProfile}
+                        alt="Foto perfil"
                     />
                 </label>
             </div>
@@ -273,6 +314,29 @@ export default function Profile(props) {
                 onChange={e => setFile(e.target.files[0])}
                 style={{ display: 'none' }}
             />
+
+            {type === 'comercial' ?
+                <div className="input-separator">
+                    <Autocomplete
+                        id="combo-box-demo"
+                        options={categoryList}
+                        getOptionLabel={(option) => option.name}
+                        onChange={(event, opt) => {
+                            if (opt) setCategory(opt)
+                        }}
+                        value={category}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                fullWidth
+                                required
+                                id="category"
+                                label="Categoria"
+                                variant="outlined"
+                            />
+                        )}
+                    />
+                </div> : null}
 
             <div className="flex-row-w">
                 <div className="input-separator">
@@ -371,6 +435,7 @@ export default function Profile(props) {
             <div className="flex-row-w">
                 <div className="input-separator">
                     <TextField
+                        autoComplete='on'
                         fullWidth
                         required
                         type="password"
@@ -385,6 +450,7 @@ export default function Profile(props) {
                 <div className="input-separator">
 
                     <TextField
+                        autoComplete='on'
                         fullWidth
                         required
                         type="password"
@@ -458,14 +524,24 @@ export default function Profile(props) {
             </div>
 
             <div className="input-separator">
-                <TextField
-                    fullWidth
-                    required
-                    id="state"
-                    label="Estado"
-                    variant="outlined"
+                <Autocomplete
+                    id="combo-box-demo"
+                    options={stateList}
+                    getOptionLabel={(option) => option.description}
+                    onChange={(event, opt) => {
+                        if (opt) setState(opt)
+                    }}
                     value={state}
-                    onChange={event => setState(event.target.value)}
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            fullWidth
+                            required
+                            id="state"
+                            label="Estado"
+                            variant="outlined"
+                        />
+                    )}
                 />
             </div>
 
