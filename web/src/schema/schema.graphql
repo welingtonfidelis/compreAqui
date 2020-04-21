@@ -1,3 +1,5 @@
+scalar Upload
+
 type token {
     name: String,
     token: String,
@@ -130,6 +132,9 @@ type Query {
 
 # rota para alteração de informações
 type Mutation {
+    photoTest: String
+    uploadFile(input: Upload!): String
+    
     ##===========> USUÁRIO <============##
     userStore(
         name: String!,

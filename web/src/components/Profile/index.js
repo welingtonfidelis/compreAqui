@@ -2,17 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { format } from 'date-fns';
 import { Button, TextField } from '@material-ui/core';
-import { Storefront, ShoppingCart } from '@material-ui/icons';
 import NumberFormat from 'react-number-format';
 import { fetchQuery, commitMutation } from 'react-relay';
 import environment from '../../services/RelayEnvironment';
 
 import swal from '../../services/SweetAlert';
 import util from '../../services/util';
+import api from '../../services/api';
 import Load from '../Load';
 
 import ImageProfile from '../../assets/images/user.png'
-import styles from './styles.scss';
+import './styles.scss';
+import '../../global.scss';
 
 const graphql = require('babel-plugin-relay/macro');
 
@@ -38,6 +39,7 @@ export default function Profile(props) {
     const [complement, setComplement] = useState('');
     const [number, setNumber] = useState('');
     const [showSubmit, setShowSubmit] = useState(true);
+    const [file, setFile] = useState(null);
 
     useEffect(() => {
         if (props.type) {
@@ -54,50 +56,91 @@ export default function Profile(props) {
         event.preventDefault();
         setLoading(true);
 
-        const mutation = graphql`
-            mutation ProfileuserStoreMutation(
-                $name: String!, $doc: String!, $email: String!,
-                $phone1: String!, $phone2: String!, $user: String!,
-                $birth: String!, $password: String!, $type: String!,
-                $cep: String!, $state: String!, $city: String!,
-                $district: String!, $street: String!, $complement: String!,
-                $number: Int!
-            ) {
-                userStore(
-                    name: $name doc: $doc email: $email 
-                    phone1: $phone1 phone2: $phone2 user: $user
-                    birth: $birth password: $password type: $type
-                    cep: $cep state: $state city: $city
-                    district: $district street: $street
-                    complement: $complement number: $number
-                    ) {
-                        name
-                    }
+        try {
+            const data = new FormData();
+            data.append('teste', 'testinho');
+            data.append('aviao', 2);
+            data.append('name', name);
+            data.append('doc', doc);
+            data.append('email', email);
+            data.append('phone1', phone1);
+            data.append('phone2', phone2);
+            data.append('user', user);
+            data.append('birth', birth);
+            data.append('password', password);
+            data.append('passwordConfirm', passwordConfirm);
+            data.append('type', type);
+            data.append('cep', cep);
+            data.append('state', state);
+            data.append('city', city);
+            data.append('district', district);
+            data.append('street', street);
+            data.append('number', number);
+            data.append('complement', complement);
+
+            if (file) {
+                data.append('file', file);
             }
-        `;
 
-        const variables = {
-            name, doc, email, phone1, phone2, user,
-            birth, password, type, cep, state, city,
-            district, street, complement, number: parseInt(number),
-        };
+            const query = await api.post('user', data, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
 
-        commitMutation(environment, {
-            mutation, variables,
-            onCompleted: (response, errors) => {
-                const { userStore } = response;
+            const { status } = query.data;
+            if (status) {
+                swal.swalInform();
+                history.push('/');
+            }
+            else swal.swalErrorInform();
 
-                if (userStore.name) {
-                    swal.swalInform();
-                    history.push('/');
-                }
-                else swal.swalErrorInform();
-            },
-            onError: err => {
-                console.error(err);
-                swal.swalErrorInform();
-            },
-        });
+        } catch (error) {
+            console.log(error);
+            swal.swalErrorInform();
+        }
+        // const mutation = graphql`
+        //     mutation ProfileuserStoreMutation(
+        //         $name: String!, $doc: String!, $email: String!,
+        //         $phone1: String!, $phone2: String!, $user: String!,
+        //         $birth: String!, $password: String!, $type: String!,
+        //         $cep: String!, $state: String!, $city: String!,
+        //         $district: String!, $street: String!, $complement: String!,
+        //         $number: Int!
+        //     ) {
+        //         userStore(
+        //             name: $name doc: $doc email: $email 
+        //             phone1: $phone1 phone2: $phone2 user: $user
+        //             birth: $birth password: $password type: $type
+        //             cep: $cep state: $state city: $city
+        //             district: $district street: $street
+        //             complement: $complement number: $number
+        //             ) {
+        //                 name
+        //             }
+        //     }
+        // `;
+
+        // const variables = {
+        //     name, doc, email, phone1, phone2, user,
+        //     birth, password, type, cep, state, city,
+        //     district, street, complement, number: parseInt(number),
+        // };
+
+        // commitMutation(environment, {
+        //     mutation, variables,
+        //     onCompleted: (response, errors) => {
+        //         const { userStore } = response;
+
+        //         if (userStore.name) {
+        //             swal.swalInform();
+        //             history.push('/');
+        //         }
+        //         else swal.swalErrorInform();
+        //     },
+        //     onError: err => {
+        //         console.error(err);
+        //         swal.swalErrorInform();
+        //     },
+        // });
 
         setLoading(false);
     }
@@ -215,7 +258,21 @@ export default function Profile(props) {
             <Load loading={loading} />
             <h1 className="title-modal">{type === 'client' ? "Cliente" : "Empresa"}</h1>
 
-            <img className="image-profile-large" src={ImageProfile} alt="Foto perfil" />
+            <div>
+                <label htmlFor="file">
+                    <img 
+                        className="image-profile-large" 
+                        src={file ? URL.createObjectURL(file) : ImageProfile} 
+                        alt="Foto perfil" 
+                    />
+                </label>
+            </div>
+
+            <input
+                type="file" id="file"
+                onChange={e => setFile(e.target.files[0])}
+                style={{ display: 'none' }}
+            />
 
             <div className="flex-row-w">
                 <div className="input-separator">

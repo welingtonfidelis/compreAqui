@@ -49,3 +49,12 @@ input {
     border: .5px solid #b8b9bd;
     background: #f0f0f5;
 }
+
+.image-profile-large {
+    height: 125px;
+    width: 125px;
+}
+
+.image-profile-large:hover {
+    cursor: pointer;
+}
