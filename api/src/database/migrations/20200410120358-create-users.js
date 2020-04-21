@@ -48,6 +48,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
+      photoUrl: {
+        allowNull: true,
+        type: Sequelize.STRING
+      },
       tokenReset: {
         allowNull: true,
         type: Sequelize.STRING
@@ -66,14 +70,6 @@ module.exports = {
         allowNull: true,
         references: {
           model: 'Categories',
-          key: 'id'
-        }
-      },
-      SubcategoryId: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        references: {
-          model: 'Subcategories',
           key: 'id'
         }
       },

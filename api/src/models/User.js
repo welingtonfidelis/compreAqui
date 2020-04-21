@@ -8,11 +8,11 @@ module.exports = (sequelize, DataTypes) => {
         user: DataTypes.STRING,
         birth: DataTypes.DATE,
         password: DataTypes.STRING,
+        photoUrl: DataTypes.STRING,
         tokenReset: DataTypes.STRING,
         type: DataTypes.STRING,
         AddressId: DataTypes.INTEGER,
-        CategoryId: DataTypes.INTEGER,
-        SubcategoryId: DataTypes.INTEGER,
+        CategoryId: DataTypes.INTEGER
     },
         {
             tableName: 'Users',
@@ -29,9 +29,6 @@ module.exports = (sequelize, DataTypes) => {
         }),
         User.belongsTo(models.Category, {
             foreingKey: 'CategoryId'
-        }),
-        User.belongsTo(models.Subcategory, {
-            foreingKey: 'SubcategoryId'
         })
     }
 

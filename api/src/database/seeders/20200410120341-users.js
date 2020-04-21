@@ -16,7 +16,7 @@ module.exports = {
                     type: 'comercial',
                     AddressId: Math.floor(Math.random() * 5) + 1,
                     CategoryId: 1,
-                    SubcategoryId: 1,
+                    photoUrl: null,
                     createdAt: new Date(),
                     updatedAt: new Date()
                 },
@@ -32,7 +32,7 @@ module.exports = {
                     type: 'comercial',
                     AddressId: Math.floor(Math.random() * 5) + 1,
                     CategoryId: 1,
-                    SubcategoryId: 1,
+                    photoUrl: null,
                     createdAt: new Date(),
                     updatedAt: new Date()
                 },
@@ -46,6 +46,7 @@ module.exports = {
                     birth: '1990-07-28 00:00:00',
                     password: '$2b$10$Dtan5DFEMqV0FC8n6vXVBedlz6pvDwncYcBPTOxCvX5kSVtkr3eYS',
                     type: 'client',
+                    photoUrl: null,
                     AddressId: Math.floor(Math.random() * 5) + 1,
                     createdAt: new Date(),
                     updatedAt: new Date()
@@ -60,6 +61,7 @@ module.exports = {
                     birth: '1990-07-28 00:00:00',
                     password: '$2b$10$Dtan5DFEMqV0FC8n6vXVBedlz6pvDwncYcBPTOxCvX5kSVtkr3eYS',
                     type: 'client',
+                    photoUrl: null,
                     AddressId: Math.floor(Math.random() * 5) + 1,
                     createdAt: new Date(),
                     updatedAt: new Date()

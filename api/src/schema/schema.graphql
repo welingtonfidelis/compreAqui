@@ -1,3 +1,5 @@
+scalar Upload
+
 type token {
     name: String,
     token: String,
@@ -35,7 +37,7 @@ type User {
     phone2: String,
     user: String,
     birth: String,
-    password: String,
+    # password: String,
     tokenReset: String,
     type: String,
     Address: Address,
@@ -103,6 +105,9 @@ type Query {
     ##===========> USUÁRIO <============##
     userIndex: [User]
     userShow(id: ID!): User
+    userShowByDoc(doc: String!): User
+    userShowByEmail(email: String!): User
+    userShowByUser(user: String!): User
 
     ##===========> SESSÃO/LOGIN <============##
     sessionSign(user: String!, password: String!): token
@@ -127,6 +132,9 @@ type Query {
 
 # rota para alteração de informações
 type Mutation {
+    photoTest: String
+    uploadFile(input: Upload!): String
+    
     ##===========> USUÁRIO <============##
     userStore(
         name: String!,
