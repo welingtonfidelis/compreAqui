@@ -7,15 +7,11 @@ const fs = require('fs');
 const readline = require('readline');
 const { google } = require('googleapis');
 
-const { User } = require('../models');
-const { Address } = require('../models');
-const { Brand } = require('../models');
-const { Size } = require('../models');
-const { Product } = require('../models');
-const { Category } = require('../models');
-const { Subcategory } = require('../models');
-const { Request } = require('../models');
-const { RequestProduct } = require('../models');
+const { 
+    User, Address, Brand, Size,
+    Product, Category, Subcategory,
+    Request, RequestProduct, State
+} = require('../models');
 
 const saltRounds = 10;
 
@@ -94,12 +90,6 @@ module.exports = {
                             model: Category,
                             attributes: [
                                 "id", "name"
-                            ]
-                        },
-                        {
-                            model: Subcategory,
-                            attributes: [
-                                "id", "CategoryId", "name"
                             ]
                         }
                     ]
@@ -237,6 +227,54 @@ module.exports = {
                     },
                     order: [['description', 'ASC']]
 
+                });
+
+            } catch (error) {
+                const err = error.stack || error.errors || error.message || error;
+                console.log(err);
+            }
+
+            return query;
+        },
+
+        //===========> ESTADOS <============//
+        stateIndex: async (_, args) => {
+            let query = null;
+            try {
+                query = await State.findAll({
+                    order: [['description', 'ASC']]
+                });
+
+            } catch (error) {
+                const err = error.stack || error.errors || error.message || error;
+                console.log(err);
+            }
+
+            return query;
+        },
+
+        //===========> CATEGORIA <============//
+        categoryIndex: async (_, args) => {
+            let query = null;
+            try {
+                query = await Category.findAll({
+                    order: [['name', 'ASC']]
+                });
+
+            } catch (error) {
+                const err = error.stack || error.errors || error.message || error;
+                console.log(err);
+            }
+
+            return query;
+        },
+
+        //===========> SUBCATEGORIA <============//
+        subcategoryIndex: async (_, args) => {
+            let query = null;
+            try {
+                query = await Subcategory.findAll({
+                    order: [['name', 'ASC']]
                 });
 
             } catch (error) {

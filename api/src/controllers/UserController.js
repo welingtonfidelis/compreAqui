@@ -7,7 +7,7 @@ module.exports = {
         try {
             const { 
                 name, doc, email, phone1, phone2, user, number, 
-                birth, type, cep, state, 
+                birth, type, cep, state, CategoryId,
                 city, district, street, complement
             } = req.body;
 
@@ -24,7 +24,7 @@ module.exports = {
 
             query = await User.create({
                 name, doc, email, phone1, phone2, user, photoUrl,
-                birth, password, type, AddressId
+                birth, password, type, AddressId, CategoryId
             });
             
             res.status(200).send({ status: true, response: query, code: 20 });

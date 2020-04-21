@@ -17,6 +17,12 @@ type Address {
     number: Int
 }
 
+type State {
+    id: ID,
+    description: String,
+    code: String
+}
+
 type Category {
     id: ID,
     name: String
@@ -114,6 +120,15 @@ type Query {
 
     ##===========> MARCA <============##
     brandIndex: [Brand]
+
+    ##===========> ESTADO <============##
+    stateIndex: [State]
+
+    ##===========> CATEGORIA <============##
+    categoryIndex: [Category]
+
+    ##===========> ESTADO <============##
+    subcategoryIndex: [Subcategory]
 
     ##===========> TAMANHO <============##
     sizeIndex: [Size]
