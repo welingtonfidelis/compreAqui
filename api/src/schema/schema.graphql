@@ -3,7 +3,9 @@ scalar Upload
 type token {
     name: String,
     token: String,
-    typeUser: String
+    typeUser: String,
+    typeUserEncript: String,
+    photoUrl: String
 }
 
 type Address {
@@ -43,6 +45,7 @@ type User {
     phone2: String,
     user: String,
     birth: String,
+    photoUrl: String,
     # password: String,
     tokenReset: String,
     type: String,

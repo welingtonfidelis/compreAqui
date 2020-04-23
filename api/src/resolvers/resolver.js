@@ -43,20 +43,24 @@ module.exports = {
                     where: {
                         [Op.or]: [{ user }, { email: user }]
                     },
-                    attributes: ['id', 'name', 'password', 'type']
+                    attributes: ['id', 'name', 'password', 'type', 'photoUrl']
                 });
 
                 if (query) {
-                    const { id, name, type } = query, hash = query.password;
+                    const { id, name, type, photoUrl } = query, hash = query.password; 
 
                     const isValid = await bcrypt.compareSync(password, hash);
+                    const typeEncript = bcrypt.hashSync(type, saltRounds);
 
                     if (isValid) {
                         const token = jwt.sign({ id, typeUser: type }, process.env.SECRET, {
                             // expiresIn: '12h'
                         })
 
-                        return { name, token, typeUser: type };
+                        return { 
+                            name, token, photoUrl, 
+                            typeUser: type, typeUserEncript: typeEncript 
+                        };
                     }
                 }
 

@@ -38,7 +38,7 @@ const server = new GraphQLServer({
 });
 
 server.start({ port: port1 }, () => {
-    console.log(`Server GRAPHQL running in ${port1}\n`)
+    console.log(`Server GRAPHQL running in ${port1}`)
 });
 
 app.listen(port2, () => {
