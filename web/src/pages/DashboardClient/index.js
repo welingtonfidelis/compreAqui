@@ -8,13 +8,13 @@ import './styles.scss';
 
 const graphql = require('babel-plugin-relay/macro');
 
-export default function DashboardComercial() {
+export default function DashboardClient() {
    
 
     return (
         <div className="App">
 
-        <h1>Dash comercial</h1>
+        <h1>Dash client</h1>
         <h2>teste</h2>
         OOOOI
         <Button variant="contained" color="primary">

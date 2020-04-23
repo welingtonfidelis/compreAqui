@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { format } from 'date-fns';
-import { Button, TextField } from '@material-ui/core';
+import { Button, TextField, InputLabel } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 import NumberFormat from 'react-number-format';
 import { fetchQuery } from 'react-relay';
@@ -112,7 +112,7 @@ export default function Profile(props) {
             data.append('street', street);
             data.append('number', number);
             data.append('complement', complement);
-            
+
             if (category) {
                 data.append('CategoryId', category.id);
             }
@@ -490,13 +490,15 @@ export default function Profile(props) {
             </div>
 
             <div className="input-separator">
-                <NumberFormat
+                <TextField
+                    type="number"
+                    fullWidth
                     required
                     id="number"
+                    label="Número"
+                    variant="outlined"
                     value={number}
                     onChange={event => setNumber(event.target.value)}
-                    placeholder="Número"
-                    mask="_"
                 />
             </div>
 

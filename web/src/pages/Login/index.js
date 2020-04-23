@@ -2,60 +2,20 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchQuery } from 'react-relay';
 import environment from '../../services/RelayEnvironment';
+import { Button } from '@material-ui/core';
+
 import Load from '../../components/Load';
 
 import './styles.scss';
 
 const graphql = require('babel-plugin-relay/macro');
 
-export default function Login() {
+export default function Login({ history }) {
     const ImageLogo = `${process.env.PUBLIC_URL}/logo192.png`;
     const [user, setUser] = useState('');
     const [password, setpassWord] = useState('');
     const [errorLogin, setErrorLogin] = useState(false);
     const [loading, setLoading] = useState(false);
-
-    // useEffect(() => {
-    //     // async function test() {
-    //     //   const query = graphql`
-    //     //   query ApptestQuery {
-    //     //     test
-    //     //   }
-    //     // `;
-
-    //     // const variables = { };
-
-    //     // const response = await fetchQuery(environment, query, variables);
-    //     // console.log(response);
-
-    //     // }
-
-    //     // test();
-
-    //     async function login() {
-    //         const query = graphql`
-    //         query LoginsessionSignQuery($user: String!, $password: String!) {
-    //         sessionSign(user: $user, password: $password) {
-    //           name
-    //           token
-    //           typeUser
-    //         }
-    //       }
-    //     `;
-
-    //         const variables = {
-    //             user: 'comercial1',
-    //             password: '1234'
-    //         };
-
-    //         const response = await fetchQuery(environment, query, variables);
-    //         console.log(response.sessionSign);
-
-    //     }
-
-    //     login();
-
-    // }, []);
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -68,6 +28,8 @@ export default function Login() {
                     name
                     token
                     typeUser
+                    typeUserEncript
+                    photoUrl
                 }
             }`;
 
@@ -76,14 +38,22 @@ export default function Login() {
             };
 
             const response = await fetchQuery(environment, query, variables);
-            if(response.sessionSign) {
-                console.log(response.sessionSign);
+            console.log(response);
+            
+            if (response.sessionSign) {
+                const { name, token, typeUserEncript, typeUser, photoUrl } = response.sessionSign;
+                localStorage.setItem('compreAqui@name', name);
+                localStorage.setItem('compreAqui@token', token);
+                localStorage.setItem('compreAqui@photoUrl', photoUrl);
+                localStorage.setItem('compreAqui@typeUser', typeUserEncript);
 
+                if (typeUser === 'comercial') history.push('/main/dashboardComercial');
+                else history.push('/main/dashboardClient');
             }
             else {
                 setErrorLogin(true);
             }
-            
+
 
         } catch (error) {
             console.error(error);
@@ -106,6 +76,7 @@ export default function Login() {
                     <form onSubmit={handleSubmit}>
                         <label htmlFor="user">Usuário</label>
                         <input
+                            required
                             type="text"
                             id="user"
                             placeholder="seu usuário"
@@ -114,6 +85,8 @@ export default function Login() {
                         />
                         <label htmlFor="password">Senha</label>
                         <input
+                            required
+                            autoComplete="on"
                             type="password"
                             id="password"
                             placeholder="*******"
@@ -121,7 +94,8 @@ export default function Login() {
                             onChange={event => setpassWord(event.target.value)}
                         />
 
-                        <button type="submit" className="btn-ok">ENTRAR</button>
+                        <Button type="submit" variant="contained" color="primary"> Entrar </Button>
+
                         {errorLogin ?
                             <span
                                 className="invalid-login"

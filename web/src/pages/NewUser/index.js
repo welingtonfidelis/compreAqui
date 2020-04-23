@@ -25,7 +25,7 @@ function getSteps() {
 }
 
 export default function NewUser({ history }) {
-    const classes = useStyles();
+    const classes = useStyles(); 
     const [activeStep, setActiveStep] = useState(0);
     const steps = getSteps();
     const [type, setType] = useState('');
@@ -35,7 +35,8 @@ export default function NewUser({ history }) {
     };
 
     const handleBack = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+        if(activeStep === 0) history.push('/');
+        else setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
     const handleReset = () => {
@@ -100,7 +101,7 @@ export default function NewUser({ history }) {
                     ) : (
                             <div className="btn-steps">
                                 <Button
-                                    disabled={activeStep === 0}
+                                    // disabled={activeStep === 0}
                                     onClick={handleBack}
                                     className={classes.backButton}
                                 >
