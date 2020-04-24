@@ -95,46 +95,14 @@ function Menu({ container, page }) {
             case 'Dashboard':
             case 'dashboard':
                 setTitleToolbar('Dashboard');
-                history.push('/main/dashboard');
+                history.push('/main/dashboardComercial');
                 break;
 
-            case 'Usuário':
-            case 'user':
-            case 'modaluser':
-                setTitleToolbar('Usuário');
-                history.push('/main/user');
-                break;
-
-            case 'Contribuinte':
-            case 'taxpayer':
-            case 'modaltaxpayer':
-                setTitleToolbar('Contribuinte');
-                history.push('/main/taxpayer');
-                break;
-
-            case 'Doação':
-            case 'donation':
-            case 'modaldonation':
-                setTitleToolbar('Doação');
-                history.push('/main/donation');
-                break;
-
-            case 'Recolhimento':
-            case 'receive':
-                setTitleToolbar('Recolhimento');
-                history.push('/main/receive');
-                break;
-
-            case 'Caixa':
-            case 'cashregister':
-                setTitleToolbar('Caixa');
-                history.push('/main/cashregister');
-                break;
-
-            case 'Relatório':
-            case 'report':
-                setTitleToolbar('Relatório');
-                history.push('/main/report');
+            case 'Produtos':
+            case 'products':
+            case 'modalProducts':
+                setTitleToolbar('Produtos');
+                history.push('/main/products');
                 break;
 
             default:

@@ -5,6 +5,7 @@ import MenuComercial from '../MenuComercial';
 
 import DashboardComercial from '../../pages/DashboardComercial';
 import DashboardClient from '../../pages/DashboardClient';
+import Products from '../../pages/Products';
 
 import { isComercial } from '../../services/auth';
 
@@ -16,6 +17,7 @@ export default function Main() {
             {isComercial() ? <MenuComercial page={window.location.href} /> : null}
             <Route path="/main/dashboardComercial" component={DashboardComercial} />
             <Route path="/main/dashboardClient" component={DashboardClient} />
+            <Route path="/main/products" component={Products} />
         </div>
     );
 }
