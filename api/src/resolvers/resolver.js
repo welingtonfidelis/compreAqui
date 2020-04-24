@@ -8,9 +8,10 @@ const readline = require('readline');
 const { google } = require('googleapis');
 
 const { 
-    User, Address, Brand, Size,
+    User, Address, Brand, Size, 
     Product, Category, Subcategory,
-    Request, RequestProduct, State
+    Request, RequestProduct, State,
+    ProductPhoto
 } = require('../models');
 
 const saltRounds = 10;
@@ -74,7 +75,7 @@ module.exports = {
 
         //===========> USUÁRIO <============//
         userIndex: async (_, args) => {
-            const notAuthenticated = isAuthenticated(args);
+            const notAuthenticated = isAuthenticated(args), { page = 1 } = args;
             if (notAuthenticated) return notAuthenticated;
 
             let query = null;
@@ -96,7 +97,9 @@ module.exports = {
                                 "id", "name"
                             ]
                         }
-                    ]
+                    ],
+                    offset: (page -1) * 15,
+                    limit: 15
                 });
                 // console.log("All users:", JSON.stringify(query, null, 2));
 
@@ -296,37 +299,26 @@ module.exports = {
 
             let query = null;
             try {
-                const { typeUser, ProviderId, UserId } = args;
+                const { typeUser, ProviderId, UserId, page = 1 } = args;
 
-                if (typeUser === 'client') {
-                    query = await Product.findAll({
-                        where: {
-                            ProviderId,
-                            stock: { [Op.gt]: 0 }
+                let where = { ProviderId, stock: { [Op.gt]: 0 }};
+                if(typeUser === 'comercial') where = { ProviderId: UserId };
+                
+                query = await Product.findAll({
+                    where,
+                    order: [['description', 'ASC']],
+                    include: [
+                        {
+                            model: User,
+                            as: "Provider"
                         },
-                        order: [['description', 'ASC']],
-                        include: [
-                            {
-                                model: User,
-                                as: "Provider"
-                            }
-                        ]
-                    });
-                }
-                else {
-                    query = await Product.findAll({
-                        where: {
-                            ProviderId: UserId
-                        },
-                        order: [['description', 'ASC']],
-                        include: [
-                            {
-                                model: User,
-                                as: "Provider"
-                            }
-                        ]
-                    });
-                }
+                        {
+                            model: ProductPhoto
+                        }
+                    ],
+                    offset: (page -1) * 15,
+                    limit: 15
+                });
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
@@ -371,7 +363,7 @@ module.exports = {
 
             let query = null;
             try {
-                const { UserId, typeUser } = args;
+                const { UserId, typeUser, page = 1 } = args;
 
                 if (typeUser === 'user') {
                     query = await Request.findAll({
@@ -397,8 +389,9 @@ module.exports = {
                                     }
                                 ]
                             }
-                        ]
-
+                        ],
+                        offset: (page -1) * 15,
+                        limit: 15
                     });
                 }
                 else {
@@ -425,11 +418,11 @@ module.exports = {
                                     }
                                 ]
                             }
-                        ]
-
+                        ],
+                        offset: (page -1) * 15,
+                        limit: 15
                     });
                 }
-
 
                 //console.log("All users:", JSON.stringify(query, null, 2));
 

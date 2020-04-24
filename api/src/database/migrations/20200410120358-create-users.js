@@ -85,6 +85,25 @@ module.exports = {
         allowNull: true,
         type: Sequelize.DATE
       }
+    }).then(async () => {
+      const transaction = await queryInterface.sequelize.transaction();
+      try{
+        await queryInterface.addIndex(
+          'Users',
+          {
+            fields: [
+              'user', 'doc','email', 'tokenReset', 
+              'CategoryId', 'AddressId', 'type'
+            ],
+            unique: true,
+            transaction,
+          }
+        );
+        await transaction.commit();
+      } catch (err) {
+        await transaction.rollback();
+        throw err;
+      }
     })
   },
 

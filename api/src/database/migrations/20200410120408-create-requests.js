@@ -37,6 +37,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
+      observation: {
+        allowNull: true,
+        type: Sequelize.STRING
+      },
       delivery: {
         allowNull: false,
         type: Sequelize.BOOLEAN
@@ -56,6 +60,22 @@ module.exports = {
       deletedAt: {
         allowNull: true,
         type: Sequelize.DATE
+      }
+    }).then(async () => {
+      const transaction = await queryInterface.sequelize.transaction();
+      try{
+        await queryInterface.addIndex(
+          'Requests',
+          {
+            fields: ['ClientId', 'ProviderId','status'],
+            unique: true,
+            transaction,
+          }
+        );
+        await transaction.commit();
+      } catch (err) {
+        await transaction.rollback();
+        throw err;
       }
     })
   },

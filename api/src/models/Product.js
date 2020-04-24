@@ -25,6 +25,9 @@ module.exports = (sequelize, DataTypes) => {
         }),
         Product.belongsTo(models.Size, {
             foreingKey: 'SizeId',
+        }),
+        Product.hasMany(models.ProductPhoto, {
+            foreingKey: 'ProductId'
         })
     }
     return Product;

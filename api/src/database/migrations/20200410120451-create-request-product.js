@@ -21,7 +21,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Requests',
+          model: 'Products',
           key: 'id',
         }
       },
@@ -40,6 +40,22 @@ module.exports = {
       deletedAt: {
         allowNull: true,
         type: Sequelize.DATE
+      }
+    }).then(async () => {
+      const transaction = await queryInterface.sequelize.transaction();
+      try{
+        await queryInterface.addIndex(
+          'RequestProducts',
+          {
+            fields: ['RequestId', 'ProductId'],
+            unique: true,
+            transaction,
+          }
+        );
+        await transaction.commit();
+      } catch (err) {
+        await transaction.rollback();
+        throw err;
       }
     })
   },
