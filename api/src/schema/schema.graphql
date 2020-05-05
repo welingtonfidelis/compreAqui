@@ -71,11 +71,12 @@ type Product {
     ProviderId: ID,
     BrandId: ID,
     SizeId: ID,
+    name: String,
     description: String,
     price: Float,
     stock: Int,
     Provider: User,
-    ProductPhoto: ProductPhoto
+    ProductPhotos: [ProductPhoto]
 }
 
 type ProductPhoto {
@@ -237,7 +238,8 @@ type Mutation {
     productStore(
         BrandId: ID!,
         SizeId: ID!,
-        description: String!,
+        name: String!,
+        description: String,
         price: Float!,
         stock: Int!,
     ): Product

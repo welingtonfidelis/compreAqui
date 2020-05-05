@@ -33,9 +33,13 @@ module.exports = {
           key: 'id',
         }
       },
-      description: {
+      name: {
         type: Sequelize.STRING,
         allowNull: false
+      },
+      description: {
+        type: Sequelize.STRING,
+        allowNull: true
       },
       price: {
         type: Sequelize.REAL,
@@ -65,7 +69,7 @@ module.exports = {
           {
             fields: [
               'ProviderId', 'BrandId', 'SizeId', 
-              'description', 'price'
+              'description', 'price', 'name'
             ],
             unique: true,
             transaction,

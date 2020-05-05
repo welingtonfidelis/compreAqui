@@ -306,7 +306,7 @@ module.exports = {
                 
                 query = await Product.findAll({
                     where,
-                    order: [['description', 'ASC']],
+                    order: [['name', 'ASC']],
                     include: [
                         {
                             model: User,
@@ -607,8 +607,6 @@ module.exports = {
         //===========> USUÁRIO <============//
         userStore: async (_, args) => {
             let query = null;
-
-            console.log(args);
 
             try {
                 const {
