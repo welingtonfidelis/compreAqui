@@ -293,6 +293,28 @@ module.exports = {
         },
 
         //===========> PRODUTO <============//
+        productCount: async (_, args) => {
+            const notAuthenticated = isAuthenticated(args);
+            if (notAuthenticated) return notAuthenticated;
+            
+            let query = null;
+            try {
+                const { typeUser, ProviderId, UserId } = args;
+                
+                let where = { ProviderId, stock: { [Op.gt]: 0 }};
+                if(typeUser === 'comercial') where = { ProviderId: UserId };
+                
+                const {count} = await Product.findAndCountAll({ where });
+                query = count;
+
+            } catch (error) {
+                const err = error.stack || error.errors || error.message || error;
+                console.log(err);
+            }
+
+            return query;
+        },
+
         productIndex: async (_, args) => {
             const notAuthenticated = isAuthenticated(args);
             if (notAuthenticated) return notAuthenticated;
@@ -303,7 +325,7 @@ module.exports = {
 
                 let where = { ProviderId, stock: { [Op.gt]: 0 }};
                 if(typeUser === 'comercial') where = { ProviderId: UserId };
-                
+                                
                 query = await Product.findAll({
                     where,
                     order: [['name', 'ASC']],
@@ -357,6 +379,28 @@ module.exports = {
         },
 
         //===========> PEDIDO <============//
+        requestCount: async (_, args) => {
+            const notAuthenticated = isAuthenticated(args);
+            if (notAuthenticated) return notAuthenticated;
+            
+            let query = null;
+            try {
+                const { typeUser, ProviderId, UserId } = args;
+                
+                let where = { ClientId: UserId };
+                if(typeUser === 'comercial') where = { ProviderId: UserId };
+                
+                const {count} = await Request.findAndCountAll({ where });
+                query = count;
+
+            } catch (error) {
+                const err = error.stack || error.errors || error.message || error;
+                console.log(err);
+            }
+
+            return query;
+        },
+
         requestIndex: async (_, args) => {
             const notAuthenticated = isAuthenticated(args);
             if (notAuthenticated) return notAuthenticated;

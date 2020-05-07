@@ -146,10 +146,12 @@ type Query {
 
     ##===========> PRODUTO <============##
     productIndex(ProviderId: ID, page: Int): [Product]
+    productCount(ProviderId: ID): Int
     productShow(id: ID!): Product
 
     ##===========> PEDIDO <============##
     requestIndex(page: Int): [Request]
+    requestCount: Int
 
     ##===========> PEDIDO/PRODUTO <============##
     requestShow(id: ID!): Request
