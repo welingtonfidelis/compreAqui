@@ -5,25 +5,25 @@ module.exports = {
     return queryInterface.bulkInsert({ tableName: 'Sizes' },
       [
         {
-          description: 'Tamanho 1',
+          sizeDescription: 'Tamanho 1',
           ProviderId: 1,
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
-          description: 'Tamanho 2',
+          sizeDescription: 'Tamanho 2',
           ProviderId: 1,
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
-          description: 'Tamanho 3',
+          sizeDescription: 'Tamanho 3',
           ProviderId: 2,
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
-          description: 'Tamanho 4',
+          sizeDescription: 'Tamanho 4',
           ProviderId: 2,
           createdAt: new Date(),
           updatedAt: new Date()

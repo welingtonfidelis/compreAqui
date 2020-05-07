@@ -32,7 +32,6 @@ module.exports = {
           'Categories',
           {
             fields: ['name'],
-            unique: true,
             transaction,
           }
         );

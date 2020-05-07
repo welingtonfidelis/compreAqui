@@ -40,7 +40,6 @@ module.exports = {
           'Subcategories',
           {
             fields: ['name', 'CategoryId'],
-            unique: true,
             transaction,
           }
         );

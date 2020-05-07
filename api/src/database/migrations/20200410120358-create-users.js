@@ -95,7 +95,6 @@ module.exports = {
               'user', 'doc','email', 'tokenReset', 
               'CategoryId', 'AddressId', 'type'
             ],
-            unique: true,
             transaction,
           }
         );

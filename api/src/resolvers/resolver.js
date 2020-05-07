@@ -210,7 +210,7 @@ module.exports = {
                     where: {
                         ProviderId: args.UserId
                     },
-                    order: [['description', 'ASC']]
+                    order: [['brandDescription', 'ASC']]
                 });
 
             } catch (error) {
@@ -232,7 +232,7 @@ module.exports = {
                     where: {
                         ProviderId: args.UserId
                     },
-                    order: [['description', 'ASC']]
+                    order: [['sizeDescription', 'ASC']]
 
                 });
 

@@ -15,7 +15,7 @@ export default function Login({ history }) {
     const [user, setUser] = useState('');
     const [password, setpassWord] = useState('');
     const [errorLogin, setErrorLogin] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);    
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -38,8 +38,7 @@ export default function Login({ history }) {
             };
 
             const response = await fetchQuery(environment, query, variables);
-            console.log(response);
-            
+
             if (response.sessionSign) {
                 const { name, token, typeUserEncript, typeUser, photoUrl } = response.sessionSign;
                 localStorage.setItem('compreAqui@name', name);
@@ -49,6 +48,7 @@ export default function Login({ history }) {
 
                 if (typeUser === 'comercial') history.push('/main/dashboardComercial');
                 else history.push('/main/dashboardClient');
+                return;
             }
             else {
                 setErrorLogin(true);

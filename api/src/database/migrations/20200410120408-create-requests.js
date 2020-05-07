@@ -68,7 +68,6 @@ module.exports = {
           'Requests',
           {
             fields: ['ClientId', 'ProviderId','status'],
-            unique: true,
             transaction,
           }
         );

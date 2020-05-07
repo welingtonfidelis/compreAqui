@@ -48,7 +48,6 @@ module.exports = {
           'RequestProducts',
           {
             fields: ['RequestId', 'ProductId'],
-            unique: true,
             transaction,
           }
         );

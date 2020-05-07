@@ -57,13 +57,13 @@ type User {
 type Brand {
     id: ID,
     ProviderId: ID,
-    description: String
+    brandDescription: String
 }
 
 type Size {
     id: ID,
     ProviderId: ID,
-    description: String
+    sizeDescription: String
 }
 
 type Product {
@@ -71,10 +71,18 @@ type Product {
     ProviderId: ID,
     BrandId: ID,
     SizeId: ID,
+    name: String,
     description: String,
     price: Float,
     stock: Int,
-    Provider: User
+    Provider: User,
+    ProductPhotos: [ProductPhoto]
+}
+
+type ProductPhoto {
+    id: ID,
+    ProductId: ID,
+    photoUrl: String
 }
 
 type Request {
@@ -112,7 +120,7 @@ type Query {
     test: String
 
     ##===========> USUÁRIO <============##
-    userIndex: [User]
+    userIndex(page: Int): [User]
     userShow(id: ID!): User
     userShowByDoc(doc: String!): User
     userShowByEmail(email: String!): User
@@ -137,11 +145,11 @@ type Query {
     sizeIndex: [Size]
 
     ##===========> PRODUTO <============##
-    productIndex(ProviderId: ID): [Product]
+    productIndex(ProviderId: ID, page: Int): [Product]
     productShow(id: ID!): Product
 
     ##===========> PEDIDO <============##
-    requestIndex: [Request]
+    requestIndex(page: Int): [Request]
 
     ##===========> PEDIDO/PRODUTO <============##
     requestShow(id: ID!): Request
@@ -230,7 +238,8 @@ type Mutation {
     productStore(
         BrandId: ID!,
         SizeId: ID!,
-        description: String!,
+        name: String!,
+        description: String,
         price: Float!,
         stock: Int!,
     ): Product

@@ -4,9 +4,8 @@ import {
   RecordSource,
   Store,
 } from 'relay-runtime';
-import { isEmpty } from 'lodash';
 
-const token = 'teste de token';
+const token = localStorage.getItem('compreAqui@token');
 
 function fetchQuery(operation, variables, cacheConfig, uploadables) {
   const request = {

@@ -12,6 +12,7 @@ import { isComercial } from '../../services/auth';
 import './styles.scss';
 
 export default function Main() {
+    
     return (
         <div id="main">
             {isComercial() ? <MenuComercial page={window.location.href} /> : null}

@@ -6,6 +6,7 @@ import { fetchQuery } from 'react-relay';
 import environment from '../../services/RelayEnvironment';
 
 import ModalProductNew from '../../components/ProductNew';
+import Load from '../../components/Load';
 
 import './styles.scss';
 
@@ -15,19 +16,59 @@ export default function Products() {
   const history = useHistory();
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [medicEditId, setMedicEditId] = useState(0);
+  const [productList, setProductList] = useState([]);
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    getProductList();
+  }, [page]);
+
+  async function getProductList() {
+    setLoading(true)
+    try {
+      const query = graphql`
+        query ProductsproductIndexQuery($page: Int) {
+          productIndex (page: $page)  {
+            id
+            name
+            description
+            price
+            stock
+            ProductPhotos {
+              photoUrl
+            }
+          }
+        }
+      `
+
+      const variables = {page}
+      const response = await fetchQuery(environment, query, variables)
+
+      console.log(response);
+
+      if (response.productIndex) {
+        setProductList(response.productIndex)
+        console.log(response.productIndex);
+        
+      }
+    } catch (error) {
+      console.error(error)
+    }
+    setLoading(false)
+  }
 
   function handleNewProduct() {
     setShowModal(!showModal);
   }
 
-  async function getListMedics() {
+  async function reloadList() {
     console.log('lista de produtos');
 
   }
 
   return (
     <div className="content">
+      <Load id="divLoading" loading={loading} />
 
       <h1>Dash comercial</h1>
       <h2>teste</h2>
@@ -40,8 +81,8 @@ export default function Products() {
       <ModalProductNew
         showModal={showModal}
         setShowModal={setShowModal}
-        id={medicEditId}
-        reloadListFunction={getListMedics} 
+        id={0}
+        reloadListFunction={reloadList}
       />
     </div>
   )

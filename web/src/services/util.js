@@ -32,18 +32,20 @@ const states = [
 
 export default {
   async getCep(cep) {
-    cep = (cep.replace(/\D/g, ''));
-
-    if (cep.length === 8) {
-      try {
-        const query = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
-
-        const { erro } = query.data;
-        if (erro) return null;
-        else return query.data;
-
-      } catch (error) {
-        console.log(error);
+    if(cep && cep !== ''){
+      cep = (cep.replace(/\D/g, ''));
+  
+      if (cep.length === 8) {
+        try {
+          const query = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
+  
+          const { erro } = query.data;
+          if (erro) return null;
+          else return query.data;
+  
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
 

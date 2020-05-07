@@ -57,13 +57,13 @@ type User {
 type Brand {
     id: ID,
     ProviderId: ID,
-    description: String
+    brandDescription: String
 }
 
 type Size {
     id: ID,
     ProviderId: ID,
-    description: String
+    sizeDescription: String
 }
 
 type Product {

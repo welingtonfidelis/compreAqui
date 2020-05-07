@@ -11,8 +11,6 @@ import {
     Storefront, TrendingUp, AttachMoney
 } from '@material-ui/icons';
 
-// import ModalEditProfile from '../ModalEditProfile/index';
-
 import Swal from '../../services/SweetAlert';
 
 import './styles.scss';
@@ -65,7 +63,7 @@ function Menu({ container, page }) {
         { text: 'Dashboard', icon: < Dashboard /> }, { text: 'Pedidos', icon: <Person /> },
         { text: 'Produtos', icon: <Storefront /> }, { text: 'Relatório', icon: <TrendingUp /> },
     ]);
-
+    
     async function exit() {
         if (await Swal.swalConfirm('Sair do sistema', 'Deseja realmente sair do sistema?')) {
             localStorage.clear();

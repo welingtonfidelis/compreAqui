@@ -71,7 +71,6 @@ module.exports = {
               'ProviderId', 'BrandId', 'SizeId', 
               'description', 'price', 'name'
             ],
-            unique: true,
             transaction,
           }
         );
