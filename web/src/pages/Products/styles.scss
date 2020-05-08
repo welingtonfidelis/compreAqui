@@ -1,0 +1,20 @@
+.product-list-content {
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    border: 1px solid #0e78fa;
+    border-radius: 8px;
+    margin: 5px;
+}
+
+.product-list-content img {
+    width: 60px;
+    height: 60px;
+}
+
+.product-list-dsc {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+
+}

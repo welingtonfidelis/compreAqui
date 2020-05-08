@@ -14,6 +14,7 @@ module.exports = {
                 title,
                 text,
                 icon,
+                confirmButtonColor: '#4caf50',
             }
         )
     },
@@ -29,18 +30,21 @@ module.exports = {
                 title,
                 text,
                 icon,
+                confirmButtonColor: '#4caf50',
             }
         )
     },
     
     swalConfirm(title = '', text = '') {
         return Swal.fire({
-            type: 'question',
+            icon: 'question',
             title,
             text,
             showCancelButton: true,
-            confirmButtonText: 'SIM',
-            cancelButtonText: 'NÃO',
+            confirmButtonText: "SIM",
+            confirmButtonColor: '#4caf50',
+            cancelButtonText: "NÃO",
+            cancelButtonColor: '#f50057',
             reverseButtons: true
         }).then((result) => {
             return (result.value)

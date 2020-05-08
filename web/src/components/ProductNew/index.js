@@ -41,6 +41,61 @@ export default function ProductNew({ showModal, setShowModal, id, reloadListFunc
   const [file, setFile] = useState([]);
 
   useEffect(() => {
+    async function getProduct() {
+      setLoading(true)
+      try {
+        const query = graphql`
+        query ProductNewproductShowQuery($id: ID!) {
+          productShow (id: $id)  {
+            ProviderId
+            BrandId
+            SizeId
+            description
+            name
+            price
+            stock
+            ProductPhotos {
+              photoUrl
+            }
+          }
+        }
+      `
+        const variables = { id }
+        const response = await fetchQuery(environment, query, variables)
+
+        if(response.productShow) {
+          const { productShow } = response;
+          console.log(productShow);
+
+          for(let el of brandList){
+            if (el.id === productShow.BrandId) {
+              setBrand(el)
+              break;
+            }
+          }
+          for(let el of sizeList){
+            if (el.id === productShow.SizeId) {
+              setSize(el)
+              break;
+            }
+          }
+
+          form.current.name.value = productShow.name;
+          form.current.description.value = productShow.description;
+          form.current.stock.value = productShow.stock;
+          form.current.price.value = productShow.price;
+        }
+
+      } catch (error) {
+        console.error(error)
+      }
+      setLoading(false)
+    };
+
+    if (id > 0) getProduct();
+  }, [id])
+
+  useEffect(() => {
     async function getInfo() {
       setLoading(true)
       try {
@@ -129,7 +184,7 @@ export default function ProductNew({ showModal, setShowModal, id, reloadListFunc
     let html = [];
     for (let i = 0; i < 3; i++) {
       html.push(
-        <div>
+        <div key={i}>
           <label htmlFor={`file_${i}`}>
             <img
               className="image-profile-large"
@@ -260,7 +315,7 @@ export default function ProductNew({ showModal, setShowModal, id, reloadListFunc
             </div>
 
             <div className="product-image-select">
-              <MountImageDiv/>
+              <MountImageDiv />
             </div>
 
             <Button fullWidth className="btn-save" type="submit">Salvar</Button>
