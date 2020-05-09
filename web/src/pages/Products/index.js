@@ -119,8 +119,8 @@ export default function Products() {
   }
 
   async function reloadList() {
-    console.log('lista de produtos');
-
+    setEditId(0);
+    getProductList();
   }
 
   return (
@@ -135,7 +135,7 @@ export default function Products() {
           onChange={event => setFilter(event.target.value)}
         />
 
-        <Button variant="contained" color="primary" onClick={{}}>
+        <Button variant="contained" color="primary" onClick={() => console.log('busca')}>
           <Search />
         </Button>
 

@@ -13,6 +13,7 @@ routes.post('/user', upload.single('file'), UserController.store);
 routes.use(verifyJWT);
 
 routes.post('/product', upload.array('files'), ProductController.store);
+routes.put('/product/:id', upload.array('files'), ProductController.update);
 
 //Validação de Token para continuar a executar requisição
 function verifyJWT(req, res, next) {

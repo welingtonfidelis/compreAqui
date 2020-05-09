@@ -365,6 +365,9 @@ module.exports = {
                         {
                             model: User,
                             as: "Provider"
+                        },
+                        {
+                            model: ProductPhoto
                         }
                     ]
 
@@ -890,11 +893,11 @@ module.exports = {
             let query = null;
             try {
                 const { UserId, BrandId, SizeId, description,
-                    price, stock } = args;
+                    price, stock, name } = args;
 
                 query = await Product.create({
                     ProviderId: UserId, description, BrandId,
-                    SizeId, stock, price
+                    SizeId, stock, price, name
                 });
 
             } catch (error) {

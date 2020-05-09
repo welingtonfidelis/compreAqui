@@ -33,12 +33,14 @@ const useStyles = makeStyles((theme) => ({
 export default function ProductNew({ showModal, setShowModal, id, reloadListFunction }) {
   const classes = useStyles();
   const form = useRef();
+  const img = useRef();
   const [loading, setLoading] = useState(false);
   const [brandList, setBrandList] = useState([]);
   const [sizeList, setSizeList] = useState([]);
   const [brand, setBrand] = useState(null);
   const [size, setSize] = useState(null);
   const [file, setFile] = useState([]);
+  const [fileDefault, setFileDefault] = useState(mountDefaultFile());
 
   useEffect(() => {
     async function getProduct() {
@@ -65,7 +67,6 @@ export default function ProductNew({ showModal, setShowModal, id, reloadListFunc
 
         if(response.productShow) {
           const { productShow } = response;
-          console.log(productShow);
 
           for(let el of brandList){
             if (el.id === productShow.BrandId) {
@@ -84,6 +85,12 @@ export default function ProductNew({ showModal, setShowModal, id, reloadListFunc
           form.current.description.value = productShow.description;
           form.current.stock.value = productShow.stock;
           form.current.price.value = productShow.price;
+
+          let tmp = fileDefault;
+          (productShow.ProductPhotos).forEach((el, index) => {
+            tmp[index] = el.photoUrl;
+          })
+          setFileDefault(tmp);
         }
 
       } catch (error) {
@@ -133,6 +140,9 @@ export default function ProductNew({ showModal, setShowModal, id, reloadListFunc
 
   function handleClose() {
     setShowModal(false);
+    setFileDefault(mountDefaultFile());
+    setBrand(null);
+    setSize(null);
   };
 
   async function handleSubmit(event) {
@@ -150,13 +160,23 @@ export default function ProductNew({ showModal, setShowModal, id, reloadListFunc
       data.append("BrandId", brand.id);
       data.append("SizeId", size.id);
 
+      const companyName = (localStorage.getItem('compreAqui@name')).replace(' ', '_');
       file.forEach((el, index) => {
-        data.append("files", el)
+        const ext = (el.type).split('/');
+        data.append("files", el, `${companyName}_${name.value}_${index}.${ext[1]}`);        
       });
 
-      const query = await api.post("product", data, {
-        headers: { "Content-Type": "multipart/form-data" },
-      })
+      let query = null 
+      if(id > 0) {
+        query = await api.put(`product/${id}`, data, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      }
+      else {
+        query = await api.post("product", data, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      }
 
       const { status } = query.data
       if (status) {
@@ -177,7 +197,16 @@ export default function ProductNew({ showModal, setShowModal, id, reloadListFunc
     let tmp = file;
     tmp[index] = photo;
 
+    document.getElementById(`img_${index}`).src = URL.createObjectURL(photo);
     setFile(tmp);
+  }
+
+  function mountDefaultFile() {
+    const tmp = [];
+    for(let i = 0; i < 3; i++) {
+      tmp.push(require('../../assets/images/imageDefault.png'));
+    }
+    return tmp;
   }
 
   function MountImageDiv() {
@@ -187,8 +216,9 @@ export default function ProductNew({ showModal, setShowModal, id, reloadListFunc
         <div key={i}>
           <label htmlFor={`file_${i}`}>
             <img
+              id={`img_${i}`}
               className="image-profile-large"
-              src={file[i] ? URL.createObjectURL(file[i]) : ImageDefault}
+              src={ fileDefault[i] }
               alt="Foto produto"
             />
           </label>
@@ -296,9 +326,7 @@ export default function ProductNew({ showModal, setShowModal, id, reloadListFunc
                 name="price"
                 label="Preço"
                 type="number"
-                InputLabelProps={{
-                  shrink: true,
-                }}
+                inputProps={{step: "any"}}
                 variant="outlined"
               />
             </div>
