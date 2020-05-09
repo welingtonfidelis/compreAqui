@@ -6,12 +6,14 @@ import { Button } from '@material-ui/core';
 
 import Load from '../../components/Load';
 
+import swal from '../../services/SweetAlert';
+
 import './styles.scss';
 
 const graphql = require('babel-plugin-relay/macro');
 
 export default function Login({ history }) {
-    const ImageLogo = `${process.env.PUBLIC_URL}/logo192.png`;
+    const ImageLogo = `${process.env.PUBLIC_URL}/logo.png`;
     const [user, setUser] = useState('');
     const [password, setpassWord] = useState('');
     const [errorLogin, setErrorLogin] = useState(false);
@@ -46,9 +48,16 @@ export default function Login({ history }) {
                 localStorage.setItem('compreAqui@photoUrl', photoUrl);
                 localStorage.setItem('compreAqui@typeUser', typeUserEncript);
 
-                if (typeUser === 'comercial') history.push('/main/dashboardComercial');
-                else history.push('/main/dashboardClient');
-                return;
+                if (typeUser === 'comercial') {
+                    history.push('/main/dashboardComercial');
+                    return;
+                }
+                else swal.swalInform(
+                    'Querido cliente', 
+                    'Nosso sistema ainda está em construção. Por favor, ' + 
+                    'use nosso aplicativo até que tenhamos finalizado o perfil ' + 
+                    'de CLIENTE nesta plataforma.',
+                    'info');
             }
             else {
                 setErrorLogin(true);

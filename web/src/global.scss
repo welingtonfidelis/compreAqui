@@ -61,6 +61,13 @@ input {
     cursor: pointer;
 }
 
+.image-profile-large-rounded {
+    @extend .image-profile-large;
+    height: 100px;
+    width: 100px;
+    border-radius: 50% !important;
+}
+
 .content {
     flex: 1;
     padding-top: 65px;
@@ -107,6 +114,7 @@ input {
 
 .search-bar {
     padding: 0 5px 0 5px;
+    margin-bottom: 10px;
     display: flex;
     flex-direction: row;
 }

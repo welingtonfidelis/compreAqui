@@ -135,51 +135,7 @@ export default function Profile(props) {
       console.log(error)
       swal.swalErrorInform()
     }
-    // const mutation = graphql`
-    //     mutation ProfileuserStoreMutation(
-    //         $name: String!, $doc: String!, $email: String!,
-    //         $phone1: String!, $phone2: String!, $user: String!,
-    //         $birth: String!, $password: String!, $type: String!,
-    //         $cep: String!, $state: String!, $city: String!,
-    //         $district: String!, $street: String!, $complement: String!,
-    //         $number: Int!
-    //     ) {
-    //         userStore(
-    //             name: $name doc: $doc email: $email
-    //             phone1: $phone1 phone2: $phone2 user: $user
-    //             birth: $birth password: $password type: $type
-    //             cep: $cep state: $state city: $city
-    //             district: $district street: $street
-    //             complement: $complement number: $number
-    //             ) {
-    //                 name
-    //             }
-    //     }
-    // `;
-
-    // const variables = {
-    //     name, doc, email, phone1, phone2, user,
-    //     birth, password, type, cep, state, city,
-    //     district, street, complement, number: parseInt(number),
-    // };
-
-    // commitMutation(environment, {
-    //     mutation, variables,
-    //     onCompleted: (response, errors) => {
-    //         const { userStore } = response;
-
-    //         if (userStore.name) {
-    //             swal.swalInform();
-    //             history.push('/');
-    //         }
-    //         else swal.swalErrorInform();
-    //     },
-    //     onError: err => {
-    //         console.error(err);
-    //         swal.swalErrorInform();
-    //     },
-    // });
-
+   
     setLoading(false)
   }
 

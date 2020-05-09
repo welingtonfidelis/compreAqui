@@ -12,8 +12,6 @@ import swal from '../../services/SweetAlert';
 import api from '../../services/api';
 import Load from '../Load';
 
-import ImageDefault from '../../assets/images/imageDefault.png';
-
 const graphql = require('babel-plugin-relay/macro');
 
 const useStyles = makeStyles((theme) => ({
@@ -30,10 +28,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ProductNew({ showModal, setShowModal, id, reloadListFunction }) {
+export default function ProductNew({ showModal, setShowModal, id, setId, reloadListFunction }) {
   const classes = useStyles();
   const form = useRef();
-  const img = useRef();
   const [loading, setLoading] = useState(false);
   const [brandList, setBrandList] = useState([]);
   const [sizeList, setSizeList] = useState([]);
@@ -143,6 +140,7 @@ export default function ProductNew({ showModal, setShowModal, id, reloadListFunc
     setFileDefault(mountDefaultFile());
     setBrand(null);
     setSize(null);
+    setId(0);
   };
 
   async function handleSubmit(event) {

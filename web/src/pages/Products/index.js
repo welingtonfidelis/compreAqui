@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import { Edit, Delete, Search } from '@material-ui/icons';
@@ -17,7 +16,6 @@ import './styles.scss';
 const graphql = require('babel-plugin-relay/macro');
 
 export default function Products() {
-  const history = useHistory();
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [productList, setProductList] = useState([]);
@@ -91,8 +89,6 @@ export default function Products() {
       commitMutation(environment, {
         mutation, variables,
         onCompleted: (response, errors) => {
-          console.log(response);
-
           const { productDelete } = response;
 
           if (productDelete > 0) {
@@ -148,13 +144,13 @@ export default function Products() {
         const { ProductPhotos } = el;
         const photoUrl = ProductPhotos[0]
           ? ProductPhotos[0].photoUrl
-          : require('../../assets/images/imageDefault.png');
+          : require('../../assets/images/bag.png');
         const colorStock = el.stock > 0 ? {} : { color: 'red' };
 
         return (
           <div key={el.id} className="product-list-content">
             <div className="flex-row" style={{ flex: 1 }}>
-              <img src={photoUrl} alt="Foto do produto" srcset="" />
+              <img src={photoUrl} alt="Foto do produto" />
               <div className="product-list-dsc">
                 <h3>{el.name}</h3>
                 <span>Preço atual: {util.maskValue(el.price)}</span>
@@ -163,7 +159,9 @@ export default function Products() {
             </div>
 
             <div className="btn-list-conteiner">
-              <div className="btn-list-edit" onClick={() => handleEditProduct(el.id)}><Edit /></div>
+              <div className="btn-list-edit" onClick={() => handleEditProduct(el.id)}>
+                <Edit />
+              </div>
               <div className="btn-list-del" onClick={() => handleDeleteProduct(el.id)}>
                 <Delete />
               </div>
@@ -186,6 +184,7 @@ export default function Products() {
         showModal={showModal}
         setShowModal={setShowModal}
         id={editId}
+        setId={setEditId}
         reloadListFunction={reloadList}
       />
     </div>

@@ -7,6 +7,8 @@ module.exports = (sequelize, DataTypes) => {
         status: DataTypes.STRING,
         delivery: DataTypes.BOOLEAN,
         cashBack: DataTypes.REAL,
+        observation: DataTypes.STRING,
+        reason: DataTypes.STRING
     },
         {
             tableName: 'Requests',

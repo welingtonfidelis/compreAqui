@@ -97,12 +97,15 @@ type Request {
     createdAt: String,
     Client: User,
     Provider: User,
+    observation: String,
+    reason: String,
     RequestProducts: [RequestProducts]
 }
 
 input RequestListProduct {
     id: ID,
     amount: Int
+    price: Float
 }
 
 type RequestProducts {
@@ -110,6 +113,7 @@ type RequestProducts {
     RequestId: ID,
     ProductId: ID,
     amount: Int,
+    price: Float,
     request: Request,
     Product: Product
 }
@@ -150,8 +154,8 @@ type Query {
     productShow(id: ID!): Product
 
     ##===========> PEDIDO <============##
-    requestIndex(page: Int): [Request]
-    requestCount: Int
+    requestIndex(page: Int, status: String): [Request]
+    requestCount(status: String): Int
 
     ##===========> PEDIDO/PRODUTO <============##
     requestShow(id: ID!): Request
@@ -265,13 +269,15 @@ type Mutation {
         value: Float!,
         delivery: String!,
         cashBack: Float!,
+        observation: String,
         products: [RequestListProduct!]
     ): Request
 
     requestChangeStatus (
         id: ID!,
         status: String,
-        timeWait: Int
+        timeWait: Int,
+        reason: String
     ): String
 
 }

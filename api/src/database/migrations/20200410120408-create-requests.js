@@ -49,6 +49,14 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER
       },
+      observation: {
+        allowNull: true,
+        type: Sequelize.STRING,
+      },
+      reason: {
+        allowNull: true,
+        type: Sequelize.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

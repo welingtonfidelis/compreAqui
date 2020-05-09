@@ -7,8 +7,8 @@ import {
     List, ListItem, ListItemIcon, ListItemText, Toolbar, Typography
 } from '@material-ui/core';
 import {
-    Dashboard, Person, People, MonetizationOn, Menu as MenuIcon,
-    Storefront, TrendingUp, AttachMoney
+    Dashboard, Person, Menu as MenuIcon,
+    Storefront
 } from '@material-ui/icons';
 
 import Swal from '../../services/SweetAlert';
@@ -59,10 +59,10 @@ function Menu({ container, page }) {
     const theme = useTheme();
     const [mobileOpen, setMobileOpen] = useState(false);
     const history = useHistory();
-    const [menuOptions, setMenuOptions] = useState([
+    const menuOptions = [
         { text: 'Dashboard', icon: < Dashboard /> }, { text: 'Pedidos', icon: <Person /> },
-        { text: 'Produtos', icon: <Storefront /> }, { text: 'Relatório', icon: <TrendingUp /> },
-    ]);
+        { text: 'Produtos', icon: <Storefront /> },
+    ];
     
     async function exit() {
         if (await Swal.swalConfirm('Sair do sistema', 'Deseja realmente sair do sistema?')) {
@@ -103,6 +103,13 @@ function Menu({ container, page }) {
                 history.push('/main/products');
                 break;
 
+            case 'Pedidos':
+            case 'requests':
+            case 'modalRequests':
+                setTitleToolbar('Pedidos');
+                history.push('/main/requests');
+                break;
+
             default:
                 break;
         }
@@ -112,11 +119,8 @@ function Menu({ container, page }) {
         <div className="content-menu">
             <header id="hdr">
                 <div id="logo">
-                    <img src={logo} />
+                    <img src={logo} alt="Logo do sistema"/>
                 </div>
-                {/* <div id="company-name">
-                    <h2>Nome da empresa</h2>
-                </div> */}
             </header>
             <Divider />
             <List className="content-list">
