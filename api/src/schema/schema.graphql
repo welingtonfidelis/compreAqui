@@ -71,6 +71,7 @@ type Product {
     ProviderId: ID,
     BrandId: ID,
     SizeId: ID,
+    SubcategoryId: ID,
     name: String,
     description: String,
     price: Float,
@@ -142,8 +143,9 @@ type Query {
     ##===========> CATEGORIA <============##
     categoryIndex: [Category]
 
-    ##===========> ESTADO <============##
+    ##===========> SUBCATEGORIA <============##
     subcategoryIndex: [Subcategory]
+    subcategoryIndexByUser: [Subcategory]
 
     ##===========> TAMANHO <============##
     sizeIndex: [Size]
@@ -244,6 +246,7 @@ type Mutation {
     productStore(
         BrandId: ID!,
         SizeId: ID!,
+        SubcategoryId: ID!,
         name: String!,
         description: String,
         price: Float!,
@@ -254,6 +257,7 @@ type Mutation {
         id: ID!,
         BrandId: ID!,
         SizeId: ID!,
+        SubcategoryId: ID!,
         description: String!,
         price: Float!,
         stock: Int!,

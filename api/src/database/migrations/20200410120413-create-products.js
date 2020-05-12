@@ -33,6 +33,14 @@ module.exports = {
           key: 'id',
         }
       },
+      SubcategoryId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Categories',
+          key: 'id',
+        }
+      },
       name: {
         type: Sequelize.STRING,
         allowNull: false
@@ -69,7 +77,7 @@ module.exports = {
           {
             fields: [
               'ProviderId', 'BrandId', 'SizeId', 
-              'description', 'price', 'name'
+              'description', 'price', 'name', 'SubcategoryId'
             ],
             transaction,
           }

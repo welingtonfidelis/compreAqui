@@ -3,8 +3,8 @@ const { Op } = require('sequelize');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const { 
-    User, Address, Brand, Size, 
+const {
+    User, Address, Brand, Size,
     Product, Category, Subcategory,
     Request, RequestProduct, State,
     ProductPhoto
@@ -44,7 +44,7 @@ module.exports = {
                 });
 
                 if (query) {
-                    const { id, name, type, photoUrl } = query, hash = query.password; 
+                    const { id, name, type, photoUrl } = query, hash = query.password;
 
                     const isValid = await bcrypt.compareSync(password, hash);
                     const typeEncript = bcrypt.hashSync(type, saltRounds);
@@ -54,9 +54,9 @@ module.exports = {
                             // expiresIn: '12h'
                         })
 
-                        return { 
-                            name, token, photoUrl, 
-                            typeUser: type, typeUserEncript: typeEncript 
+                        return {
+                            name, token, photoUrl,
+                            typeUser: type, typeUserEncript: typeEncript
                         };
                     }
                 }
@@ -94,7 +94,7 @@ module.exports = {
                             ]
                         }
                     ],
-                    offset: (page -1) * 15,
+                    offset: (page - 1) * 15,
                     limit: 15
                 });
                 // console.log("All users:", JSON.stringify(query, null, 2));
@@ -288,19 +288,44 @@ module.exports = {
             return query;
         },
 
+        subcategoryIndexByUser: async (_, args) => {
+            let query = null;
+            try {
+                const { CategoryId } = await User.findOne({
+                    where: {
+                        id: args.UserId
+                    },
+                    attributes: ["CategoryId"]
+                });
+
+                if (CategoryId) {
+                    query = await Subcategory.findAll({
+                        where: { CategoryId },
+                        order: [['name', 'ASC']]
+                    });
+                }
+
+            } catch (error) {
+                const err = error.stack || error.errors || error.message || error;
+                console.log(err);
+            }
+
+            return query;
+        },
+
         //===========> PRODUTO <============//
         productCount: async (_, args) => {
             const notAuthenticated = isAuthenticated(args);
             if (notAuthenticated) return notAuthenticated;
-            
+
             let query = null;
             try {
                 const { typeUser, ProviderId, UserId } = args;
-                
-                let where = { ProviderId, stock: { [Op.gt]: 0 }};
-                if(typeUser === 'comercial') where = { ProviderId: UserId };
-                
-                const {count} = await Product.findAndCountAll({ where });
+
+                let where = { ProviderId, stock: { [Op.gt]: 0 } };
+                if (typeUser === 'comercial') where = { ProviderId: UserId };
+
+                const { count } = await Product.findAndCountAll({ where });
                 query = count;
 
             } catch (error) {
@@ -319,9 +344,9 @@ module.exports = {
             try {
                 const { typeUser, ProviderId, UserId, page = 1 } = args;
 
-                let where = { ProviderId, stock: { [Op.gt]: 0 }};
-                if(typeUser === 'comercial') where = { ProviderId: UserId };
-                                
+                let where = { ProviderId, stock: { [Op.gt]: 0 } };
+                if (typeUser === 'comercial') where = { ProviderId: UserId };
+
                 query = await Product.findAll({
                     where,
                     order: [['name', 'ASC']],
@@ -334,7 +359,7 @@ module.exports = {
                             model: ProductPhoto
                         }
                     ],
-                    offset: (page -1) * 15,
+                    offset: (page - 1) * 15,
                     limit: 15
                 });
 
@@ -381,16 +406,16 @@ module.exports = {
         requestCount: async (_, args) => {
             const notAuthenticated = isAuthenticated(args);
             if (notAuthenticated) return notAuthenticated;
-            
+
             let query = null;
             try {
                 const { typeUser, UserId, status } = args;
-                
+
                 let where = { ClientId: UserId };
-                if(typeUser === 'comercial') where = { ProviderId: UserId };
-                if(status) where.status = status;
-                
-                const {count} = await Request.findAndCountAll({ where });
+                if (typeUser === 'comercial') where = { ProviderId: UserId };
+                if (status) where.status = status;
+
+                const { count } = await Request.findAndCountAll({ where });
                 query = count;
 
             } catch (error) {
@@ -410,7 +435,7 @@ module.exports = {
                 const { UserId, typeUser, page = 1, status } = args;
 
                 let where = { ClientId: UserId };
-                let include = [ 
+                let include = [
                     {
                         model: User,
                         as: "Provider",
@@ -433,13 +458,13 @@ module.exports = {
                     where = { ProviderId: UserId };
                     include[0].as = "Client";
                 }
-                if(status) where.status = status;
+                if (status) where.status = status;
 
                 query = await Request.findAll({
                     where,
                     order: [['createdAt', 'DESC']],
                     include,
-                    offset: (page -1) * 15,
+                    offset: (page - 1) * 15,
                     limit: 15
                 });
 
@@ -770,12 +795,14 @@ module.exports = {
 
             let query = null;
             try {
-                const { UserId, BrandId, SizeId, description,
-                    price, stock, name } = args;
+                const {
+                    UserId, BrandId, SizeId, description,
+                    price, stock, name, SubcategoryId
+                } = args;
 
                 query = await Product.create({
                     ProviderId: UserId, description, BrandId,
-                    SizeId, stock, price, name
+                    SizeId, stock, price, name, SubcategoryId
                 });
 
             } catch (error) {
@@ -791,8 +818,10 @@ module.exports = {
 
             let query = null;
             try {
-                const { id, BrandId, SizeId, description,
-                    price, stock } = args;
+                const {
+                    id, BrandId, SizeId, description,
+                    price, stock, SubcategoryId
+                } = args;
 
                 query = await Product.update({
                     BrandId, SizeId, description,
@@ -855,7 +884,7 @@ module.exports = {
                 const RequestId = query.dataValues.id;
                 for (const prod of products) {
                     await RequestProduct.create({
-                        RequestId, ProductId: prod.id, 
+                        RequestId, ProductId: prod.id,
                         amount: prod.amount, price: prod.price
                     });
 

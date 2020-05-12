@@ -7,6 +7,7 @@ module.exports = {
         {
           BrandId: 1,
           SizeId: 1,
+          SubcategoryId: 1,
           name: "Produto 1",
           description: "Produto 1 descrição",
           price: 22.50,
@@ -18,6 +19,7 @@ module.exports = {
         {
           BrandId: 1,
           SizeId: 2,
+          SubcategoryId: 2,
           name: "Produto 2",
           description: "Produto 2 descrição",
           price: 10.50,
@@ -29,6 +31,7 @@ module.exports = {
         {
           BrandId: 2,
           SizeId: 1,
+          SubcategoryId: 1,
           name: "Produto 3",
           description: "Produto 3 descrição",
           price: 10,
@@ -40,6 +43,7 @@ module.exports = {
         {
           BrandId: 2,
           SizeId: 2,
+          SubcategoryId: 2,
           name: "Produto 4",
           description: "Produto 4 descrição",
           price: 1500.50,
@@ -48,8 +52,6 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date()
         },
-        
-
       ])
   },
 

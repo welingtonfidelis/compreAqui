@@ -3,6 +3,7 @@ module.exports = (sequelize, DataTypes) => {
         ProviderId: DataTypes.INTEGER,
         BrandId: DataTypes.INTEGER,
         SizeId: DataTypes.INTEGER,
+        SubcategoryId: DataTypes.INTEGER,
         name: DataTypes.STRING,
         description: DataTypes.STRING,
         price: DataTypes.REAL,
@@ -26,6 +27,9 @@ module.exports = (sequelize, DataTypes) => {
         }),
         Product.belongsTo(models.Size, {
             foreingKey: 'SizeId',
+        }),
+        Product.belongsTo(models.Subcategory, {
+            foreingKey: 'SubcategoryId',
         }),
         Product.hasMany(models.ProductPhoto, {
             foreingKey: 'ProductId'
