@@ -530,7 +530,8 @@ module.exports = {
                         model: RequestProduct,
                         include: [
                             {
-                                model: Product
+                                model: Product,
+                                paranoid: false
                             }
                         ]
                     }
@@ -566,60 +567,37 @@ module.exports = {
             try {
                 const { UserId, typeUser, id } = args;
 
-                if (typeUser === 'client') {
-                    query = await Request.findOne({
-                        where: {
-                            id
-                        },
-                        order: [['createdAt', 'DESC']],
+                let where = { id };
+                let include = [
+                    {
+                        model: User,
+                        as: "Provider",
                         include: [
                             {
-                                model: User,
-                                as: "Provider",
-                                include: [
-                                    {
-                                        model: Address
-                                    }
-                                ]
-                            },
-                            {
-                                model: RequestProduct,
-                                include: [
-                                    {
-                                        model: Product
-                                    }
-                                ]
+                                model: Address
                             }
                         ]
-                    });
-                }
-                else {
-                    query = await Request.findOne({
-                        where: {
-                            id
-                        },
-                        order: [['createdAt', 'DESC']],
+                    },
+                    {
+                        model: RequestProduct,
                         include: [
                             {
-                                model: User,
-                                as: "Client",
-                                include: [
-                                    {
-                                        model: Address
-                                    }
-                                ]
-                            },
-                            {
-                                model: RequestProduct,
-                                include: [
-                                    {
-                                        model: Product
-                                    }
-                                ]
+                                model: Product,
+                                paranoid: false
                             }
                         ]
-                    });
+                    }
+                ]
+                if (typeUser === 'comercial') {
+                    where = { ProviderId: UserId };
+                    include[0].as = "Client";
                 }
+
+                query = await Request.findOne({
+                    where,
+                    order: [['createdAt', 'DESC']],
+                    include
+                });
 
                 //console.log("All users:", JSON.stringify(query, null, 2));
 
