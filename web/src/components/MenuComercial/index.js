@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core';
 import {
     Dashboard, Person, Menu as MenuIcon,
-    Storefront
+    Storefront, LocalOffer, AspectRatio
 } from '@material-ui/icons';
 
 import Swal from '../../services/SweetAlert';
@@ -61,7 +61,8 @@ function Menu({ container, page }) {
     const history = useHistory();
     const menuOptions = [
         { text: 'Dashboard', icon: < Dashboard /> }, { text: 'Pedidos', icon: <Person /> },
-        { text: 'Produtos', icon: <Storefront /> },
+        { text: 'Produtos', icon: <Storefront /> }, { text: 'Marcas', icon: <LocalOffer /> },
+        { text: 'Tamanhos', icon: <AspectRatio /> },
     ];
     
     async function exit() {
@@ -108,6 +109,20 @@ function Menu({ container, page }) {
             case 'modalRequests':
                 setTitleToolbar('Pedidos');
                 history.push('/main/requests');
+                break;
+
+            case 'Marcas':
+            case 'brands':
+            case 'modalBrands':
+                setTitleToolbar('Marcas');
+                history.push('/main/brands');
+                break;
+                
+            case 'Tamanhos':
+            case 'sizes':
+            case 'modalSizes':
+                setTitleToolbar('Tamanhos');
+                history.push('/main/sizes');
                 break;
 
             default:

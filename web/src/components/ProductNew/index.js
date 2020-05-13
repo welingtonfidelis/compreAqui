@@ -34,8 +34,10 @@ export default function ProductNew({ showModal, setShowModal, id, setId, reloadL
   const [loading, setLoading] = useState(false);
   const [brandList, setBrandList] = useState([]);
   const [sizeList, setSizeList] = useState([]);
+  const [subCategoryList, SetSubcategoryList] = useState([]);
   const [brand, setBrand] = useState(null);
   const [size, setSize] = useState(null);
+  const [subcategory, setSubcategory] = useState({});
   const [file, setFile] = useState([]);
   const [fileDefault, setFileDefault] = useState(mountDefaultFile());
 
@@ -49,6 +51,7 @@ export default function ProductNew({ showModal, setShowModal, id, setId, reloadL
             ProviderId
             BrandId
             SizeId
+            SubcategoryId
             description
             name
             price
@@ -74,6 +77,12 @@ export default function ProductNew({ showModal, setShowModal, id, setId, reloadL
           for(let el of sizeList){
             if (el.id === productShow.SizeId) {
               setSize(el)
+              break;
+            }
+          }
+          for(let el of subCategoryList){
+            if (el.id === productShow.SubcategoryId) {
+              setSubcategory(el);
               break;
             }
           }
@@ -104,7 +113,7 @@ export default function ProductNew({ showModal, setShowModal, id, setId, reloadL
       setLoading(true)
       try {
         const query = graphql`
-          query ProductNewbrandIndexAndsizeIndexQuery {
+          query ProductNewbrandIndexAndsizeIndexAndsubcategoryIndexByUserQuery {
             brandIndex{
               id
               brandDescription
@@ -114,6 +123,11 @@ export default function ProductNew({ showModal, setShowModal, id, setId, reloadL
               id
               sizeDescription
             }
+
+            subcategoryIndexByUser {
+              id
+              name
+            }
           }
         `
 
@@ -121,13 +135,17 @@ export default function ProductNew({ showModal, setShowModal, id, setId, reloadL
         const response = await fetchQuery(environment, query, variables)
 
         if (response.brandIndex) {
-          setBrandList(response.brandIndex)
+          setBrandList(response.brandIndex);
         }
         if (response.sizeIndex) {
-          setSizeList(response.sizeIndex)
+          setSizeList(response.sizeIndex);
         }
+        if (response.subcategoryIndexByUser) {
+          SetSubcategoryList(response.subcategoryIndexByUser);
+        }
+
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
       setLoading(false)
     }
@@ -157,6 +175,7 @@ export default function ProductNew({ showModal, setShowModal, id, setId, reloadL
       data.append("stock", stock.value);
       data.append("BrandId", brand.id);
       data.append("SizeId", size.id);
+      data.append("SubcategoryId", subcategory.id);
 
       const companyName = (localStorage.getItem('compreAqui@name')).replace(' ', '_');
       file.forEach((el, index) => {
@@ -252,6 +271,28 @@ export default function ProductNew({ showModal, setShowModal, id, setId, reloadL
             <Load id="divLoading" loading={loading} />
 
             <h2>{id > 0 ? "Editar produto" : "Cadastrar produto"}</h2>
+
+            <Autocomplete
+              id="subcategory"
+              className="input-separator"
+              options={subCategoryList}
+              getOptionLabel={(option) => option.name}
+              onChange={(event, opt) => {
+                if (opt) setSubcategory(opt)
+              }}
+              value={subcategory}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  fullWidth
+                  required
+                  id="subcategory"
+                  name="subcategory"
+                  label="Subcategoria"
+                  variant="outlined"
+                />
+              )}
+            />
 
             <Autocomplete
               id="brand"

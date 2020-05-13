@@ -135,10 +135,12 @@ type Query {
     sessionSign(user: String!, password: String!): token
 
     ##===========> MARCA <============##
-    brandIndex: [Brand]
+    brandCount: Int
+    brandIndex(page: Int): [Brand]
+    brandShow(id: ID!): Brand
 
     ##===========> ESTADO <============##
-    stateIndex: [State]
+    stateIndex(page: Int): [State]
 
     ##===========> CATEGORIA <============##
     categoryIndex: [Category]
@@ -148,7 +150,9 @@ type Query {
     subcategoryIndexByUser: [Subcategory]
 
     ##===========> TAMANHO <============##
-    sizeIndex: [Size]
+    sizeCount: Int
+    sizeIndex(page: Int): [Size]
+    sizeShow(id: ID!): Size
 
     ##===========> PRODUTO <============##
     productIndex(ProviderId: ID, page: Int): [Product]
@@ -216,12 +220,12 @@ type Mutation {
 
     ##===========> MARCA <============##
     brandStore(
-        description: String!,
+        brandDescription: String!,
     ): Brand
 
     brandUpdate(
         id: ID!
-        description: String!
+        brandDescription: String!
     ): String
 
     brandDelete(
@@ -230,12 +234,12 @@ type Mutation {
 
     ##===========> TAMANHO <============##
     sizeStore(
-        description: String!,
+        sizeDescription: String!,
     ): Size
 
     sizeUpdate(
         id: ID!
-        description: String!
+        sizeDescription: String!
     ): String
 
     sizeDelete(

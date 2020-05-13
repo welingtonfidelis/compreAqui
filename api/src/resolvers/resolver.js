@@ -196,17 +196,58 @@ module.exports = {
         },
 
         //===========> MARCA <============//
+        brandCount: async (_, args) => {
+            const notAuthenticated = isAuthenticated(args);
+            if (notAuthenticated) return notAuthenticated;
+
+            let query = null;
+            try {
+                const { count } = await Brand.findAndCountAll({
+                    where: { ProviderId: args.UserId }
+                });
+                query = count;
+
+            } catch (error) {
+                const err = error.stack || error.errors || error.message || error;
+                console.log(err);
+            }
+
+            return query;
+        },
+
         brandIndex: async (_, args) => {
             const notAuthenticated = isAuthenticated(args);
             if (notAuthenticated) return notAuthenticated;
 
             let query = null;
             try {
+                const { page = 1 } = args;
                 query = await Brand.findAll({
                     where: {
                         ProviderId: args.UserId
                     },
-                    order: [['brandDescription', 'ASC']]
+                    order: [['brandDescription', 'ASC']],
+                    offset: (page - 1) * 15,
+                    limit: 15
+                });
+
+            } catch (error) {
+                const err = error.stack || error.errors || error.message || error;
+                console.log(err);
+            }
+
+            return query;
+        },
+
+        brandShow: async (_, args) => {
+            const notAuthenticated = isAuthenticated(args);
+            if (notAuthenticated) return notAuthenticated;
+
+            let query = null;
+            try {
+                const { id } = args;
+                query = await Brand.findOne({
+                    where: { id },
                 });
 
             } catch (error) {
@@ -218,18 +259,58 @@ module.exports = {
         },
 
         //===========> TAMANHO <============//
+        sizeCount: async (_, args) => {
+            const notAuthenticated = isAuthenticated(args);
+            if (notAuthenticated) return notAuthenticated;
+
+            let query = null;
+            try {
+                const { count } = await Size.findAndCountAll({
+                    where: { ProviderId: args.UserId }
+                });
+                query = count;
+
+            } catch (error) {
+                const err = error.stack || error.errors || error.message || error;
+                console.log(err);
+            }
+
+            return query;
+        },
+
         sizeIndex: async (_, args) => {
             const notAuthenticated = isAuthenticated(args);
             if (notAuthenticated) return notAuthenticated;
 
             let query = null;
             try {
+                const { page = 1 } = args;
                 query = await Size.findAll({
                     where: {
                         ProviderId: args.UserId
                     },
-                    order: [['sizeDescription', 'ASC']]
+                    order: [['sizeDescription', 'ASC']],
+                    offset: (page - 1) * 15,
+                    limit: 15
+                });
 
+            } catch (error) {
+                const err = error.stack || error.errors || error.message || error;
+                console.log(err);
+            }
+
+            return query;
+        },
+
+        sizeShow: async (_, args) => {
+            const notAuthenticated = isAuthenticated(args);
+            if (notAuthenticated) return notAuthenticated;
+
+            let query = null;
+            try {
+                const { id } = args;
+                query = await Size.findOne({
+                    where: { id },
                 });
 
             } catch (error) {
@@ -655,10 +736,10 @@ module.exports = {
 
             let query = null;
             try {
-                const { UserId, description } = args;
+                const { UserId, brandDescription } = args;
 
                 query = await Brand.create({
-                    ProviderId: UserId, description
+                    ProviderId: UserId, brandDescription
                 });
 
             } catch (error) {
@@ -674,10 +755,10 @@ module.exports = {
 
             let query = null;
             try {
-                const { id, description } = args;
+                const { id, brandDescription } = args;
 
                 query = await Brand.update({
-                    description
+                    brandDescription
                 },
                     {
                         return: true,
@@ -725,10 +806,10 @@ module.exports = {
 
             let query = null;
             try {
-                const { UserId, description } = args;
+                const { UserId, sizeDescription } = args;
 
                 query = await Size.create({
-                    ProviderId: UserId, description
+                    ProviderId: UserId, sizeDescription
                 });
 
             } catch (error) {
@@ -744,10 +825,10 @@ module.exports = {
 
             let query = null;
             try {
-                const { id, description } = args;
+                const { id, sizeDescription } = args;
 
                 query = await Size.update({
-                    description
+                    sizeDescription
                 },
                     {
                         return: true,

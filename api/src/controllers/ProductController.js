@@ -5,11 +5,12 @@ module.exports = {
         try {
             const {
                 name, description, SizeId,
-                BrandId, stock, price
+                BrandId, stock, price, SubcategoryId
             } = req.body, { UserId } = req.headers;
 
+            
             const { id } = await Product.create({
-                name, description, SizeId,
+                name, description, SizeId, SubcategoryId,
                 BrandId, stock, price, ProviderId: UserId
             });
 
@@ -41,7 +42,7 @@ module.exports = {
             } = req.body, { id } = req.params;
 
             const query = await Product.update(
-                { name, description, SizeId,
+                { name, description, SizeId, SubcategoryId,
                 BrandId, stock, price },
                 { where: { id } });
 

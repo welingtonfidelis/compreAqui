@@ -7,6 +7,8 @@ import DashboardComercial from '../../pages/DashboardComercial';
 import DashboardClient from '../../pages/DashboardClient';
 import Products from '../../pages/Products';
 import Requests from '../../pages/Requests';
+import Brands from '../../pages/Brands';
+import Sizes from '../../pages/Sizes';
 
 import { isComercial } from '../../services/auth';
 
@@ -21,6 +23,8 @@ export default function Main() {
             <Route path="/main/dashboardClient" component={DashboardClient} />
             <Route path="/main/products" component={Products} />
             <Route path="/main/requests" component={Requests} />
+            <Route path="/main/brands" component={Brands} />
+            <Route path="/main/sizes" component={Sizes} />
         </div>
     );
 }
