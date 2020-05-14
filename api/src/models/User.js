@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
         tokenReset: DataTypes.STRING,
         type: DataTypes.STRING,
         AddressId: DataTypes.INTEGER,
-        CategoryId: DataTypes.INTEGER
+        CategoryId: DataTypes.INTEGER,
+        playId: DataTypes.STRING
     },
         {
             tableName: 'Users',

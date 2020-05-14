@@ -10,11 +10,9 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "@unform/core": "^2.1.0",
     "axios": "^0.19.2",
     "bcryptjs": "^2.4.3",
     "date-fns": "^2.12.0",
-    "formik": "^2.1.4",
     "lodash": "^4.17.15",
     "node-sass": "^4.13.1",
     "react": "^16.13.1",
@@ -30,8 +28,7 @@
     "redux": "^4.0.5",
     "relay-runtime": "^9.0.0",
     "sweetalert2": "^9.10.12",
-    "use-persisted-reducer": "^2.1.0",
-    "yup": "^0.28.4"
+    "use-persisted-reducer": "^2.1.0"
   },
   "scripts": {
     "start": "react-scripts start",

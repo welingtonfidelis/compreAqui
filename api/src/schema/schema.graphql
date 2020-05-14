@@ -46,12 +46,12 @@ type User {
     user: String,
     birth: String,
     photoUrl: String,
-    # password: String,
     tokenReset: String,
     type: String,
     Address: Address,
     Category: Category,
-    Subcategory: Subcategory
+    Subcategory: Subcategory,
+    playId: String
 }
 
 type Brand {
@@ -132,7 +132,7 @@ type Query {
     userShowByUser(user: String!): User
 
     ##===========> SESSÃO/LOGIN <============##
-    sessionSign(user: String!, password: String!): token
+    sessionSign(user: String!, password: String!, playId: String): token
 
     ##===========> MARCA <============##
     brandCount: Int

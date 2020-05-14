@@ -34,13 +34,13 @@ module.exports = {
         //===========> LOGIN <============//
         sessionSign: async (_, args) => {
             try {
-                const { user, password } = args;
+                const { user, password, playId } = args;
 
                 const query = await User.findOne({
                     where: {
                         [Op.or]: [{ user }, { email: user }]
                     },
-                    attributes: ['id', 'name', 'password', 'type', 'photoUrl']
+                    attributes: ['id', 'name', 'password', 'type', 'photoUrl', 'playId']
                 });
 
                 if (query) {
@@ -53,6 +53,13 @@ module.exports = {
                         const token = jwt.sign({ id, typeUser: type }, process.env.SECRET, {
                             // expiresIn: '12h'
                         })
+
+                        if (playId && playId != query.playId) {
+                            User.update(
+                                { playId },
+                                { where: { id } }
+                            );
+                        }
 
                         return {
                             name, token, photoUrl,
