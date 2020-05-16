@@ -5,8 +5,9 @@ export default StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        marginHorizontal: 50,
-        backgroundColor: 'red',
+        paddingHorizontal: 10,
+        paddingTop: 10,
+        backgroundColor: '#fff',
     },
     btnSave1: {
         backgroundColor: '#F2BB16',
@@ -39,5 +40,8 @@ export default StyleSheet.create({
         color: '#F2BB16',
         fontWeight: 'bold',
         textTransform: 'uppercase',
+    },
+    flexRow: {
+        flexDirection: 'row',
     },
 });

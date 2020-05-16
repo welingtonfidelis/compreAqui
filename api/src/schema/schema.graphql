@@ -126,6 +126,7 @@ type Query {
 
     ##===========> USUÁRIO <============##
     userIndex(page: Int): [User]
+    userIndexByCategory(page: Int, CategoryId: ID!): [User]
     userShow(id: ID!): User
     userShowByDoc(doc: String!): User
     userShowByEmail(email: String!): User

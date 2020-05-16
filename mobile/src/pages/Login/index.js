@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 
-import {
-  View, KeyboardAvoidingView, Text,
-  TouchableOpacity, Image,
-  ImageBackground, StatusBar, Button
-} from 'react-native';
-import { TextInput } from 'react-native-paper';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { TextInput, ActivityIndicator } from 'react-native-paper';
 import { graphql, fetchQuery } from 'react-relay';
 import environment from '../../services/createRelayEnvironment';
 import OneSignal from 'react-native-onesignal';
+import { useDispatch, useSelector } from 'react-redux';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import alert from '../../services/alert';
 
@@ -20,10 +18,11 @@ import logo from '../../assets/images/logo.png';
 export default function Login({ navigation }) {
   const [errorLogin, setErroLogin] = useState(false);
   const [load, setLoad] = useState(false);
-  const [user, setUser] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(true);
+  const [user, setUser] = useState('user1');
+  const [password, setPassword] = useState('1234');
   const [PlayerId, setPlayerId] = useState('');
+  const dispatch = useDispatch();
+  const position = useSelector(state => state);
 
   useEffect(() => {
     async function init() {
@@ -37,8 +36,7 @@ export default function Login({ navigation }) {
   }, []);
 
   async function handleSubmit() {
-    console.log(PlayerId);
-
+    setLoad(true);
     try {
       const query = graphql`
             query LoginsessionSignQuery($user: String!, $password: String!, $PlayerId: String) {
@@ -51,18 +49,23 @@ export default function Login({ navigation }) {
             }`;
 
       const variables = { user, password, PlayerId };
-
       const response = await fetchQuery(environment, query, variables);
 
       const { sessionSign } = response;
       if (sessionSign) {
-        if (sessionSign.typeUser === 'client') {
-          console.log(sessionSign);
+        const { name, typeUser, photoUrl, token } = sessionSign;
+        if (typeUser === 'client') {
+          dispatch({ type: 'UPDATE_USER', user: { name, typeUser, token, photoUrl } });
+          await AsyncStorage.setItem('compreAqui@token', token);
 
+          navigation.navigate('client');
+          setLoad(false);
+          return;
         }
-        else { alert.successInform(
-          'Comerciante',
-          'O aplicativo ainda está em desenvolvimento para o seu perfil. Por favor, utilize a plataforma web.');
+        else {
+          alert.successInform(
+            'Comerciante',
+            'O aplicativo ainda está em desenvolvimento para o seu perfil. Por favor, utilize a plataforma web.');
         }
 
       }
@@ -70,8 +73,12 @@ export default function Login({ navigation }) {
 
     } catch (error) {
       console.error(error);
-      alert.errorInform(null, 'teste');
+      alert.errorInform(
+        null,
+        'Houve um erro ao tentar logar em sua conta. Por favor, tente novamente'
+      );
     }
+    setLoad(false);
   }
 
   return (
@@ -111,7 +118,10 @@ export default function Login({ navigation }) {
         style={globalStyles.btnSave1}
         onPress={handleSubmit}
       >
-        <Text style={globalStyles.txtSave1}>Entrar</Text>
+        {load
+          ? <ActivityIndicator animating={load} />
+          : <Text style={globalStyles.txtSave1}>Entrar</Text>
+        }
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -123,7 +133,7 @@ export default function Login({ navigation }) {
 
       <TouchableOpacity
         style={[globalStyles.btnSave2, styles.btnRegister]}
-        onPress={() => console.log('register')}
+        onPress={() => console.log('teste', position)}
       >
         <Text style={globalStyles.txtSave2}>Cadastre-se</Text>
       </TouchableOpacity>

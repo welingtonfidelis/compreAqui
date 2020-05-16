@@ -12,6 +12,7 @@
     "relay": "relay-compiler --src ./src --schema src/data/schema.graphql"
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.10.1",
     "@react-native-community/masked-view": "^0.1.7",
     "@react-navigation/bottom-tabs": "^5.2.5",
     "@react-navigation/native": "^5.1.3",

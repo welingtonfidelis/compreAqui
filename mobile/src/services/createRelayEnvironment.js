@@ -4,14 +4,13 @@ import {
     RecordSource,
     Store,
 } from 'relay-runtime';
+import AsyncStorage from '@react-native-community/async-storage';
 
-const token = 'teste'; //localStorage.getItem('compreAqui@token');
-
-function fetchQuery(operation, variables, cacheConfig, uploadables) {
+async function fetchQuery(operation, variables, cacheConfig, uploadables) {
     const request = {
         method: 'POST',
         headers: {
-            token,
+            token: await AsyncStorage.getItem('compreAqui@token'),
         },
     };
 
@@ -39,12 +38,12 @@ function fetchQuery(operation, variables, cacheConfig, uploadables) {
         });
     }
 
-    return fetch('http://192.168.4.101:3001/', request)
+    return fetch('http://192.168.0.105:3001/', request)
         .then(response => {
             if (response.status === 200) {
                 return response.json();
             }
-
+            console.log('tokeen', token);
             // HTTP errors
             // TODO: NOT sure what to do here yet
             return response.json();

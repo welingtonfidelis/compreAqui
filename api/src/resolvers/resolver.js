@@ -88,17 +88,38 @@ module.exports = {
                     include: [
                         {
                             model: Address,
-                            attributes: [
-                                "id", "cep", "state",
-                                "city", "district", "street",
-                                "complement", "number"
-                            ]
                         },
                         {
                             model: Category,
-                            attributes: [
-                                "id", "name"
-                            ]
+                        }
+                    ],
+                    offset: (page - 1) * 15,
+                    limit: 15
+                });
+
+            } catch (error) {
+                const err = error.stack || error.errors || error.message || error;
+                console.log(err);
+            }
+
+            return query;
+        },
+        userIndexByCategory: async (_, args) => {
+            const notAuthenticated = isAuthenticated(args), { page = 1, CategoryId } = args;
+            if (notAuthenticated) return notAuthenticated;
+
+            console.log('categ', CategoryId);
+            
+            let query = null;
+            try {
+                query = await User.findAll({
+                    where: {
+                        CategoryId
+                    },
+                    order: [['name', 'ASC']],
+                    include: [
+                        {
+                            model: Address,
                         }
                     ],
                     offset: (page - 1) * 15,
