@@ -38,12 +38,12 @@ async function fetchQuery(operation, variables, cacheConfig, uploadables) {
         });
     }
 
-    return fetch('http://192.168.0.105:3001/', request)
+    return fetch('http://192.168.5.191:3001/', request)
         .then(response => {
             if (response.status === 200) {
                 return response.json();
             }
-            console.log('tokeen', token);
+
             // HTTP errors
             // TODO: NOT sure what to do here yet
             return response.json();

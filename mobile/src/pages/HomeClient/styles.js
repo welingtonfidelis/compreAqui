@@ -11,7 +11,6 @@ export default StyleSheet.create({
     containerCategory: {
         marginEnd: 8,
         alignItems: 'center',
-        marginBottom: 15,
     },
     categoryImage: {
         width: 90,
@@ -19,9 +18,13 @@ export default StyleSheet.create({
         resizeMode: 'stretch',
         borderRadius: 8,
     },
+    categoryViewText: {
+        width: 90,
+    },
     catetegoryText: {
-        fontSize: 16,
+        fontSize: 15,
         color: '#646464',
+        textAlign: 'center',
     },
 
     containerCompany: {

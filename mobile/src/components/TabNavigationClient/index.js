@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useSelector } from 'react-redux';
 
 import Login from '../../pages/Login';
 import Home from '../../pages/HomeClient';
@@ -10,10 +11,14 @@ import Search from '../../pages/SearchClient';
 import Requests from '../../pages/RequestsClient';
 import Profile from '../../pages/Profile';
 
+import PurchaseList from '../../components/PurchaseList';
+
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 export default function TabNavigationUser() {
+    const store = useSelector(state => state.company);
+
     function MainTabNavigator() {
         return (
             <Tab.Navigator tabBarOptions={{
@@ -29,16 +34,16 @@ export default function TabNavigationUser() {
 
                 <Tab.Screen name="Pesquisar" component={Search} options={{
                     tabBarIcon: ({ color, focused }) =>
-                    <Icon name="search" color={color} size={focused ? 35 : 28} />,
+                        <Icon name="search" color={color} size={focused ? 35 : 28} />,
                 }} />
 
                 <Tab.Screen name="Pedidos" component={Requests} options={{
                     tabBarIcon: ({ color, focused }) =>
-                    <Icon name="loyalty" color={color} size={focused ? 35 : 28} />,
+                        <Icon name="loyalty" color={color} size={focused ? 35 : 28} />,
                 }} />
                 <Tab.Screen name="Perfil" component={Profile} options={{
                     tabBarIcon: ({ color, focused }) =>
-                    <Icon name="face" color={color} size={focused ? 35 : 28} />,
+                        <Icon name="face" color={color} size={focused ? 35 : 28} />,
                 }} />
             </Tab.Navigator>
         );
@@ -65,6 +70,11 @@ export default function TabNavigationUser() {
                     options={{ headerShown: false }}
                     name="login"
                     component={Login}
+                />
+                <Stack.Screen
+                    options={{ headerTitle: store.name }}
+                    name="purchaseList"
+                    component={PurchaseList}
                 />
             </Stack.Navigator>
         </NavigationContainer>

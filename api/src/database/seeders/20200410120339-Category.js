@@ -1,21 +1,22 @@
 'use strict';
+const categoryList = [
+  'Alimentação', 'Aluguel', 'Construção', 'Super Mercado', 'Assist Técnica',
+  'Mecânico'
+];
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert({ tableName: 'Categories' },
-      [
+    const categories = [];
+    for (let el of categoryList) {
+      categories.push(
         {
-          name: 'Alimentação',
+          name: el,
           createdAt: new Date(),
           updatedAt: new Date()
-        },
-        {
-          name: 'Construção',
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-
-      ])
+        }
+      )
+    }
+    return queryInterface.bulkInsert({ tableName: 'Categories' }, categories)
   },
 
   down: (queryInterface, Sequelize) => {

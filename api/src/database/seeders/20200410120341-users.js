@@ -1,16 +1,20 @@
 'use strict';
 
+const faker = require('faker');
+faker.locale = 'pt_BR';
+
 module.exports = {
     up: (queryInterface, Sequelize) => {
-        return queryInterface.bulkInsert({ tableName: 'Users' },
-            [
+        const users = [];
+        for(let i = 0; i <= 17; i++) {
+            users.push(
                 {
-                    name: 'Comercial 1',
-                    email: 'comercial1@email.com',
-                    phone1: '(35) 9 9999-9999',
-                    phone2: '(35) 3521-2222',
-                    doc: '00.000.000/0001-00',
-                    user: 'comercial1',
+                    name: faker.company.companyName(),
+                    email: `comercial${i}@email.com`,
+                    phone1: faker.phone.phoneNumber(),
+                    phone2: faker.phone.phoneNumber(),
+                    doc: `00.000.000/0001-${(i+'').padStart(2, 0)}`,
+                    user: `comercial${i}`,
                     birth: '1990-07-28 00:00:00',
                     password: '$2b$10$Dtan5DFEMqV0FC8n6vXVBedlz6pvDwncYcBPTOxCvX5kSVtkr3eYS',
                     type: 'comercial',
@@ -19,87 +23,31 @@ module.exports = {
                     photoUrl: null,
                     createdAt: new Date(),
                     updatedAt: new Date()
-                },
-                {
-                    name: 'Comercial 2',
-                    email: 'comercial2@email.com',
-                    phone1: '(35) 9 9999-9999',
-                    phone2: '(35) 3521-2222',
-                    doc: '00.000.000/0001-01',
-                    user: 'comercial2',
-                    birth: '1990-07-28 00:00:00',
-                    password: '$2b$10$Dtan5DFEMqV0FC8n6vXVBedlz6pvDwncYcBPTOxCvX5kSVtkr3eYS',
-                    type: 'comercial',
-                    AddressId: Math.floor(Math.random() * 5) + 1,
-                    CategoryId: 1,
-                    photoUrl: null,
-                    createdAt: new Date(),
-                    updatedAt: new Date()
-                },
-                {
-                    name: 'Comercial 3',
-                    email: 'comercial3@email.com',
-                    phone1: '(35) 9 9999-9999',
-                    phone2: '(35) 3521-2222',
-                    doc: '00.000.000/0001-02',
-                    user: 'comercial3',
-                    birth: '1990-07-28 00:00:00',
-                    password: '$2b$10$Dtan5DFEMqV0FC8n6vXVBedlz6pvDwncYcBPTOxCvX5kSVtkr3eYS',
-                    type: 'comercial',
-                    AddressId: Math.floor(Math.random() * 5) + 1,
-                    CategoryId: 1,
-                    photoUrl: null,
-                    createdAt: new Date(),
-                    updatedAt: new Date()
-                },
-                {
-                    name: 'Comercial 4',
-                    email: 'comercial4@email.com',
-                    phone1: '(35) 9 9999-9999',
-                    phone2: '(35) 3521-2222',
-                    doc: '00.000.000/0001-03',
-                    user: 'comercial4',
-                    birth: '1990-07-28 00:00:00',
-                    password: '$2b$10$Dtan5DFEMqV0FC8n6vXVBedlz6pvDwncYcBPTOxCvX5kSVtkr3eYS',
-                    type: 'comercial',
-                    AddressId: Math.floor(Math.random() * 5) + 1,
-                    CategoryId: 1,
-                    photoUrl: null,
-                    createdAt: new Date(),
-                    updatedAt: new Date()
-                },
-                {
-                    name: 'User 1',
-                    email: 'user1@email.com',
-                    phone1: '(35) 9 9999-9999',
-                    phone2: '(35) 3521-2222',
-                    doc: '000.000.000-00',
-                    user: 'user1',
-                    birth: '1990-07-28 00:00:00',
-                    password: '$2b$10$Dtan5DFEMqV0FC8n6vXVBedlz6pvDwncYcBPTOxCvX5kSVtkr3eYS',
-                    type: 'client',
-                    photoUrl: null,
-                    AddressId: Math.floor(Math.random() * 5) + 1,
-                    createdAt: new Date(),
-                    updatedAt: new Date()
-                },
-                {
-                    name: 'User 2',
-                    email: 'user2@email.com',
-                    phone1: '(35) 9 9999-9999',
-                    phone2: '(35) 3521-2222',
-                    doc: '000.000.000-01',
-                    user: 'user2',
-                    birth: '1990-07-28 00:00:00',
-                    password: '$2b$10$Dtan5DFEMqV0FC8n6vXVBedlz6pvDwncYcBPTOxCvX5kSVtkr3eYS',
-                    type: 'client',
-                    photoUrl: null,
-                    AddressId: Math.floor(Math.random() * 5) + 1,
-                    createdAt: new Date(),
-                    updatedAt: new Date()
-                },
+                }
+            )
+        }
 
-            ])
+        for(let i = 0; i < 5; i++) {
+            users.push(
+                {
+                    name: faker.name.findName(),
+                    email: `user${i}@email.com`,
+                    phone1: faker.phone.phoneNumber(),
+                    phone2: faker.phone.phoneNumber(),
+                    doc: `000.000.000-${(i+'').padStart(2, 0)}`,
+                    user: `user${i}`,
+                    birth: '1990-07-28 00:00:00',
+                    password: '$2b$10$Dtan5DFEMqV0FC8n6vXVBedlz6pvDwncYcBPTOxCvX5kSVtkr3eYS',
+                    type: 'client',
+                    AddressId: Math.floor(Math.random() * 5) + 1,
+                    photoUrl: null,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                }
+            )
+        }
+
+        return queryInterface.bulkInsert({ tableName: 'Users' }, users)
     },
 
     down: (queryInterface, Sequelize) => {

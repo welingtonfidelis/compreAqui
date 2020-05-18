@@ -29,7 +29,7 @@ export default function Profile({ navigation }) {
     //     routes: [ { name: 'login' } ],
     //   })
     // );
-    navigation.push('login');
+    navigation.navigate('login');
   }
 
   return (

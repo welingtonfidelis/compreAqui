@@ -4,14 +4,16 @@ import {
   View, Text, FlatList, RefreshControl,
   TouchableOpacity, Image,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
 import { graphql, fetchQuery } from 'react-relay';
-import { useSelector, useDispatch } from 'react-redux';
+import { ActivityIndicator } from 'react-native-paper';
+import { useDispatch } from 'react-redux';
 
 import environment from '../../services/createRelayEnvironment';
 
 import globalStyles from '../globalStyles';
 import styles from './styles';
+
+import alert from '../../services/alert';
 
 import companyLogo from '../../assets/images/store.png';
 
@@ -22,9 +24,10 @@ export default function HomeClient({ navigation }) {
   const [companyList, setCompanyList] = useState([]);
   const [categoryList, setCategoryList] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [page, setPage] = useState(1);
   const [loadMore, setLoadMore] = useState(true);
-  const store = useSelector(state => state);
+  const dispatch = useDispatch();
   const photoTmp = 'https://compreaqui.s3-sa-east-1.amazonaws.com/images/category/food.png';
 
   useEffect(() => {
@@ -41,7 +44,7 @@ export default function HomeClient({ navigation }) {
       const query = graphql`
             query HomeClientcategoryIndexQuery {
                 categoryIndex {
-                    id
+                    CategoryId :id
                     name
                 }
             }`;
@@ -52,6 +55,7 @@ export default function HomeClient({ navigation }) {
       const { categoryIndex } = response;
       if (categoryIndex) {
         setCategoryList(categoryIndex);
+        setCategoryName(categoryIndex[0].name);
       }
 
     } catch (error) {
@@ -70,16 +74,12 @@ export default function HomeClient({ navigation }) {
       const query = graphql`
             query HomeClientuserIndexByCategoryQuery($page: Int, $categoryId: ID!) {
                 userIndexByCategory(page: $page, CategoryId: $categoryId) {
-                  id
+                  ProviderId: id
                   name
                   photoUrl
                   phone1
                   phone2
                   Address {
-                    cep
-                    street
-                    number
-                    complement
                     city
                     state
                   }
@@ -90,11 +90,14 @@ export default function HomeClient({ navigation }) {
       const response = await fetchQuery(environment, query, variables);
 
       const { userIndexByCategory } = response;
-      console.log(userIndexByCategory);
-
       if (userIndexByCategory) {
-        setCompanyList(userIndexByCategory);
+        if (isRefreshing) {
+          setIsRefreshing(false);
+          setCompanyList(userIndexByCategory);
+        }
+        else { setCompanyList([...companyList, ...userIndexByCategory]); }
       }
+      setLoadMore(userIndexByCategory.length > 0);
 
     } catch (error) {
       console.error(error);
@@ -108,74 +111,102 @@ export default function HomeClient({ navigation }) {
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
+    await setIsRefreshing(true);
 
-    setLoadMore(true);
+    await setLoadMore(true);
     if (page === 1) { getCompany(); }
     else { setPage(1); }
 
     setRefreshing(false);
   }, [refreshing]);
 
+  function activityIndicatorShow() {
+    const resp = load ? <ActivityIndicator animating={load} /> : null;
+    return resp;
+  }
+
+  async function handleSelectCategory(id, index) {
+    await setLoadMore(true);
+    await setIsRefreshing(true);
+
+    setCategoryId(id);
+    setCategoryName(categoryList[index].name);
+  }
+
+  function handleSelectCompany(item) {
+    dispatch({ type: 'UPDATE_COMPANY', company: { name: item.name, id: item.ProviderId } });
+    navigation.push('purchaseList');
+  }
+
   return (
     <View style={globalStyles.container}>
-      <Text style={styles.categoryTitle}>Categorias</Text>
+      <View style={{ flex: 1 }}>
+        <Text style={styles.categoryTitle}>Categorias</Text>
 
-      <FlatList
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        data={categoryList}
-        keyExtractor={item => `${item.id}`}
-        numColumns={1}
-        horizontal={true}
-        onEndReachedThreshold={0.3}
-        onEndReached={({ distanceFromEnd }) => { }}
-        renderItem={({ item }) => {
+        <FlatList
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+          data={categoryList}
+          keyExtractor={item => `${item.id}`}
+          numColumns={1}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          onEndReachedThreshold={0.3}
+          onEndReached={({ distanceFromEnd }) => { }}
+          renderItem={({ item, index }) => {
 
-          return (
-            <TouchableOpacity
-              onPress={() => setCategoryId(item.id)}>
-              <View style={styles.containerCategory}>
-                <Image style={styles.categoryImage} source={{ uri: photoTmp }} />
+            return (
+              <TouchableOpacity
+                onPress={() => handleSelectCategory(item.CategoryId, index)}>
+                <View style={styles.containerCategory}>
+                  <Image style={styles.categoryImage} source={{ uri: photoTmp }} />
 
-                <Text style={styles.catetegoryText}>{item.name}</Text>
-              </View>
-            </TouchableOpacity>
-          );
-        }}
-      />
-
-      <Text style={styles.categoryTitle}>Empresas</Text>
-
-      <FlatList
-        data={companyList}
-        keyExtractor={item => `${item.id}`}
-        numColumns={1}
-        onEndReachedThreshold={0.3}
-        onEndReached={({ distanceFromEnd }) => { }}
-        renderItem={({ item }) => {
-
-          const { Address } = item;
-          return (
-            <TouchableOpacity
-              onPress={() => console.log(item.id)}>
-              <View style={styles.containerCompany}>
-                {item.photoUrl
-                  ? <Image style={styles.companyImage} source={{ uri: item.photoUrl }} />
-                  : <Image style={styles.companyImage} source={companyLogo} />}
-
-                <View style={styles.companyInfo}>
-                  <Text style={styles.companyName}>{item.name}</Text>
-
-                  <Text style={styles.companyInfoAdr}>{Address.city} - {Address.state}</Text>
-                  <Text style={styles.companyInfoPhon}>{item.phone1}</Text>
-                  <Text style={styles.companyInfoPhon}>{item.phone2}</Text>
+                  <View style={styles.categoryViewText}>
+                    <Text style={styles.catetegoryText}>{item.name}</Text>
+                  </View>
                 </View>
-              </View>
-            </TouchableOpacity>
-          );
-        }}
-      />
+              </TouchableOpacity>
+            );
+          }}
+        />
+      </View>
+
+      <View style={{ flex: 2 }}>
+        <Text style={styles.categoryTitle}>{categoryName}</Text>
+
+        <FlatList
+          data={companyList}
+          keyExtractor={item => `${item.id}`}
+          numColumns={1}
+          showsVerticalScrollIndicator={false}
+          onEndReachedThreshold={0.5}
+          onEndReached={({ distanceFromEnd }) => { if (loadMore) { setPage(page + 1); } }}
+          ListFooterComponent={activityIndicatorShow}
+          renderItem={({ item }) => {
+
+            const { Address } = item;
+            return (
+              <TouchableOpacity
+                onPress={() => handleSelectCompany(item)}>
+                <View style={styles.containerCompany}>
+                  {item.photoUrl
+                    ? <Image style={styles.companyImage} source={{ uri: item.photoUrl }} />
+                    : <Image style={styles.companyImage} source={companyLogo} />}
+
+                  <View style={styles.companyInfo}>
+                    <Text style={styles.companyName}>{item.name}</Text>
+
+                    <Text style={styles.companyInfoAdr}>{Address.city} - {Address.state}</Text>
+                    <Text style={styles.companyInfoPhon}>{item.phone1}</Text>
+                    <Text style={styles.companyInfoPhon}>{item.phone2}</Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            );
+          }}
+        />
+      </View>
     </View>
   );
 }
