@@ -1,4 +1,5 @@
 import React from 'react';
+import { TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -54,11 +55,24 @@ export default function TabNavigationUser() {
             <Stack.Navigator
                 initialRouteName="client"
                 screenOptions={{
-                    gestureEnabled: true,
-                    headerTitleAlign: 'center',
-                    headerTintColor: '#008CF0',
-                    headerTitleStyle: { fontSize: 24 },
-                    headerStyle: { elevation: 0 },
+                    gestureEnabled: false,
+                    // headerTitleAlign: 'center',
+                    headerTintColor: '#F2BB16',
+                    headerTitleStyle: { fontSize: 20 },
+                    headerStyle: { elevation: 0, height: 45 },
+                    headerRight: () => (
+                        (
+                            <TouchableOpacity
+                                style={{ marginRight: 10 }}
+                                onPress={() => console.log(store.id)}
+                            >
+                                <Icon
+                                    name="store" size={30}
+                                    color="#646464"
+                                />
+                            </TouchableOpacity>
+                        )
+                    ),
                 }}
                 headerMode="float">
                 <Stack.Screen
