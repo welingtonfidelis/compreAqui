@@ -1,5 +1,7 @@
 'use strict';
 
+const uuid = require('uuid');
+
 module.exports = {
   up: (queryInterface, Sequelize) => {
     let arrayState = [

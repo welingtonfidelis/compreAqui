@@ -1,3 +1,5 @@
+const uudi = require('uuid/v4');
+
 module.exports = (sequelize, DataTypes) => {
     const Size = sequelize.define('Size', {
         ProviderId: DataTypes.INTEGER,
@@ -16,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
             foreingKey: 'ProviderId',
             as: "Provider"
         })
-    }
+    };
 
     return Size;
 }

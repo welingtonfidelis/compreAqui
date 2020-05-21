@@ -1,12 +1,22 @@
 'use strict';
 
+const uuid = require('uuid/v4');
+const { Address, Category } = require('../../models');
+
 const faker = require('faker');
 faker.locale = 'pt_BR';
 
 module.exports = {
-    up: (queryInterface, Sequelize) => {
+    up: async (queryInterface, Sequelize) => {
+        const address = await Address.findAll({
+            attributes: ['id']
+        });
+        const category = await Category.findAll({
+            attributes: ['id']
+        });
+        
         const users = [];
-        for(let i = 0; i <= 17; i++) {
+        for(let i = 1; i <= 17; i++) {
             users.push(
                 {
                     name: faker.company.companyName(),
@@ -18,8 +28,8 @@ module.exports = {
                     birth: '1990-07-28 00:00:00',
                     password: '$2b$10$Dtan5DFEMqV0FC8n6vXVBedlz6pvDwncYcBPTOxCvX5kSVtkr3eYS',
                     type: 'comercial',
-                    AddressId: Math.floor(Math.random() * 5) + 1,
-                    CategoryId: 1,
+                    AddressId: address[Math.floor(Math.random() * address.length)].id,
+                    CategoryId: category[Math.floor(Math.random() * category.length)].id,
                     photoUrl: null,
                     createdAt: new Date(),
                     updatedAt: new Date()
@@ -39,7 +49,7 @@ module.exports = {
                     birth: '1990-07-28 00:00:00',
                     password: '$2b$10$Dtan5DFEMqV0FC8n6vXVBedlz6pvDwncYcBPTOxCvX5kSVtkr3eYS',
                     type: 'client',
-                    AddressId: Math.floor(Math.random() * 5) + 1,
+                    AddressId: address[Math.floor(Math.random() * address.length)].id,
                     photoUrl: null,
                     createdAt: new Date(),
                     updatedAt: new Date()
@@ -51,9 +61,6 @@ module.exports = {
     },
 
     down: (queryInterface, Sequelize) => {
-        return queryInterface.bulkDelete({ tableName: 'Users' },
-            [{
-                AddressId: 1
-            }])
+        return queryInterface.bulkDelete({ tableName: 'Users' }, [{}])
     }
 };

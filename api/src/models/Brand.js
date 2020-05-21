@@ -1,3 +1,5 @@
+const uuid = require('uuid/v4');
+
 module.exports = (sequelize, DataTypes) => {
     const Brand = sequelize.define('Brand', {
         ProviderId: DataTypes.INTEGER,

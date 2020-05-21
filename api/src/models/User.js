@@ -1,3 +1,5 @@
+const uuid = require('uuid/v4');
+
 module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define('User', {
         name: DataTypes.STRING,
@@ -11,8 +13,8 @@ module.exports = (sequelize, DataTypes) => {
         photoUrl: DataTypes.STRING,
         tokenReset: DataTypes.STRING,
         type: DataTypes.STRING,
-        AddressId: DataTypes.INTEGER,
-        CategoryId: DataTypes.INTEGER,
+        AddressId: DataTypes.UUID,
+        CategoryId: DataTypes.UUID,
         playId: DataTypes.STRING
     },
         {
@@ -28,10 +30,10 @@ module.exports = (sequelize, DataTypes) => {
             foreingKey: 'AddressId',
             onDelete: 'cascade'
         }),
-        User.belongsTo(models.Category, {
-            foreingKey: 'CategoryId'
-        })
-    }
+            User.belongsTo(models.Category, {
+                foreingKey: 'CategoryId'
+            })
+    };
 
     return User;
 }

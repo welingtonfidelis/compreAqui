@@ -1,3 +1,5 @@
+const uuid = require('uuid/v4');
+
 module.exports = (sequelize, DataTypes) => {
     const Request = sequelize.define('Request', {
         ClientId: DataTypes.INTEGER,
@@ -30,6 +32,7 @@ module.exports = (sequelize, DataTypes) => {
         Request.hasMany(models.RequestProduct, {
             foreingKey: 'RequestId'
         })
-    }
+    };
+
     return Request;
 }

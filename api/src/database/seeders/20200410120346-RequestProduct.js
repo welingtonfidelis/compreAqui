@@ -1,34 +1,31 @@
 'use strict';
 
+const uuid = require('uuid/v4');
+const { Request, Product } = require('../../models');
+
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert({ tableName: 'RequestProducts' },
-      [
+  up: async (queryInterface, Sequelize) => {
+    const product = await Product.findAll({
+      attributes: ['id']
+    });
+    const request = await Request.findAll({
+      attributes: ['id']
+    });
+
+    const requestProducts = [];
+    for(let i = 1; i <= 15; i++) {
+      requestProducts.push(
         {
-          RequestId: 1,
-          ProductId: 1,
-          amount: 2,
-          price: 5.50,
+          RequestId: request[Math.floor(Math.random() * request.length)].id,
+          ProductId: product[Math.floor(Math.random() * product.length)].id,
+          amount: Math.floor(Math.random() * 10),
+          price: Math.floor(Math.random() * (1000 - 100) + 100) / 100,
           createdAt: new Date(),
           updatedAt: new Date()
-        },
-        {
-          RequestId: 2,
-          ProductId: 2,
-          amount: 5,
-          price: 10,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-        {
-          RequestId: 3,
-          ProductId: 1,
-          amount: 10,
-          price: 9.90,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-      ])
+        }
+      )
+    }
+    return queryInterface.bulkInsert({ tableName: 'RequestProducts' }, requestProducts)
   },
 
   down: (queryInterface, Sequelize) => {

@@ -38,7 +38,7 @@ module.exports = {
         try {
             const {
                 name, description, SizeId,
-                BrandId, stock, price
+                BrandId, stock, price, SubcategoryId
             } = req.body, { id } = req.params;
 
             const query = await Product.update(

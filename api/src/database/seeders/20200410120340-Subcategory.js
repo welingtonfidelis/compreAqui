@@ -1,18 +1,25 @@
 'use strict';
 
+const uuid = require('uuid/v4');
+const { Category } = require('../../models');
+
 module.exports = {
-  up: (queryInterface, Sequelize) => {
+  up: async (queryInterface, Sequelize) => {
+    const cat = await Category.findAll({
+      attributes: ['id']
+    });
+
     return queryInterface.bulkInsert({ tableName: 'Subcategories' },
       [
         {
           name: 'Lanchonete',
-          CategoryId: 1,
+          CategoryId: cat[0].id,
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
           name: 'Aluguel Ferramentas',
-          CategoryId: 2,
+          CategoryId: cat[1].id,
           createdAt: new Date(),
           updatedAt: new Date()
         },

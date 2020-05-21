@@ -1,7 +1,7 @@
 {
-  "name": "api_vende_aqui",
+  "name": "api_compre_aqui",
   "version": "1.0.0",
-  "description": "Api do sistema vendeAqui",
+  "description": "Api do sistema compreAqui",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

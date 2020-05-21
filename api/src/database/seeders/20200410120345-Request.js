@@ -1,46 +1,37 @@
 'use strict';
 
+const uuid = require('uuid/v4');
+const { User } = require('../../models');
+
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert({ tableName: 'Requests' },
-      [
+  up: async (queryInterface, Sequelize) => {
+    const client = await User.findAll({
+      where: {type: 'client'},
+      attributes: ['id']
+    });
+    const comercial = await User.findAll({
+      where: {type: 'comercial'},
+      attributes: ['id']
+    });
+
+    const requests = [];
+    for(let i = 1; i <= 15; i++){
+      requests.push(
         {
-          ClientId: 3,
-          ProviderId: 1,
-          value: 50.90,
+          ClientId: client[Math.floor(Math.random() * client.length)].id,
+          ProviderId: comercial[Math.floor(Math.random() * comercial.length)].id,
+          value: Math.floor(Math.random() * (1000 - 100) + 100) / 100,
           status: "pending",
           delivery: true,
-          cashBack: 100,
+          cashBack: Math.floor(Math.random() * 100),
           observation: "Entregar no 250B",
           timeWait: 0,
           createdAt: new Date(),
           updatedAt: new Date()
         },
-        {
-          ClientId: 4,
-          ProviderId: 1,
-          value: 15.50,
-          status: "pending",
-          delivery: false,
-          cashBack: 20,
-          observation: "",
-          timeWait: 0,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-        {
-          ClientId: 3,
-          ProviderId: 2,
-          value: 51,
-          status: "pending",
-          delivery: true,
-          cashBack: 60,
-          observation: "Entregar no 250B",
-          timeWait: 0,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-      ])
+      )
+    }
+    return queryInterface.bulkInsert({ tableName: 'Requests' }, requests)
   },
 
   down: (queryInterface, Sequelize) => {

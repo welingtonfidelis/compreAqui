@@ -1,3 +1,5 @@
+const uuid = require('uuid/v4');
+
 module.exports = (sequelize, DataTypes) => {
     const RequestProduct = sequelize.define('RequestProduct', {
         RequestId: DataTypes.INTEGER,
@@ -20,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
         RequestProduct.belongsTo(models.Product, {
             foreingKey: 'ProductId'
         })
-    }
+    };
+
     return RequestProduct;
 }

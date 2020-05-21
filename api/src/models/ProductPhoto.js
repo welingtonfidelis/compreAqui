@@ -1,3 +1,5 @@
+const uuid = require('uuid/v4');
+
 module.exports = (sequelize, DataTypes) => {
     const ProductPhoto = sequelize.define('ProductPhoto', {
         ProductId: DataTypes.INTEGER,
@@ -8,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
             foreingKey: 'ProductId',
             as: 'Product'
         })
-    }
+    };
+
     return ProductPhoto;
 }

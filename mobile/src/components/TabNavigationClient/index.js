@@ -12,7 +12,7 @@ import Search from '../../pages/SearchClient';
 import Requests from '../../pages/RequestsClient';
 import Profile from '../../pages/Profile';
 
-import PurchaseList from '../../components/PurchaseList';
+import PurchaseList from '../../pages/PurchaseList';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -59,7 +59,7 @@ export default function TabNavigationUser() {
                     // headerTitleAlign: 'center',
                     headerTintColor: '#F2BB16',
                     headerTitleStyle: { fontSize: 20 },
-                    headerStyle: { elevation: 0, height: 45 },
+                    headerStyle: { elevation: 5, height: 45 },
                     headerRight: () => (
                         (
                             <TouchableOpacity

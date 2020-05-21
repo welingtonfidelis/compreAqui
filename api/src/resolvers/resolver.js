@@ -43,6 +43,7 @@ module.exports = {
                     attributes: ['id', 'name', 'password', 'type', 'photoUrl', 'playId']
                 });
 
+
                 if (query) {
                     const { id, name, type, photoUrl } = query, hash = query.password;
 
@@ -50,9 +51,9 @@ module.exports = {
                     const typeEncript = bcrypt.hashSync(type, saltRounds);
 
                     if (isValid) {
-                        const token = jwt.sign({ id, typeUser: type }, process.env.SECRET, {
-                            // expiresIn: '12h'
-                        })
+                        const token = jwt.sign(
+                            { id, typeUser: type }, process.env.SECRET, {}
+                        )
 
                         if (playId && playId != query.playId) {
                             User.update(
@@ -109,7 +110,7 @@ module.exports = {
             if (notAuthenticated) return notAuthenticated;
 
             console.log('categ', CategoryId);
-            
+
             let query = null;
             try {
                 query = await User.findAll({
@@ -406,6 +407,8 @@ module.exports = {
                     },
                     attributes: ["CategoryId"]
                 });
+                console.log(args.UserId);
+
 
                 if (CategoryId) {
                     query = await Subcategory.findAll({

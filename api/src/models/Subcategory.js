@@ -1,3 +1,5 @@
+const uuid = require('uuid/v4');
+
 module.exports = (sequelize, DataTypes) => {
     const Subcategory = sequelize.define('Subcategory', {
         name: DataTypes.STRING,
@@ -8,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
             foreingKey: 'CategoryId',
             onDelete: 'cascade'
         })
-    }
+    };
 
     return Subcategory;
 }

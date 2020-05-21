@@ -1,3 +1,5 @@
+const uud = require('uuid/v4');
+
 module.exports = (sequelize, DataTypes) => {
     const Product = sequelize.define('Product', {
         ProviderId: DataTypes.INTEGER,
@@ -34,6 +36,7 @@ module.exports = (sequelize, DataTypes) => {
         Product.hasMany(models.ProductPhoto, {
             foreingKey: 'ProductId'
         })
-    }
+    };
+
     return Product;
 }

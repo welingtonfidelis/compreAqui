@@ -1,5 +1,6 @@
 'use strict';
 
+const uuid = require('uuid/v4');
 const faker = require('faker');
 faker.locale = 'pt_BR';
 

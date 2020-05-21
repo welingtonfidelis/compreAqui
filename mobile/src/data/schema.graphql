@@ -133,7 +133,7 @@ type State {
 
 type Subcategory {
   id: ID
-  CategoryId: Int
+  CategoryId: ID
   name: String
 }
 

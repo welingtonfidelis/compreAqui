@@ -1,4 +1,6 @@
 'use strict';
+
+const uuid = require('uuid/v4');
 const categoryList = [
   'Alimentação', 'Aluguel', 'Construção', 'Super Mercado', 'Assist Técnica',
   'Mecânico'

@@ -1,30 +1,37 @@
 'use strict';
 
+const uuid = require('uuid/v4');
+const { User } = require('../../models');
+
 module.exports = {
-  up: (queryInterface, Sequelize) => {
+  up: async (queryInterface, Sequelize) => {
+    const user = await User.findAll({
+      attributes: ['id']
+    });
+
     return queryInterface.bulkInsert({ tableName: 'Sizes' },
       [
         {
           sizeDescription: 'Tamanho 1',
-          ProviderId: 1,
+          ProviderId: user[0].id,
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
           sizeDescription: 'Tamanho 2',
-          ProviderId: 1,
+          ProviderId: user[0].id,
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
           sizeDescription: 'Tamanho 3',
-          ProviderId: 2,
+          ProviderId: user[1].id,
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
           sizeDescription: 'Tamanho 4',
-          ProviderId: 2,
+          ProviderId: user[1].id,
           createdAt: new Date(),
           updatedAt: new Date()
         },
