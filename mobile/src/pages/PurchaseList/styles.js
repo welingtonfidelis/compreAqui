@@ -23,8 +23,8 @@ export default StyleSheet.create({
         marginTop: 5
     },
     productImage: {
-        width: (width/2) - 36,
+        width: (width / 2) - 36,
         height: 130,
         resizeMode: 'stretch'
-    }
+    },
 });

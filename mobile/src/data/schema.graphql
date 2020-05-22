@@ -50,6 +50,8 @@ type Product {
   price: Float
   stock: Int
   Provider: User
+  Brand: Brand
+  Size: Size
   ProductPhotos: [ProductPhoto]
 }
 

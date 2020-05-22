@@ -13,6 +13,7 @@ import Requests from '../../pages/RequestsClient';
 import Profile from '../../pages/Profile';
 
 import PurchaseList from '../../pages/PurchaseList';
+import PurchaseProduct from '../../pages/PurchaseProduct';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -89,6 +90,11 @@ export default function TabNavigationUser() {
                     options={{ headerTitle: store.name }}
                     name="purchaseList"
                     component={PurchaseList}
+                />
+                <Stack.Screen
+                    options={{ headerTitle: store.name }}
+                    name="purchaseProduct"
+                    component={PurchaseProduct}
                 />
             </Stack.Navigator>
         </NavigationContainer>

@@ -501,6 +501,12 @@ module.exports = {
                         },
                         {
                             model: ProductPhoto
+                        },
+                        {
+                            model: Brand
+                        },
+                        {
+                            model: Size
                         }
                     ]
 

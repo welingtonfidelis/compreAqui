@@ -1,14 +1,15 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
-    View, Button, Modal, Text, RefreshControl,
+    View, Text, RefreshControl,
     FlatList, TouchableOpacity, Image
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import { graphql, fetchQuery } from 'react-relay';
 import { ActivityIndicator } from 'react-native-paper';
 
-import environment from '../../services/createRelayEnvironment';
+import Cart from '../../components/Cart';
 
+import environment from '../../services/createRelayEnvironment';
 import alert from '../../services/alert';
 import util from '../../services/util';
 
@@ -17,9 +18,10 @@ import styles from './styles';
 
 import productLogo from '../../assets/images/product.png';
 
-export default function PurhcaseList() {
+export default function PurhcaseList({ navigation }) {
     const store = useSelector(state => state.company);
     const ProviderId = store.id;
+    const slidingRef = useRef();
 
     const [load, setLoad] = useState(false);
     const [productList, setProductList] = useState([]);
@@ -27,6 +29,7 @@ export default function PurhcaseList() {
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [loadMore, setLoadMore] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
+    const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
         getInfo();
@@ -53,7 +56,6 @@ export default function PurhcaseList() {
 
             const { productIndex } = response;
             if (productIndex) {
-                console.log(productIndex);
                 if (isRefreshing) {
                     setIsRefreshing(false);
                     setProductList(productIndex);
@@ -89,6 +91,10 @@ export default function PurhcaseList() {
         return resp;
     }
 
+    function handleProductPurchase(id) {
+        navigation.push('purchaseProduct', { id });
+    }
+
     return (
         <View style={globalStyles.container}>
             <View style={styles.container}>
@@ -109,7 +115,7 @@ export default function PurhcaseList() {
 
                         return (
                             <TouchableOpacity
-                                onPress={() => console.log(item.id)}>
+                                onPress={() => handleProductPurchase(item.id)}>
                                 <View style={styles.content}>
                                     <Text style={styles.productName}>{item.name}</Text>
 
@@ -124,6 +130,8 @@ export default function PurhcaseList() {
                     }}
                 />
             </View>
+
+            <Cart />
         </View>
     );
 }

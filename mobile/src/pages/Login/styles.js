@@ -24,7 +24,6 @@ export default StyleSheet.create({
     },
     btnReset: {
         alignItems: 'flex-end',
-        paddingTop: 5,
     },
     txtReset: {
         fontSize: 15,
