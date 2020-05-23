@@ -29,6 +29,10 @@ module.exports = {
         type: Sequelize.REAL,
         allowNull: false
       },
+      cash: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false
+      },
       cashBack: {
         type: Sequelize.REAL,
         allowNull: false

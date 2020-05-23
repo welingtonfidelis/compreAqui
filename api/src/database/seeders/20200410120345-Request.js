@@ -23,6 +23,7 @@ module.exports = {
           value: Math.floor(Math.random() * (1000 - 100) + 100) / 100,
           status: "pending",
           delivery: true,
+          cash: true,
           cashBack: Math.floor(Math.random() * 100),
           observation: "Entregar no 250B",
           timeWait: 0,

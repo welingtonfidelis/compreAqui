@@ -35,7 +35,7 @@ type Mutation {
   productStore(BrandId: ID!, SizeId: ID!, SubcategoryId: ID!, name: String!, description: String, price: Float!, stock: Int!): Product
   productUpdate(id: ID!, BrandId: ID!, SizeId: ID!, SubcategoryId: ID!, description: String!, price: Float!, stock: Int!): String
   productDelete(id: ID!): String
-  requestStore(ProviderId: ID!, value: Float!, delivery: String!, cashBack: Float!, observation: String, products: [RequestListProduct!]): Request
+  requestStore(ProviderId: ID!, value: Float!, delivery: String!, cash: String!, cashBack: Float!, observation: String, products: [RequestListProduct!]): Request
   requestChangeStatus(id: ID!, status: String, timeWait: Int, reason: String): String
 }
 

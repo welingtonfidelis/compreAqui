@@ -19,7 +19,6 @@ import productLogo from '../../assets/images/product.png';
 
 export default function PurhcaseProduct({ route }) {
     const dispatch = useDispatch();
-    const store = useSelector(state => state);
     const { id } = route.params;
 
     const [load, setLoad] = useState(false);
@@ -78,13 +77,16 @@ export default function PurhcaseProduct({ route }) {
     }, []);
 
     function saveProduct() {
-        const { name, price, id } = product;
-        dispatch({ type: 'ADD_TO_CART', product: { name, price, id, amount } });
+        if (amount > 0) {
+            const { name, price, id } = product;
+            dispatch({ type: 'ADD_TO_CART', product: { name, price, id, amount, total: price * amount } });
 
-        setShowSnack(true);
-        setTimeout(() => {
-            setShowSnack(false);
-        }, 4000);
+            setShowSnack(true);
+            setTimeout(() => {
+                setShowSnack(false);
+            }, 4000);
+        }
+        else alert.errorInform(null, 'Coloque ao menos um item no seu carrinho, por favor');
     }
 
     return (
@@ -145,10 +147,13 @@ export default function PurhcaseProduct({ route }) {
                 style={globalStyles.btnSave1}
                 onPress={saveProduct}
             >
-                <Text style={globalStyles.txtSave1}>Colocar  no carrinho</Text>
+                {load
+                    ? <ActivityIndicator animating={load} />
+                    : <Text style={globalStyles.txtSave1}>Colocar no carrinho</Text>
+                }
             </TouchableOpacity>
 
-            <Snackbar visible={showSnack} style={{width: '100%'}}>
+            <Snackbar visible={showSnack} style={{ width: '100%' }}>
                 Item salvo no carrinho
             </Snackbar>
         </View>

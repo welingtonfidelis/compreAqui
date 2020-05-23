@@ -14,6 +14,7 @@ import Profile from '../../pages/Profile';
 
 import PurchaseList from '../../pages/PurchaseList';
 import PurchaseProduct from '../../pages/PurchaseProduct';
+import PurchaseSend from '../../pages/PurchaseSend';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -95,6 +96,11 @@ export default function TabNavigationUser() {
                     options={{ headerTitle: store.name }}
                     name="purchaseProduct"
                     component={PurchaseProduct}
+                />
+                <Stack.Screen
+                    options={{ headerTitle: store.name }}
+                    name="purchaseSend"
+                    component={PurchaseSend}
                 />
             </Stack.Navigator>
         </NavigationContainer>

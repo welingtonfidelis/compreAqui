@@ -36,7 +36,7 @@ export default function HomeClient({ navigation }) {
 
   useEffect(() => {
     if (loadMore) { getCompany(); }
-  }, [page, categoryId]);
+  }, [page]);
 
   async function getInfo() {
     setLoad(true);
@@ -126,11 +126,14 @@ export default function HomeClient({ navigation }) {
   }
 
   async function handleSelectCategory(id, index) {
-    await setLoadMore(true);
     await setIsRefreshing(true);
-
-    setCategoryId(id);
+    await setLoadMore(true);
+    await setCategoryId(id);
+    
     setCategoryName(categoryList[index].name);
+
+    if (page === 1) { getCompany(); }
+    else { setPage(1); }
   }
 
   function handleSelectCompany(item) {

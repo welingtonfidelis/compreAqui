@@ -279,6 +279,7 @@ type Mutation {
         ProviderId: ID!,
         value: Float!,
         delivery: String!,
+        cash: String!,
         cashBack: Float!,
         observation: String,
         products: [RequestListProduct!]

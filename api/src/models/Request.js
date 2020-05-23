@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         value: DataTypes.REAL,
         status: DataTypes.STRING,
         delivery: DataTypes.BOOLEAN,
+        cash: DataTypes.BOOLEAN,
         cashBack: DataTypes.REAL,
         observation: DataTypes.STRING,
         reason: DataTypes.STRING

@@ -55,6 +55,7 @@ export default function Login({ navigation }) {
       if (sessionSign) {
         const { name, typeUser, photoUrl, token } = sessionSign;
         if (typeUser === 'client') {
+          OneSignal.sendTag('user_type', 'client');
           dispatch({ type: 'UPDATE_USER', user: { name, typeUser, token, photoUrl } });
           await AsyncStorage.setItem('compreAqui@token', token);
 
@@ -63,6 +64,7 @@ export default function Login({ navigation }) {
           return;
         }
         else {
+          OneSignal.sendTag('user_type', 'commercial');
           alert.successInform(
             'Comerciante',
             'O aplicativo ainda está em desenvolvimento para o seu perfil. Por favor, utilize a plataforma web.');

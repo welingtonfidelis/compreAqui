@@ -21,7 +21,6 @@ import productLogo from '../../assets/images/product.png';
 export default function PurhcaseList({ navigation }) {
     const store = useSelector(state => state.company);
     const ProviderId = store.id;
-    const slidingRef = useRef();
 
     const [load, setLoad] = useState(false);
     const [productList, setProductList] = useState([]);
@@ -29,7 +28,6 @@ export default function PurhcaseList({ navigation }) {
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [loadMore, setLoadMore] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
-    const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
         getInfo();
@@ -131,7 +129,7 @@ export default function PurhcaseList({ navigation }) {
                 />
             </View>
 
-            <Cart />
+            <Cart navigation={navigation}/>
         </View>
     );
 }
