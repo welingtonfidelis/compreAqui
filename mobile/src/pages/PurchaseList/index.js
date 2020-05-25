@@ -51,7 +51,6 @@ export default function PurhcaseList({ navigation }) {
             const variables = { ProviderId, page };
             const response = await fetchQuery(environment, query, variables);
 
-
             const { productIndex } = response;
             if (productIndex) {
                 if (isRefreshing) {

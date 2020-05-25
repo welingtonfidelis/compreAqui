@@ -3,7 +3,7 @@ import {
     View, Text, FlatList, TouchableOpacity
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { graphql, fetchQuery } from 'react-relay';
+import { graphql, commitMutation } from 'react-relay';
 import { ActivityIndicator, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -19,14 +19,77 @@ export default function PurhcaseSend({ navigation }) {
     const store = useSelector(state => state);
 
     const [cash, setCash] = useState(true);
-    const [cashBack, setCashBack] = useState(0);
+    const [cashBack, setCashBack] = useState('0');
     const [delivery, setDelivery] = useState(true);
     const [observation, setObservation] = useState('');
     const [load, setLoad] = useState(false);
 
     async function handleSubmit() {
-        if(store.cart.length > 0) {
-            console.log('salvar');
+        if (store.cart.length > 0) {
+            setLoad(true);
+
+            const cart = [];
+            store.cart.forEach(el => cart.push(
+                { id: el.id, amount: el.amount, price: el.price }
+            ));
+
+            try {
+                const mutation = graphql`
+                    mutation PurchaseSendrequestStoreMutation(
+                        $ProviderId: ID!, $delivery: String!, $cash: String!, 
+                        $cashBack: Float!, $value: Float!, $observation: String,
+                        $products: [RequestListProduct!]
+                    ) {
+                        requestStore(
+                            ProviderId: $ProviderId, delivery: $delivery, cash: $cash, 
+                            cashBack: $cashBack, value: $value, products: $products,
+                            observation: $observation
+                        )
+                        {
+                            id
+                        }
+                    }
+                `;
+
+                const variables = {
+                    ProviderId: store.cartProviderId, delivery: `${delivery}`, cash: `${cash}`,
+                    cashBack: cashBack !== '' ? parseFloat(cashBack.replace(',', '.')) : 0,
+                    value: store.cartTotal, products: cart, observation
+                };
+
+                commitMutation(environment, {
+                    mutation, variables,
+                    onCompleted: (response, errors) => {
+                        console.log(response);
+                        const { requestStore } = response;
+
+                        if (requestStore) {
+                            alert.successInform(
+                                null,
+                                'Pedido efetuado com sucesso. Aguarde a resposta do vendedor.'
+                            );
+                            navigation.goBack();
+                            dispatch({ type: 'CLEAR_CART' });
+                        }
+
+                    },
+                    onError: err => {
+                        console.error(err);
+                        alert.errorInform(
+                            null,
+                            'Houve um erro ao salvar seu pedido. Por favor, tente novamente'
+                        );
+                    },
+                });
+
+            } catch (error) {
+                console.log(error);
+                alert.errorInform(
+                    null,
+                    'Houve um erro ao salvar seu pedido. Por favor, tente novamente'
+                );
+            }
+            setLoad(false)
 
         }
         else alert.errorInform(null, 'Por favor, coloque ao menos um produto em seu carrinho');

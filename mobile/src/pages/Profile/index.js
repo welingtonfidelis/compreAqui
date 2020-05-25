@@ -23,13 +23,15 @@ export default function Profile({ navigation }) {
   // const store = useSelector(state => state);
   
   function handleLogout() {
-    // navigation.dispatch(
-    //   CommonActions.reset({
-    //     index: 0,
-    //     routes: [ { name: 'login' } ],
-    //   })
-    // );
-    navigation.navigate('login');
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 1,
+        routes: [
+          { name: 'login' },
+        ],
+      })
+    );
+    // navigation.navigate('login');
   }
 
   return (

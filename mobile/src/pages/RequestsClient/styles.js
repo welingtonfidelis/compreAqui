@@ -2,41 +2,41 @@ import { StyleSheet, Dimensions } from 'react-native';
 const { width, height } = Dimensions.get('screen');
 
 export default StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignContent: 'center',
-        marginHorizontal: 20,
+    content: {
+        flexDirection :'row',
+        marginBottom: 10,
+        backgroundColor: '#E5E5E5',
+        padding: 5,
+        borderRadius: 8,
+        alignItems: 'center'
     },
     logo: {
-        width: width - 40,
-        height: 110,
-        resizeMode: 'contain',
-        marginBottom: 20,
+        width: 80,
+        height: 80,
+        marginRight: 5
     },
-    containerWelcome: {
-        marginBottom: 20,
-    },
-    txtWelcome: {
+    text1: {
         textAlign: 'center',
-        color: '#646464',
+        borderBottomWidth: 1,
+        borderBottomColor: '#898989',
         fontSize: 16,
+        fontWeight: "bold",
+        color: '#F2BB16'
     },
-    btnReset: {
-        alignItems: 'flex-end',
-        paddingTop: 5,
-    },
-    txtReset: {
-        fontSize: 15,
-        color: '#646464',
-    },
-    btnRegister: {
-        marginTop: 40,
-    },
-    txtInvalid: {
-        marginTop: 5,
-        fontSize: 15,
-        color: 'red',
+    text2: {
         textAlign: 'center',
+        fontSize: 15,
+        fontWeight: "bold",
+        marginBottom: 5
     },
+    contentIfo: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    contentStatus: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        marginTop: 5
+    }
 });

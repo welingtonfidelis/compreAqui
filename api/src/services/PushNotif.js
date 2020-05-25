@@ -3,7 +3,7 @@ const app_id = process.env.ONESIGNAL_APP_ID;
 const api_key = process.env.ONESIGNAL_API_KEY;
 
 module.exports = {
-    async sendOnePush(playId, msg = '', title = 'App Vida') {        
+    async sendOnePush(playId, title = 'CompreAqui', msg = '') {   
         try {
             await axios.post('https://onesignal.com/api/v1/notifications', {
                 'app_id': app_id,
@@ -21,11 +21,14 @@ module.exports = {
             );
         }
     },
-    async sendAllPush(msg, title = 'App Vida') {
+    async sendAllPush(title = 'CompreAqui', msg, segments) {
         try {
+            //ex.: Client, Comemrcial, Active Users, Inactive Users
+            segments = segments !== undefined ? segments : ['Client'];
+            
             await axios.post('https://onesignal.com/api/v1/notifications', {
                 'app_id': app_id,
-                "included_segments": ["Active Users"],
+                "included_segments": segments,
                 'data': { "foo": "bar" },
                 "headings": {"en": title},
                 'contents': { "en": msg },

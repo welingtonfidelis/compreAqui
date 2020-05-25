@@ -1,4 +1,4 @@
-const uudi = require('uuid/v4');
+const uuid = require('uuid/v4');
 
 module.exports = (sequelize, DataTypes) => {
     const Size = sequelize.define('Size', {

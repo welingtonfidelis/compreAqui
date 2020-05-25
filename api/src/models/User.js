@@ -13,9 +13,11 @@ module.exports = (sequelize, DataTypes) => {
         photoUrl: DataTypes.STRING,
         tokenReset: DataTypes.STRING,
         type: DataTypes.STRING,
-        AddressId: DataTypes.UUID,
-        CategoryId: DataTypes.UUID,
-        playId: DataTypes.STRING
+        AddressId: DataTypes.INTEGER,
+        CategoryId: DataTypes.INTEGER,
+        playId: DataTypes.STRING,
+        notifiePush: DataTypes.BOOLEAN,
+        notifieEmail: DataTypes.BOOLEAN
     },
         {
             tableName: 'Users',

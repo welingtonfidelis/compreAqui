@@ -1,13 +1,12 @@
+require('dotenv').config();
 const { GraphQLServer } = require('graphql-yoga');
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const resolvers = require('./resolvers/resolver');
 const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
 const routes = require('./routes');
 const app = express();
-dotenv.config();
 
 const port1 = 3001; //rotas em graphql
 const port2 = 3002; //rotas em API REST (upload de arquivos)

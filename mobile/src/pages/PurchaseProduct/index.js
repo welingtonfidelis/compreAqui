@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-    View, Button, Text, RefreshControl,
-    FlatList, TouchableOpacity, Image
+    View, Text, FlatList, TouchableOpacity, Image
 } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { graphql, fetchQuery } from 'react-relay';
 import { ActivityIndicator, Snackbar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -14,8 +13,6 @@ import util from '../../services/util';
 
 import globalStyles from '../globalStyles';
 import styles from './styles';
-
-import productLogo from '../../assets/images/product.png';
 
 export default function PurhcaseProduct({ route }) {
     const dispatch = useDispatch();

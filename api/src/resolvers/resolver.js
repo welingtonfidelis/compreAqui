@@ -12,6 +12,9 @@ const {
 
 const saltRounds = 10;
 
+const PushNotifie = require('../services/PushNotif');
+const EmailNotifie = require('../services/EmailNotif');
+
 const isAuthenticated = (args) => {
     if (!args.UserId) return new AuthenticationError('Invalid token');
     else return null;
@@ -969,12 +972,12 @@ module.exports = {
 
             let query = null;
             try {
-                const { UserId, ProviderId, value,
+                const { UserId, ProviderId, value, cash, observation, 
                     delivery, cashBack, products } = args;
 
                 query = await Request.create({
-                    ClientId: UserId, ProviderId, timeWait: 0,
-                    value, status: 'pending', delivery, cashBack
+                    ClientId: UserId, ProviderId, timeWait: 0, cash,
+                    value, status: 'pending', delivery, cashBack, observation
                 });
 
                 const RequestId = query.dataValues.id;
@@ -983,8 +986,51 @@ module.exports = {
                         RequestId, ProductId: prod.id,
                         amount: prod.amount, price: prod.price
                     });
-
                 }
+
+                const provider = await User.findOne({
+                    where: { id: ProviderId },
+                    attributes: [
+                        "name", "email", "playId", "notifiePush", "notifieEmail"
+                    ]
+                });
+
+                if(provider){
+                    const { name, email, playId, notifiePush, notifieEmail} = provider;
+
+                    const title = 'Boas notícias 😄';
+
+                    if(email && notifieEmail) {
+                        const msg = 
+                        `
+                            Olá <strong>${name}</strong>.</br>
+                            Há um novo pedido em sua loja aguardando sua aprovação 
+                            (pedido <strong>${RequestId}</strong>).</br>
+                            Entre na plataforma web <a href="#">clicando aqui</a> ou no 
+                            seu aplicativo para obter mais informações.
+                            
+                            <p>
+                            Boas vendas 💸</br>
+                            Atenciosamente, equipe CompreAqui.</br></br>
+                            <img 
+                                src="https://compreaqui.s3-sa-east-1.amazonaws.com/images/important/logo.png" 
+                                style="width: 120px;" 
+                            />
+                        `;
+
+                        EmailNotifie.sendOneEmail([email], title, msg);
+                    }
+
+                    if(playId, notifiePush) {
+                        const msg = 
+                            `Olá ${name}. \n`+
+                            `Há um novo pedido em sua loja (pedido ${RequestId}).\n`+
+                            `Acesse a plataforma web ou seu app para mais detalhes.`;
+
+                        PushNotifie.sendOnePush([playId], title, msg);
+                    }
+                }
+                
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;

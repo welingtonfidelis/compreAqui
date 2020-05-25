@@ -52,6 +52,16 @@ module.exports = {
         allowNull: true,
         type: Sequelize.STRING
       },
+      notifiePush: {
+        allowNull: false,
+        defaultValue: true,
+        type: Sequelize.BOOLEAN
+      },
+      notifieEmail: {
+        allowNull: false,
+        defaultValue: true,
+        type: Sequelize.BOOLEAN
+      },
       tokenReset: {
         allowNull: true,
         type: Sequelize.STRING
