@@ -97,6 +97,7 @@ type Request {
   status: String
   delivery: String
   cashBack: Float
+  cash: String
   createdAt: String
   Client: User
   Provider: User

@@ -9,8 +9,11 @@ import { useSelector } from 'react-redux';
 import Login from '../../pages/Login';
 import Home from '../../pages/HomeClient';
 import Search from '../../pages/SearchClient';
-import Requests from '../../pages/RequestsClient';
 import Profile from '../../pages/Profile';
+
+import Requests from '../../pages/RequestsClient';
+import RequestDetail from '../../pages/RequestClientDetail';
+
 
 import PurchaseList from '../../pages/PurchaseList';
 import PurchaseProduct from '../../pages/PurchaseProduct';
@@ -62,19 +65,22 @@ export default function TabNavigationUser() {
                     headerTintColor: '#F2BB16',
                     headerTitleStyle: { fontSize: 20 },
                     headerStyle: { elevation: 5, height: 45 },
-                    headerRight: () => (
-                        (
-                            <TouchableOpacity
-                                style={{ marginRight: 10 }}
-                                onPress={() => console.log(store.id)}
-                            >
-                                <Icon
-                                    name="store" size={30}
-                                    color="#646464"
-                                />
-                            </TouchableOpacity>
+                    headerRight: () => {
+                        return (
+                            store.id > 0 ?
+                                <TouchableOpacity
+                                    style={{ marginRight: 10 }}
+                                    onPress={() => console.log(store.id)}
+                                >
+                                    <Icon
+                                        name="store" size={30}
+                                        color="#646464"
+                                    />
+                                </TouchableOpacity>
+                                : null
                         )
-                    ),
+
+                    },
                 }}
                 headerMode="float">
                 <Stack.Screen
@@ -101,6 +107,11 @@ export default function TabNavigationUser() {
                     options={{ headerTitle: store.name }}
                     name="purchaseSend"
                     component={PurchaseSend}
+                />
+                <Stack.Screen
+                    options={{ headerTitle: store.name }}
+                    name="requestClientDetail"
+                    component={RequestDetail}
                 />
             </Stack.Navigator>
         </NavigationContainer>

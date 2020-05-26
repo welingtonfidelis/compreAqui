@@ -5,7 +5,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import { graphql, commitMutation } from 'react-relay';
 import { ActivityIndicator, TextInput } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import environment from '../../services/createRelayEnvironment';
 import alert from '../../services/alert';
@@ -134,7 +134,7 @@ export default function PurhcaseSend({ navigation }) {
                     <Text>{cash ? 'Dinheiro' : 'Cartão'}</Text>
                     <TouchableOpacity onPress={() => setCash(!cash)}>
                         <Icon
-                            name={cash ? "local-atm" : "credit-card"}
+                            name={cash ? "cash" : "credit-card"}
                             size={35}
                             color="#F2BB16"
                         />
@@ -145,7 +145,7 @@ export default function PurhcaseSend({ navigation }) {
                     <Text>{delivery ? 'Entrega' : 'Retirada'}</Text>
                     <TouchableOpacity onPress={() => setDelivery(!delivery)}>
                         <Icon
-                            name={delivery ? 'motorcycle' : 'directions-walk'}
+                            name={delivery ? 'motorbike' : 'walk'}
                             size={35}
                             color="#F2BB16"
                         />

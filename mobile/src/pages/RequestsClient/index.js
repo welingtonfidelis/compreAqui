@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 import {
-  View, KeyboardAvoidingView, Text,
-  TouchableOpacity, Image, FlatList, RefreshControl,
-  ImageBackground, StatusBar, Button
+  View, Text, TouchableOpacity, Image,
+  FlatList, RefreshControl
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch } from 'react-redux';
@@ -20,6 +19,8 @@ import styles from './styles';
 import companyLogo from '../../assets/images/store.png';
 
 export default function RequestsClient({ navigation }) {
+  const dispatch = useDispatch();
+
   const [load, setLoad] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [requestList, setRequestList] = useState([]);
@@ -86,6 +87,11 @@ export default function RequestsClient({ navigation }) {
     return resp;
   }
 
+  function handleRequest(id) {
+    dispatch({ type: 'UPDATE_COMPANY', company: { name: `Pedido ${id}`, id: 0 } });
+    navigation.push('requestClientDetail', id={id});
+  }
+
   return (
     <View style={globalStyles.container}>
       <FlatList
@@ -125,7 +131,7 @@ export default function RequestsClient({ navigation }) {
 
           return (
             <TouchableOpacity
-              onPress={() => console.log(item.id)}>
+              onPress={() => handleRequest(item.id)}>
               <View style={styles.content}>
                 {photoUrl
                   ? <Image style={styles.logo} source={{ uri: photoUrl }} />
