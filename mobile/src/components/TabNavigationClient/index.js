@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSelector } from 'react-redux';
 
 import Login from '../../pages/Login';
@@ -14,6 +14,7 @@ import Profile from '../../pages/Profile';
 import Requests from '../../pages/RequestsClient';
 import RequestDetail from '../../pages/RequestClientDetail';
 
+import CompanyDetail from '../CompanyDetail';
 
 import PurchaseList from '../../pages/PurchaseList';
 import PurchaseProduct from '../../pages/PurchaseProduct';
@@ -24,6 +25,8 @@ const Stack = createStackNavigator();
 
 export default function TabNavigationUser() {
     const store = useSelector(state => state.company);
+
+    const [showModal, setShowModal] = useState(false);
 
     function MainTabNavigator() {
         return (
@@ -38,14 +41,14 @@ export default function TabNavigationUser() {
                         <Icon name="home" color={color} size={focused ? 35 : 28} />,
                 }} />
 
-                <Tab.Screen name="Pesquisar" component={Search} options={{
+                {/* <Tab.Screen name="Pesquisar" component={Search} options={{
                     tabBarIcon: ({ color, focused }) =>
-                        <Icon name="search" color={color} size={focused ? 35 : 28} />,
-                }} />
+                        <Icon name="magnify" color={color} size={focused ? 35 : 28} />,
+                }} /> */}
 
                 <Tab.Screen name="Pedidos" component={Requests} options={{
                     tabBarIcon: ({ color, focused }) =>
-                        <Icon name="loyalty" color={color} size={focused ? 35 : 28} />,
+                        <Icon name="tag-heart" color={color} size={focused ? 35 : 28} />,
                 }} />
                 <Tab.Screen name="Perfil" component={Profile} options={{
                     tabBarIcon: ({ color, focused }) =>
@@ -54,9 +57,14 @@ export default function TabNavigationUser() {
             </Tab.Navigator>
         );
     }
-
+    
     return (
         <NavigationContainer independent={true}>
+            {showModal 
+                ? <CompanyDetail showModal={showModal} setShowModal={setShowModal} />
+                : null
+            }
+
             <Stack.Navigator
                 initialRouteName="client"
                 screenOptions={{
@@ -70,7 +78,7 @@ export default function TabNavigationUser() {
                             store.id > 0 ?
                                 <TouchableOpacity
                                     style={{ marginRight: 10 }}
-                                    onPress={() => console.log(store.id)}
+                                    onPress={() => setShowModal(true)}
                                 >
                                     <Icon
                                         name="store" size={30}

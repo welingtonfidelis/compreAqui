@@ -3,7 +3,6 @@ import {
   View, Text, TouchableOpacity, Image, Linking, ScrollView
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useDispatch } from 'react-redux';
 import { graphql, fetchQuery } from 'react-relay';
 import { ActivityIndicator } from 'react-native-paper';
 
@@ -78,7 +77,6 @@ export default function RequestClientDetail({ navigation, route }) {
       const variables = { id }
       const { requestShow } = await fetchQuery(environment, query, variables)
 
-      console.log(requestShow);
       if (requestShow) {
         setRequest(requestShow);
         setProductList(requestShow.RequestProducts);
@@ -96,14 +94,6 @@ export default function RequestClientDetail({ navigation, route }) {
     }
     setLoad(false);
   }
-
-  const onRefresh = useCallback(async () => {
-    setRefreshing(true);
-
-    getInfo();
-
-    setRefreshing(false);
-  }, [refreshing]);
 
   function ActivityIndicatorShow() {
     const resp = load ? <ActivityIndicator animating={load} /> : null;
@@ -134,14 +124,14 @@ export default function RequestClientDetail({ navigation, route }) {
             })
           }
             style={styles.phoneAction}>
-            <Icon name='whatsapp' type='material-community' size={30} color='#25d366' />
+            <Icon name='whatsapp' size={30} color='#25d366' />
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() =>
             Linking.openURL(`tel:${el}`)
           }
             style={styles.phoneAction}>
-            <Icon name='phone' type='material-community' size={30} color='#4E95C9' />
+            <Icon name='phone' size={30} color='#4E95C9' />
           </TouchableOpacity>
         </View>
       )

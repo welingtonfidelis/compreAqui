@@ -117,7 +117,7 @@ export default function PurhcaseSend({ navigation }) {
 
                                 <TouchableOpacity onPress={() => handleRemoveItem(index)}>
                                     <Icon
-                                        name="remove-circle"
+                                        name="minus-circle"
                                         size={30}
                                         color="#FF0000"
                                     />
