@@ -112,8 +112,6 @@ module.exports = {
             const notAuthenticated = isAuthenticated(args), { page = 1, CategoryId } = args;
             if (notAuthenticated) return notAuthenticated;
 
-            console.log('categ', CategoryId);
-
             let query = null;
             try {
                 query = await User.findAll({
@@ -410,8 +408,6 @@ module.exports = {
                     },
                     attributes: ["CategoryId"]
                 });
-                console.log(args.UserId);
-
 
                 if (CategoryId) {
                     query = await Subcategory.findAll({
@@ -972,7 +968,7 @@ module.exports = {
 
             let query = null;
             try {
-                const { UserId, ProviderId, value, cash, observation, 
+                const { UserId, ProviderId, value, cash, observation,
                     delivery, cashBack, products } = args;
 
                 query = await Request.create({
@@ -995,14 +991,14 @@ module.exports = {
                     ]
                 });
 
-                if(provider){
-                    const { name, email, playId, notifiePush, notifieEmail} = provider;
+                if (provider) {
+                    const { name, email, playId, notifiePush, notifieEmail } = provider;
 
                     const title = 'Boas notícias 😄';
 
-                    if(email && notifieEmail) {
-                        const msg = 
-                        `
+                    if (email && notifieEmail) {
+                        const msg =
+                            `
                             Olá <strong>${name}</strong>.</br>
                             Há um novo pedido em sua loja aguardando sua aprovação 
                             (pedido <strong>${RequestId}</strong>).</br>
@@ -1021,16 +1017,16 @@ module.exports = {
                         EmailNotifie.sendOneEmail([email], title, msg);
                     }
 
-                    if(playId, notifiePush) {
-                        const msg = 
-                            `Olá ${name}. \n`+
-                            `Há um novo pedido em sua loja (pedido ${RequestId}).\n`+
+                    if (playId, notifiePush) {
+                        const msg =
+                            `Olá ${name}. \n` +
+                            `Há um novo pedido em sua loja (pedido ${RequestId}).\n` +
                             `Acesse a plataforma web ou seu app para mais detalhes.`;
 
                         PushNotifie.sendOnePush([playId], title, msg);
                     }
                 }
-                
+
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
@@ -1047,41 +1043,6 @@ module.exports = {
             try {
                 const { id, status, timeWait, reason = '' } = args;
 
-                if (status === 'approved') {
-                    query = await RequestProduct.findAll({
-                        where: {
-                            RequestId: id
-                        },
-                        attributes: ["id", "ProductId", "amount"],
-                        include: [
-                            {
-                                model: Product,
-                                attributes: ["stock"]
-                            }
-                        ]
-                    });
-                    // console.log(JSON.stringify(query, null, 2));
-
-                    // Atualiza estoque
-                    if (query.length > 0) {
-                        for (const item of query) {
-                            const { amount, id = ProductId } = item;
-                            const stock = item.Product.stock - amount;
-
-                            await Product.update({
-                                stock
-                            },
-                                {
-                                    return: true,
-                                    where: {
-                                        id
-                                    }
-                                }
-                            );
-                        }
-                    }
-                }
-
                 query = await Request.update({
                     status, timeWait, reason
                 },
@@ -1094,6 +1055,88 @@ module.exports = {
                 );
 
                 query = query[0];
+
+                const request = await Request.findOne({
+                    where: { id },
+                    attributes: ["id"],
+                    include: [
+                        {
+                            model: RequestProduct,
+                            attributes: ["id", "amount", "ProductId"],
+                            include: [
+                                {
+                                    model: Product,
+                                    attributes: ["stock"]
+                                }
+                            ]
+                        },
+                        {
+                            model: User,
+                            attributes: [
+                                "name", "email", "playId",
+                                "notifiePush", "notifieEmail"
+                            ],
+                            as: 'Client'
+                        }
+                    ]
+                })
+
+                //atualização de estoque e notificação ao usuário
+                if (request) {
+                    const { RequestProducts, Client } = request;
+                    let statusNof = 'aprovado';
+
+                    //Atualiza estoque de pedido aprovado
+                    if (status === 'approved') {
+                        for (const item of RequestProducts) {
+                            const stock = item.Product.stock - item.amount;
+
+                            Product.update(
+                                { stock },
+                                {
+                                    where: {
+                                        id: item.ProductId
+                                    }
+                                }
+                            );
+                        }
+                    }
+                    else statusNof = 'recusado';
+
+                    const { name, email, playId, notifiePush, notifieEmail } = Client;
+
+                    const title = status === 'approved' ? 'Boas notícias 😄' : 'Más notíficas 😟';
+
+                    if (email && notifieEmail) {
+                        const msg =
+                            `
+                            Olá <strong>${name}</strong>.</br>
+                            Seu pedido (nº <strong>${id}</strong>) foi alterado para ${statusNof}.
+                            </br>
+                            Entre na plataforma web <a href="#">clicando aqui</a> ou no 
+                            seu aplicativo para obter mais informações.
+                            
+                            <p>
+                            Boas compras 🛍️</br>
+                            Atenciosamente, equipe CompreAqui.</br></br>
+                            <img 
+                                src="https://compreaqui.s3-sa-east-1.amazonaws.com/images/important/logo.png" 
+                                style="width: 120px;" 
+                            />
+                        `;
+
+                        EmailNotifie.sendOneEmail([email], title, msg);
+                    }
+
+                    if (playId, notifiePush) {
+                        const msg =
+                            `Olá ${name}. \n` +
+                            `Seu pedido nº ${id} foi alterado para ${statusNof}.\n` +
+                            `Acesse a plataforma web ou seu app para mais detalhes.`;
+
+                        PushNotifie.sendOnePush([playId], title, msg);
+                    }
+                }
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
