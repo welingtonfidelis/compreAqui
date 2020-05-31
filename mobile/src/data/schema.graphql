@@ -18,6 +18,7 @@ type Brand {
 type Category {
   id: ID
   name: String
+  photoUrl: String
 }
 
 type Mutation {
@@ -138,6 +139,7 @@ type Subcategory {
   id: ID
   CategoryId: ID
   name: String
+  photoUrl: String
 }
 
 type token {

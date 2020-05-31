@@ -28,4 +28,8 @@ export default StyleSheet.create({
         height: 130,
         resizeMode: 'stretch'
     },
+    textListEmpty: {
+        fontSize: 18,
+        textAlign: 'center'
+    }
 });

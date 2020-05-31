@@ -24,11 +24,10 @@ export default function HomeClient({ navigation }) {
   const [companyList, setCompanyList] = useState([]);
   const [categoryList, setCategoryList] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(true);
   const [page, setPage] = useState(1);
   const [loadMore, setLoadMore] = useState(true);
   const dispatch = useDispatch();
-  const photoTmp = 'https://compreaqui.s3-sa-east-1.amazonaws.com/images/category/food.png';
 
   useEffect(() => {
     getInfo();
@@ -46,6 +45,7 @@ export default function HomeClient({ navigation }) {
                 categoryIndex {
                     CategoryId :id
                     name
+                    photoUrl
                 }
             }`;
 
@@ -95,9 +95,11 @@ export default function HomeClient({ navigation }) {
           setIsRefreshing(false);
           setCompanyList(userIndexByCategory);
         }
-        else { setCompanyList([...companyList, ...userIndexByCategory]); }
+        else {setCompanyList(companyList => [...companyList, ...userIndexByCategory]); }
+
+        setLoadMore(userIndexByCategory.length > 0);
       }
-      setLoadMore(userIndexByCategory.length > 0);
+
 
     } catch (error) {
       console.error(error);
@@ -110,10 +112,11 @@ export default function HomeClient({ navigation }) {
   }
 
   const onRefresh = useCallback(async () => {
+    console.log('\n\refresh\n', id, index);
     setRefreshing(true);
-    await setIsRefreshing(true);
+    setIsRefreshing(true);
 
-    await setLoadMore(true);
+    setLoadMore(true);
     if (page === 1) { getCompany(); }
     else { setPage(1); }
 
@@ -126,10 +129,10 @@ export default function HomeClient({ navigation }) {
   }
 
   async function handleSelectCategory(id, index) {
-    await setIsRefreshing(true);
-    await setLoadMore(true);
-    await setCategoryId(id);
-    
+    setIsRefreshing(true);
+    setLoadMore(true);
+    setCategoryId(id);
+
     setCategoryName(categoryList[index].name);
 
     if (page === 1) { getCompany(); }
@@ -138,12 +141,12 @@ export default function HomeClient({ navigation }) {
 
   function handleSelectCompany(item) {
     dispatch({ type: 'UPDATE_COMPANY', company: { name: item.name, id: item.ProviderId } });
-    navigation.push('purchaseList');
+    navigation.navigate('purchaseList');
   }
 
   return (
     <View style={globalStyles.container}>
-      <View style={{ flex: 1 }}>
+      <View style={{ marginBottom: 10 }}>
         <Text style={styles.categoryTitle}>Categorias</Text>
 
         <FlatList
@@ -158,12 +161,13 @@ export default function HomeClient({ navigation }) {
           onEndReachedThreshold={0.3}
           onEndReached={({ distanceFromEnd }) => { }}
           renderItem={({ item, index }) => {
+            const time = new Date().getTime;
 
             return (
               <TouchableOpacity
                 onPress={() => handleSelectCategory(item.CategoryId, index)}>
                 <View style={styles.containerCategory}>
-                  <Image style={styles.categoryImage} source={{ uri: photoTmp }} />
+                  <Image style={styles.categoryImage} source={{ uri: `${item.photoUrl}?${time}` }} />
 
                   <View style={styles.categoryViewText}>
                     <Text style={styles.catetegoryText}>{item.name}</Text>
@@ -180,21 +184,22 @@ export default function HomeClient({ navigation }) {
 
         <FlatList
           data={companyList}
-          keyExtractor={item => `${item.id}`}
+          keyExtractor={item => item.ProviderId}
           numColumns={1}
           showsVerticalScrollIndicator={false}
           onEndReachedThreshold={0.5}
-          onEndReached={({ distanceFromEnd }) => { if (loadMore) { setPage(page + 1); } }}
+          onEndReached={({ distanceFromEnd }) => { if (loadMore) { console.log('mais'); setPage(page + 1); } }}
           ListFooterComponent={activityIndicatorShow}
           renderItem={({ item }) => {
-
+            const time = new Date().getTime;
             const { Address } = item;
+
             return (
               <TouchableOpacity
                 onPress={() => handleSelectCompany(item)}>
                 <View style={styles.containerCompany}>
                   {item.photoUrl
-                    ? <Image style={styles.companyImage} source={{ uri: item.photoUrl }} />
+                    ? <Image style={styles.companyImage} source={{ uri: `${item.photoUrl}?${time}` }} />
                     : <Image style={styles.companyImage} source={companyLogo} />}
 
                   <View style={styles.companyInfo}>

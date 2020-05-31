@@ -49,7 +49,7 @@ async function fetchQuery(operation, variables, cacheConfig, uploadables) {
             return response.json();
         })
         .catch(error => {
-            console.log(error);
+            console.warn(error);
         });
 }
 

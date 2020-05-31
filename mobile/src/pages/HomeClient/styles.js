@@ -13,8 +13,8 @@ export default StyleSheet.create({
         alignItems: 'center',
     },
     categoryImage: {
-        width: 90,
-        height: 120,
+        width: 70,
+        height: 70,
         resizeMode: 'stretch',
         borderRadius: 8,
     },

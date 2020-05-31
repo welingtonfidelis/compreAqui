@@ -61,7 +61,7 @@ export default function PurhcaseProduct({ route }) {
                 }
 
             } catch (error) {
-                console.log(error);
+                console.warn(error);
                 alert.errorInform(
                     null,
                     'Houve um erro ao tentar carregar este produto. Por favor, tente novamente'
@@ -141,12 +141,12 @@ export default function PurhcaseProduct({ route }) {
             </View>
 
             <TouchableOpacity
-                style={globalStyles.btnSave1}
+                style={globalStyles.btnSave2}
                 onPress={saveProduct}
             >
                 {load
                     ? <ActivityIndicator animating={load} />
-                    : <Text style={globalStyles.txtSave1}>Colocar no carrinho</Text>
+                    : <Text style={globalStyles.txtSave2}>Colocar no carrinho</Text>
                 }
             </TouchableOpacity>
 

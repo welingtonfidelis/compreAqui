@@ -60,7 +60,6 @@ export default function PurhcaseSend({ navigation }) {
                 commitMutation(environment, {
                     mutation, variables,
                     onCompleted: (response, errors) => {
-                        console.log(response);
                         const { requestStore } = response;
 
                         if (requestStore) {
@@ -83,7 +82,7 @@ export default function PurhcaseSend({ navigation }) {
                 });
 
             } catch (error) {
-                console.log(error);
+                console.warn(error);
                 alert.errorInform(
                     null,
                     'Houve um erro ao salvar seu pedido. Por favor, tente novamente'

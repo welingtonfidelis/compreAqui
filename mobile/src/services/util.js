@@ -44,7 +44,7 @@ export default {
           else return query.data;
   
         } catch (error) {
-          console.log(error);
+          console.warn(error);
         }
       }
     }
