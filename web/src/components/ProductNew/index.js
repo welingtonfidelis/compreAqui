@@ -204,7 +204,7 @@ export default function ProductNew({ showModal, setShowModal, id, setId, reloadL
       else swal.swalErrorInform();
 
     } catch (error) {
-      console.log(error)
+      console.warn(error)
       swal.swalErrorInform()
     }
     setLoading(false)

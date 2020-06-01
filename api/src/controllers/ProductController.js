@@ -1,5 +1,7 @@
 const { Product, ProductPhoto } = require('../models');
 
+const Upload = require('../services/Upload');
+
 module.exports = {
     async store(req, res) {
         try {
@@ -8,7 +10,7 @@ module.exports = {
                 BrandId, stock, price, SubcategoryId
             } = req.body, { UserId } = req.headers;
 
-            
+
             const { id } = await Product.create({
                 name, description, SizeId, SubcategoryId,
                 BrandId, stock, price, ProviderId: UserId
@@ -16,20 +18,22 @@ module.exports = {
 
             if (req.files) {
                 let tmp = [];
-                (req.files).forEach(el => {
+                for (const el of req.files) {
+                    const file = await Upload.uploadImage(el, 'products', id);
                     tmp.push({
-                        photoUrl: el.location,
+                        photoUrl: file.Location,
                         ProductId: id
                     });
-                });
-                await ProductPhoto.bulkCreate(tmp);
+                }
+
+                ProductPhoto.bulkCreate(tmp);
             }
-          
+
             res.status(200).send({ status: true, response: id, code: 20 });
 
         } catch (error) {
             const err = error.stack || error.errors || error.message || error;
-            console.log(err);
+            console.warn(err);
             res.status(500).send({ status: false, response: err, code: 22 });
         }
     },
@@ -42,26 +46,30 @@ module.exports = {
             } = req.body, { id } = req.params;
 
             const query = await Product.update(
-                { name, description, SizeId, SubcategoryId,
-                BrandId, stock, price },
+                {
+                    name, description, SizeId, SubcategoryId,
+                    BrandId, stock, price
+                },
                 { where: { id } });
 
             if (req.files) {
                 let tmp = [];
-                (req.files).forEach(el => {
+                for (const el of req.files) {
+                    const file = await Upload.uploadImage(el, 'products', id);
                     tmp.push({
-                        photoUrl: el.location,
+                        photoUrl: file.Location,
                         ProductId: id
                     });
-                });
-                await ProductPhoto.bulkCreate(tmp);
+                }
+
+                ProductPhoto.bulkCreate(tmp);
             }
-          
+
             res.status(200).send({ status: true, response: query, code: 20 });
 
         } catch (error) {
             const err = error.stack || error.errors || error.message || error;
-            console.log(err);
+            console.warn(err);
             res.status(500).send({ status: false, response: err, code: 22 });
         }
     }

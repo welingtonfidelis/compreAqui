@@ -27,13 +27,15 @@ type State {
 
 type Category {
     id: ID,
-    name: String
+    name: String,
+    photoUrl: String
 }
 
 type Subcategory {
     id: ID,
     CategoryId: ID,
-    name: String
+    name: String,
+    photoUrl: String
 }
 
 type User {

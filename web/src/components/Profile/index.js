@@ -113,7 +113,7 @@ export default function Profile(props) {
       data.append("complement", complement)
 
       if (category) {
-        data.append("CategoryId", category.value)
+        data.append("CategoryId", category.id)
       }
 
       if (file) {
@@ -132,7 +132,7 @@ export default function Profile(props) {
         return
       } else swal.swalErrorInform()
     } catch (error) {
-      console.log(error)
+      console.warn(error)
       swal.swalErrorInform()
     }
    

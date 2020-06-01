@@ -14,7 +14,7 @@ module.exports = {
             });
 
         } catch (error) {
-            console.log(
+            console.war(
                 'ERRO NO ENVIO DE EMAIL UNICO',
                 (error.stack || error.message || error)
             );

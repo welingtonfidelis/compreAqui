@@ -17,7 +17,6 @@ fetch('http://localhost:3001', {
 })
   .then(res => res.json())
   .then(res => {
-    console.log(res);
     const schemaString = printSchema(buildClientSchema(res.data));
     fs.writeFileSync('src/data/schema.graphql', schemaString);
   });

@@ -2,8 +2,12 @@
 
 const uuid = require('uuid/v4');
 const categoryList = [
-  'Alimentação', 'Aluguel', 'Construção', 'Super Mercado', 'Assist Técnica',
-  'Mecânico'
+  {title: 'Alimentação', url: 'https://compreaqui.s3-sa-east-1.amazonaws.com/images/category/food.png'}, 
+  {title: 'Aluguel', url: 'https://compreaqui.s3-sa-east-1.amazonaws.com/images/category/rent.png'}, 
+  {title: 'Construção', url: 'https://compreaqui.s3-sa-east-1.amazonaws.com/images/category/crane-truck.png'},
+  {title: 'Mercado', url: 'https://compreaqui.s3-sa-east-1.amazonaws.com/images/category/market.png'}, 
+  {title: 'Assist.  Técnica', url: 'https://compreaqui.s3-sa-east-1.amazonaws.com/images/category/technical-support.png'}, 
+  {title: 'Mecânico', url: 'https://compreaqui.s3-sa-east-1.amazonaws.com/images/category/mechanic.png'},
 ];
 
 module.exports = {
@@ -12,7 +16,8 @@ module.exports = {
     for (let el of categoryList) {
       categories.push(
         {
-          name: el,
+          name: el.title,
+          photoUrl: el.url,
           createdAt: new Date(),
           updatedAt: new Date()
         }

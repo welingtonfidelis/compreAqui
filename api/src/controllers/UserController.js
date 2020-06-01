@@ -2,6 +2,8 @@ const { User, Address } = require('../models');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
+const Upload = require('../services/Upload');
+
 module.exports = {
     async store(req, res) {
         try {
@@ -14,7 +16,10 @@ module.exports = {
             const password = bcrypt.hashSync(req.body.password, saltRounds);
 
             let photoUrl = null;
-            if(req.file) photoUrl = req.file.location;
+            if(req.file) {
+                const file = await Upload.uploadImage(req.file, 'profile', doc);
+                photoUrl = file.Location;
+            }
 
             let query = await Address.create({
                 cep, state, city, district,
@@ -31,7 +36,7 @@ module.exports = {
 
         } catch (error) {
             const err = error.stack || error.errors || error.message || error;
-            console.log(err);
+            console.warn(err);
             res.status(500).send({ status: false, response: err, code: 22 });
         }
     }

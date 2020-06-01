@@ -164,7 +164,7 @@ export default function RequestEdit({ showModal, setShowModal, id, setId, reload
       });
 
     } catch (error) {
-      console.log(error)
+      console.warn(error)
       swal.swalErrorInform()
     }
     setLoading(false)

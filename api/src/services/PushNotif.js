@@ -15,7 +15,7 @@ module.exports = {
             });
             
         } catch (error) {
-            console.log(
+            console.warn(
                 'ERRO NO ENVIO DE NOTIFICAÇÃO ÚNICA PUSH',
                 (error.stack || error.message || error)
             );
@@ -43,7 +43,7 @@ module.exports = {
             );
 
         } catch (error) {
-            console.log(
+            console.warn(
                 'ERRO NO ENVIO DE NOTIFICAÇÃO GERAL PUSH',
                 (error.stack || error.message || error)
             );

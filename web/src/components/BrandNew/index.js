@@ -131,7 +131,7 @@ export default function BrandNew({ showModal, setShowModal, id, setId, reloadLis
       });
 
     } catch (error) {
-      console.log(error)
+      console.warn(error)
       swal.swalErrorInform()
     }
     setLoading(false)

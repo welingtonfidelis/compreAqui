@@ -112,7 +112,6 @@ export default function HomeClient({ navigation }) {
   }
 
   const onRefresh = useCallback(async () => {
-    console.log('\n\refresh\n', id, index);
     setRefreshing(true);
     setIsRefreshing(true);
 
@@ -188,7 +187,7 @@ export default function HomeClient({ navigation }) {
           numColumns={1}
           showsVerticalScrollIndicator={false}
           onEndReachedThreshold={0.5}
-          onEndReached={({ distanceFromEnd }) => { if (loadMore) { console.log('mais'); setPage(page + 1); } }}
+          onEndReached={({ distanceFromEnd }) => { if (loadMore) setPage(page + 1); } }}
           ListFooterComponent={activityIndicatorShow}
           renderItem={({ item }) => {
             const time = new Date().getTime;

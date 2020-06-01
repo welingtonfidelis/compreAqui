@@ -1,9 +1,23 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const routes = express.Router();
+// const multer = require('multer');
+// const multerConfig = require('./services/UploadFile');
+// const upload = multer(multerConfig);
+
 const multer = require('multer');
-const multerConfig = require('./services/UploadFile');
-const upload = multer(multerConfig);
+const upload = multer({ 
+    dest: 'uploads/',
+    fileFilter: (req, file, cb) => {
+        const allowedMimes = [
+            'image/jpeg',
+            'image/png'
+        ]
+
+        if(allowedMimes.includes(file.mimetype)) cb(null, true);
+        else cb(new Error("Invalid file tipe."));
+    }
+})
 
 const UserController = require('./controllers/UserController');
 const ProductController = require('./controllers/ProductController');

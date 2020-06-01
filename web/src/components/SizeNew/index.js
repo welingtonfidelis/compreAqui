@@ -131,7 +131,7 @@ export default function SizeNew({ showModal, setShowModal, id, setId, reloadList
       });
 
     } catch (error) {
-      console.log(error)
+      console.warn(error)
       swal.swalErrorInform()
     }
     setLoading(false)

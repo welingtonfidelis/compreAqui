@@ -74,7 +74,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return invalidLogin();
@@ -103,7 +103,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -131,7 +131,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -162,7 +162,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -181,7 +181,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -200,7 +200,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -219,7 +219,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -239,7 +239,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -263,7 +263,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -282,7 +282,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -302,7 +302,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -326,7 +326,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -345,7 +345,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -361,7 +361,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -377,7 +377,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -393,9 +393,9 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
-
+            
             return query;
         },
 
@@ -418,7 +418,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -441,7 +441,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -476,7 +476,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -513,7 +513,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -537,7 +537,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -590,7 +590,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -639,7 +639,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -674,7 +674,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
             return query;
         },
@@ -717,7 +717,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
             return query;
         },
@@ -737,7 +737,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -758,7 +758,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -786,7 +786,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -807,7 +807,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -828,7 +828,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -856,7 +856,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -877,7 +877,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -902,7 +902,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -934,7 +934,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -955,7 +955,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -1030,7 +1030,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;
@@ -1140,7 +1140,7 @@ module.exports = {
 
             } catch (error) {
                 const err = error.stack || error.errors || error.message || error;
-                console.log(err);
+                console.warn(err);
             }
 
             return query;

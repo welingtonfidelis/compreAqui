@@ -13,20 +13,15 @@ const s3 = new AWS.S3({
 });
 
 module.exports = {
-    async uploadImage (file, fileName, token) {  
+    async uploadImage (file, folderName, fileName) {  
         const { originalname, path } = file;
-        let folder = 'default';
 
-        if(token){
-            folder = util.decodeToken(token).UsuarioId;
-        }
-        
         //altera tamanho da imagem
         const fileResized = await sharp(fs.readFileSync(path)).resize(768, 1024, {fit: "contain"});
         await unlinkAsync(path);
     
         const params = {
-            Bucket: `${BUCKET_NAME}/images/${folder}/${fileName}`,
+            Bucket: `${BUCKET_NAME}/images/${folderName}/${fileName}`,
             Key: originalname,
             Body: fileResized,
             ACL: "public-read",
@@ -37,7 +32,7 @@ module.exports = {
             return data;
         })
         .catch(err =>{
-            console.log('ERRO NO UPLOAD DE IMAGEM', err);
+            console.warn('ERRO NO UPLOAD DE IMAGEM', err);
             throw err;
         });
     },
@@ -62,7 +57,7 @@ module.exports = {
             return data;
         })
         .catch(err =>{
-            console.log('ERRO NO UPLOAD DE ARQUIVO', err);
+            console.warn('ERRO NO UPLOAD DE ARQUIVO', err);
             throw err;
         });
     },
