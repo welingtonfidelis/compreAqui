@@ -83,6 +83,10 @@ export default function Login({ navigation }) {
     setLoad(false);
   }
 
+  function handleNewUser() {
+    navigation.push('newUser');
+  }
+
   return (
     <View style={styles.container}>
       <Image source={logo} style={styles.logo} />
@@ -135,7 +139,7 @@ export default function Login({ navigation }) {
 
       <TouchableOpacity
         style={[globalStyles.btnSave2, styles.btnRegister]}
-        onPress={() => console.log('teste', position)}
+        onPress={handleNewUser}
       >
         <Text style={globalStyles.txtSave2}>Cadastre-se</Text>
       </TouchableOpacity>

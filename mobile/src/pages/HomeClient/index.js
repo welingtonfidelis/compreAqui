@@ -187,7 +187,7 @@ export default function HomeClient({ navigation }) {
           numColumns={1}
           showsVerticalScrollIndicator={false}
           onEndReachedThreshold={0.5}
-          onEndReached={({ distanceFromEnd }) => { if (loadMore) setPage(page + 1); } }}
+          onEndReached={({ distanceFromEnd }) => { if (loadMore) setPage(page + 1); } }
           ListFooterComponent={activityIndicatorShow}
           renderItem={({ item }) => {
             const time = new Date().getTime;

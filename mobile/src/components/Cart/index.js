@@ -3,8 +3,6 @@ import { Text, View, Dimensions, FlatList, TouchableOpacity } from 'react-native
 import { useDispatch, useSelector } from 'react-redux';
 import SlidingPanel from 'react-native-sliding-up-down-panels';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { graphql, fetchQuery } from 'react-relay';
-import environment from '../../services/createRelayEnvironment';
 
 import util from '../../services/util';
 import alert from '../../services/alert';

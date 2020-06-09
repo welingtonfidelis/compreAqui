@@ -46,4 +46,20 @@ export default StyleSheet.create({
     flexRow: {
         flexDirection: 'row',
     },
+    OptionBottomTitle: {
+        fontSize: 16,
+        color: '#fff',
+        textAlign: 'center'
+    },
+    OptionBottomContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        paddingTop: 15
+    },
+    OptionBottomText1: {
+        color: '#fff', 
+        fontSize: 14,
+        textAlign: 'center',
+        marginTop: -25
+    }
 });
