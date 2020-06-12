@@ -61,5 +61,17 @@ export default StyleSheet.create({
         fontSize: 14,
         textAlign: 'center',
         marginTop: -25
+    },
+    textSelectModal: {
+        borderWidth: 1,
+        borderRadius: 4,
+        borderColor: '#646464',
+        padding: 15,
+        fontSize: 16,
+    },
+    textError: {
+        borderColor: '#B44055',
+        borderWidth: 2,
+        color: '#B44055'
     }
 });

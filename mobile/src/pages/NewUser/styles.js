@@ -8,6 +8,10 @@ export default StyleSheet.create({
         alignContent: 'center',
         marginHorizontal: 20,
     },
+    typeUserContainer: {
+        height: height - 140,
+        justifyContent: 'center'
+    },
     containerUserLogo: {
         backgroundColor: '#F2BB16',
         borderRadius: 100,
@@ -15,7 +19,8 @@ export default StyleSheet.create({
         alignItems: 'center',
         alignSelf: 'center',
         width: 100,
-        height: 100
+        height: 100,
+        marginTop: 15
     },
     userLogo: {
         width: 95,
@@ -51,6 +56,7 @@ export default StyleSheet.create({
         color: '#646464',
         fontWeight: 'bold',
         textTransform: 'uppercase',
-        textAlign: 'center'
+        textAlign: 'center',
+        marginBottom: 15
     }
 });
