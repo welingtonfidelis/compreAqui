@@ -12,6 +12,7 @@ const port1 = 3001; //rotas em graphql
 const port2 = 3002; //rotas em API REST (upload de arquivos)
 
 app.use(cors());
+app.use(express.json());
 app.use(routes);
 
 const autheticate = async (resolve, root, args, context, info) => {

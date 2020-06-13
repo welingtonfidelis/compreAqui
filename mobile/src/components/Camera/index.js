@@ -20,8 +20,7 @@ export default function Camera({ setShowCamera, showCamera, setFile }) {
         };
         const data = await camera.takePictureAsync(options);
 
-        const tmp = (new Date()).getTime();
-        await setFile('file', `${data.uri}?${tmp}`);
+        await setFile('file', `${data.uri}`);
 
         setShowCamera(false);
     }

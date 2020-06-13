@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
 import {
-  View, KeyboardAvoidingView, Text,
+  View, Text,
   TouchableOpacity, Image, ScrollView,
-  ImageBackground, StatusBar, Button
 } from 'react-native';
 import { graphql, fetchQuery } from 'react-relay';
 import { ActivityIndicator, TextInput, IconButton } from 'react-native-paper';
@@ -11,6 +10,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import DocumentPicker from 'react-native-document-picker';
 import PickerModal from 'react-native-picker-modal-view';
 import { TextInputMask } from 'react-native-masked-text'
+import AsyncStorage from '@react-native-community/async-storage';
+import axios from 'axios';
 
 import OptionBottom from '../../components/OptionBottom';
 import Camera from '../../components/Camera';
@@ -23,6 +24,7 @@ import styles from './styles';
 
 import userLogo from '../../assets/images/userLogo.png';
 import util from '../../services/util';
+import api from '../../services/api';
 
 export default function NewUser({ navigation }) {
   const [load, setLoad] = useState(false);
@@ -34,7 +36,7 @@ export default function NewUser({ navigation }) {
   const [validateData, setValidateData] = useState({});
 
   useEffect(() => {
-    handleInputChange('file', Image.resolveAssetSource(userLogo).uri);
+    // handleInputChange('file', Image.resolveAssetSource(userLogo).uri);
     getInfo();
   }, [])
 
@@ -58,8 +60,6 @@ export default function NewUser({ navigation }) {
       const variables = {}
       const response = await fetchQuery(environment, query, variables)
 
-      console.log(response);
-
       if (response.stateIndex) {
         setStateList(response.stateIndex)
       }
@@ -76,52 +76,56 @@ export default function NewUser({ navigation }) {
     setLoad(true);
     if (validateInput()) {
       try {
-        const tmp = util.stringToDate(formData.birth);
-        console.log(tmp);
+        const data = new FormData();
+        data.append("name", formData.name);
+        data.append("doc", formData.doc);
+        data.append("email", formData.email);
+        data.append("phone1", formData.phone1);
+        data.append("phone2", formData.phone2 ? formData.phone2 : '');
+        data.append("user", formData.user);
+        data.append("birth", `${util.stringToDate(formData.birth)}`);
+        data.append("password", formData.password);
+        data.append("type", formData.type);
+        data.append("cep", formData.cep ? formData.cep : '');
+        data.append("state", formData.state.Value);
+        data.append("city", formData.city);
+        data.append("district", formData.district);
+        data.append("street", formData.street);
+        data.append("number", formData.number);
+        data.append("complement", formData.complement ? formData.complement : '');
 
-        // const data = new FormData()
-        // data.append("name", name)
-        // data.append("doc", doc)
-        // data.append("email", email)
-        // data.append("phone1", phone1)
-        // data.append("phone2", phone2)
-        // data.append("user", user)
-        // data.append("birth", birth)
-        // data.append("password", password)
-        // data.append("type", type)
-        // data.append("cep", cep)
-        // data.append("state", state.code)
-        // data.append("city", city)
-        // data.append("district", district)
-        // data.append("street", street)
-        // data.append("number", number)
-        // data.append("complement", complement)
+        if (formData.type === 'comercial') {
+          data.append("CategoryId", formData.category.Value);
+        }
 
-        // if (category) {
-        //   data.append("CategoryId", category.id)
-        // }
+        if (formData.file) {
+          const time = new Date().getTime();
+          data.append('file', {
+            uri: formData.file,
+            type: 'image/jpeg', // or photo.type
+            name: `${formData.doc}_${time}.jpeg`
+          });
+        }
 
-        // if (file) {
-        //   data.append("file", file)
-        // }
+        const query = await api.post("user", data, {
+          headers: {
+            'Content-Type': 'multipart/form-data;'
+          },
+        });
 
-        // const query = await api.post("user", data, {
-        //   headers: { "Content-Type": "multipart/form-data" },
-        // })
-
-        // const { status } = query.data
-        // if (status) {
-        //   alert.errorInform(
-        //     'Usuário',
-        //     'Salvo com sucesso.'
-        //   );
-        //   // setLoad(false)
-        //   // history.push("/")
-        //   return
-        // } else alert.errorInform(
-        //   'Usuário',
-        //   'Houve um erro ao tentar salvar seus dados. Por favor, tente novamente.'
-        // );
+        const { status } = query.data;
+        if (status) {
+          alert.successInform(
+            'Usuário',
+            'Salvo com sucesso.'
+          );
+          setLoad(false)
+          handleBack();
+          return
+        } else alert.errorInform(
+          'Usuário',
+          'Houve um erro ao tentar salvar seus dados. Por favor, tente novamente.'
+        );
 
       } catch (error) {
         console.warn(error)
@@ -232,8 +236,6 @@ export default function NewUser({ navigation }) {
         const res = await DocumentPicker.pick({
           type: [DocumentPicker.types.images],
         });
-
-        console.log(res.uri);
 
         handleInputChange('file', res.uri);
 
@@ -356,7 +358,10 @@ export default function NewUser({ navigation }) {
               style={styles.containerUserLogo}
               onPress={() => { setShow(true) }}
             >
-              <Image style={styles.userLogo} source={{ uri: formData.file }} />
+              {formData.file
+                ? <Image style={styles.userLogo} source={{ uri: formData.file }} />
+                : <Image style={styles.userLogo} source={userLogo} />
+              }
             </TouchableOpacity>
 
             <OptionBottom show={show} setShow={setShow}>

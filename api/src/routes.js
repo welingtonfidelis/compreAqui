@@ -1,9 +1,6 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const routes = express.Router();
-// const multer = require('multer');
-// const multerConfig = require('./services/UploadFile');
-// const upload = multer(multerConfig);
 
 const multer = require('multer');
 const upload = multer({ 
